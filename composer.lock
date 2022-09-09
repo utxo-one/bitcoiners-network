@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "38b3a1ec00eddbcc6ad05678cc9f1db0",
+    "content-hash": "adb852e28f7abd8551ef11a46544d9be",
     "packages": [
         {
             "name": "abraham/twitteroauth",
@@ -5887,16 +5887,16 @@
         },
         {
             "name": "utxo-one/twitter-ultimate-php",
-            "version": "0.1.0",
+            "version": "0.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/utxo-one/twitter-ultimate-php.git",
-                "reference": "c69fc15ab308c62d424301d5081d0e642b23c2b2"
+                "reference": "779a8010855dc70f833dbf9ebc212f77a2e120c2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/utxo-one/twitter-ultimate-php/zipball/c69fc15ab308c62d424301d5081d0e642b23c2b2",
-                "reference": "c69fc15ab308c62d424301d5081d0e642b23c2b2",
+                "url": "https://api.github.com/repos/utxo-one/twitter-ultimate-php/zipball/779a8010855dc70f833dbf9ebc212f77a2e120c2",
+                "reference": "779a8010855dc70f833dbf9ebc212f77a2e120c2",
                 "shasum": ""
             },
             "require": {
@@ -5927,9 +5927,9 @@
             "description": "The Ultimate PHP Wrapper for the Twitter v2 API",
             "support": {
                 "issues": "https://github.com/utxo-one/twitter-ultimate-php/issues",
-                "source": "https://github.com/utxo-one/twitter-ultimate-php/tree/0.1.0"
+                "source": "https://github.com/utxo-one/twitter-ultimate-php/tree/0.1.2"
             },
-            "time": "2022-09-07T22:31:37+00:00"
+            "time": "2022-09-09T02:46:28+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
