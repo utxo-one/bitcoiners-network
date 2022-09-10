@@ -27,6 +27,8 @@ class TwitterAuthController extends Controller
 
         $twitterUser = $twitterUserClient->getUserById(auth()->user()->twitter_id);
 
-        dd($twitterUser);
+        return view('web.dashboard', [
+            'twitterUser' => $twitterUser,
+        ]);
     }
 }

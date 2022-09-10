@@ -2,12 +2,10 @@
 
 namespace App\Services\Web\Auth;
 
-use App\Enums\UserType;
+use App\Jobs\ProcessTwitterUser;
 use Socialite;
-
 use App\Models\User;
 use App\Services\UserService;
-use Exception;
 use Illuminate\Support\Facades\Auth;
 use UtxoOne\TwitterUltimatePhp\Clients\UserClient;
 
@@ -22,13 +20,15 @@ class TwitterAuthService
             Auth::login($userExists);
         }
 
-        $userService = new UserService();
-        $userType = $userService->classifyUser($user->id);
-
         $twitterUserClient = new UserClient(bearerToken: config('services.twitter.bearer_token'));
         $twitterUser = $twitterUserClient->getUserById($user->id);
 
-        $userService->saveTwitterUser($twitterUser, $userType);
+        $userService = new UserService();
+        $userService->saveTwitterUser($twitterUser);
+
+        $user = User::find($twitterUser->getId());
+
+        ProcessTwitterUser::dispatch($twitterUser);
 
         Auth::login($user);
     }

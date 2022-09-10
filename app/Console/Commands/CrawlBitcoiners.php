@@ -2,6 +2,8 @@
 
 namespace App\Console\Commands;
 
+use App\Enums\UserType;
+use App\Models\User;
 use App\Services\CrawlerService;
 use Illuminate\Console\Command;
 
@@ -28,13 +30,15 @@ class CrawlBitcoiners extends Command
      */
     public function handle()
     {
-
-        $this->info('crawling bitcoiners, please wait');
+        $totalBitcoiners = User::where('type', UserType::BITCOINER)->count();
+        $this->info('starting count: ' . $totalBitcoiners);
+        $this->warn('starting crawl');
 
         $crawlerService = new CrawlerService();
         $crawlerService->crawlBitcoiners();
 
-        $this->info('Done');
+        $this->warn('Done');
+        $this->info('ending count: ' . User::where('type', UserType::BITCOINER)->count());
 
         return 0;
     }

@@ -10,21 +10,18 @@ use UtxoOne\TwitterUltimatePhp\Models\Users as TwitterUsers;
 
 class CrawlerService
 {
-    public function crawlBitcoiners(?int $limit = 2): void
+    public function crawlBitcoiners(?int $limit = 1): void
     {
         $userClient = new UserClient(bearerToken: config('services.twitter.bearer_token'));
 
-        $bitcoiners = User::query()
+        $bitcoiner = User::query()
             ->where('type', UserType::BITCOINER)
-            ->where('last_crawled_at', '<', Carbon::now()->subYear(1))
-            ->take($limit)
-            ->get();
+            ->inRandomOrder()
+            ->first();
 
         $userService = new UserService();
 
-        foreach($bitcoiners as $bitcoiner) {
-            $followers = $userClient->getFollowers($bitcoiner->twitter_id);
-            $userService->processTwitterUsers($followers);
-        }
+        $twitterUser = $userClient->getUserById($bitcoiner->twitter_id);
+        $userService->processTwitterUser($twitterUser);
     }
 }
