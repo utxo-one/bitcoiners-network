@@ -16,21 +16,11 @@ class DepositController extends Controller
 
     public function store(StoreDepositRequest $request)
     {
-        try {
-            $client = new Invoice($host, $apiKey);
+        
+    }
 
-                $client->createInvoice(
-                    $storeId,
-                    $currency,
-                    PreciseNumber::parseString($amount),
-                    $orderId,
-                    $buyerEmail
-                );
-
-        } catch (\Throwable $e) {
-            echo "Error: " . $e->getMessage();
-        }
-
-        return redirect()->route('transaction.deposit.index');
+    public function show()
+    {
+        return view('transaction.deposit.show');
     }
 }

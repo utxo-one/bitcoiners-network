@@ -11,6 +11,8 @@ class Transaction extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'twitter_id', 'user_id');
