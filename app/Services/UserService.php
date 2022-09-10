@@ -182,4 +182,19 @@ class UserService
 
         return $user;
     }
+
+    public function followUser(User $user): array
+    {
+        $userClient = new UserClient(
+            apiKey: config('services.twitter.client_id'),
+            apiSecret: config('services.twitter.client_secret'),
+            accessToken: auth()->user()->oauth_token,
+            accessSecret: auth()->user()->oauth_token_secret,
+        );
+
+        return $userClient->follow(
+            authUserId: auth()->user()->twitter_id,
+            userId: $user->twitter_id,
+        )->getData();
+    }
 }

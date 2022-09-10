@@ -13,4 +13,14 @@ class Follow extends Model
         'follower_id',
         'followee_id',
     ];
+
+    public function follower()
+    {
+        return $this->belongsTo(User::class, 'follower_id', 'twitter_id');
+    }
+
+    public function followee()
+    {
+        return $this->belongsTo(User::class, 'followee_id', 'twitter_id');
+    }
 }

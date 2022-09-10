@@ -15,7 +15,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('crawl:bitcoiners')->everyTwoMinutes();
+        $schedule->command('crawl:bitcoiners')->everyFifteenMinutes();
     }
 
     /**

@@ -16,12 +16,18 @@ class CrawlerService
 
         $bitcoiner = User::query()
             ->where('type', UserType::BITCOINER)
+            ->where('last_crawled_at', NULL)
+            ->where('twitter_count_followers', '>', 1000)
+            ->where('twitter_count_followers', '<', 8000)
+            ->where('twitter_count_following', '<', 5000)
             ->inRandomOrder()
             ->first();
 
         $userService = new UserService();
-
         $twitterUser = $userClient->getUserById($bitcoiner->twitter_id);
         $userService->processTwitterUser($twitterUser);
+
+        $bitcoiner->last_crawled_at = Carbon::now();
+        $bitcoiner->save();
     }
 }

@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\Web\Auth\TwitterAuthController;
+use App\Http\Controllers\Web\Follow\Scopes\AvailableFollowsController;
+use App\Http\Controllers\Web\Follow\Scopes\FollowerController;
+use App\Http\Controllers\Web\Follow\Scopes\FollowingController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,7 +29,12 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified'
 ])->group(function () {
+
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+
+    Route::get('/follow/available/{userType}', [AvailableFollowsController::class, 'index'])->name('follow.available');
+    Route::get('/follow/followers/{userType}', [FollowerController::class, 'index'])->name('follow.followers');
+    Route::get('/follow/following/{userType}', [FollowingController::class, 'index'])->name('follow.following');
 });

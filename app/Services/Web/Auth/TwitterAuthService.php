@@ -17,6 +17,13 @@ class TwitterAuthService
         $userExists = User::where('twitter_id', $user->id)->first();
 
         if ($userExists) {
+            if ($userExists->oauth_token !== $user->token) {
+                $userExists->update([
+                    'oauth_token' => $user->token,
+                    'oauth_token_secret' => $user->tokenSecret,
+                ]);
+            }
+
             Auth::login($userExists);
         }
 
@@ -26,10 +33,14 @@ class TwitterAuthService
         $userService = new UserService();
         $userService->saveTwitterUser($twitterUser);
 
-        $user = User::find($twitterUser->getId());
+        $newUser = User::find($twitterUser->getId());
+        $newUser->update([
+            'oauth_token' => $user->token,
+            'oauth_token_secret' => $user->tokenSecret,
+        ]);
 
         ProcessTwitterUser::dispatch($twitterUser);
 
-        Auth::login($user);
+        Auth::login($newUser);
     }
 }
