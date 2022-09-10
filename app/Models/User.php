@@ -18,32 +18,16 @@ class User extends Authenticatable
     use Notifiable;
     use TwoFactorAuthenticatable;
 
+    public $incrementing = false;
+    protected $primaryKey = 'twitter_id';
+    protected $keyType = 'string';
+
     /**
      * The attributes that are mass assignable.
      *
      * @var string[]
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'twitter_id',
-        'type',
-        'twitter_username',
-        'twitter_description',
-        'twitter_location',
-        'twitter_url',
-        'twitter_profile_image_url',
-        'twitter_verified',
-        'twitter_follwer_count',
-        'twitter_following_count',
-        'twitter_tweet_count',
-        'twitter_listed_count',
-        'twitter_pinned_tweet_id',
-        'oauth_type',
-        'oauth_token',
-        'oauth_token_secret',
-    ];
+    protected $guarded = [];
 
     /**
      * The attributes that should be hidden for serialization.

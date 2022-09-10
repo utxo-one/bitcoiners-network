@@ -7,14 +7,14 @@ use App\Services\UserService;
 use Illuminate\Console\Command;
 use UtxoOne\TwitterUltimatePhp\Clients\UserClient;
 
-class ProcessTwitterFollowers extends Command
+class ProcessBitcoiner extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'process:followers';
+    protected $signature = 'process:bitcoiner';
 
     /**
      * The console command description.
@@ -32,14 +32,12 @@ class ProcessTwitterFollowers extends Command
     {
         $twitterUsername = $this->ask('What is the Twitter username?');
 
-        $this->info('Processing followers, please wait');
+        $this->info('Processing bitcoiner, please wait');
 
         $twitterUserClient = new UserClient(bearerToken: config('services.twitter.bearer_token'));
         $twitterUser = $twitterUserClient->getUserByUsername($twitterUsername);
-        $followers = $twitterUserClient->getFollowers($twitterUser->getId());
-
-        $crawlerService = new CrawlerService();
-        $crawlerService->processTwitterUsers($followers);
+        $userService = new UserService();
+        $userService->processTwitterUser($twitterUser);
 
         $this->info('Done');
 
