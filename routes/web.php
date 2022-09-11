@@ -44,5 +44,6 @@ Route::middleware([
     Route::post('/transaction/deposit', [DepositController::class, 'store'])->name('transaction.deposit.store');
     Route::get('/transaction/deposit/success', [DepositController::class, 'show'])->name('transaction.deposit.show');
 
-    Route::post('/transaction/btcpay/webhook', [BtcPayWebhookController::class, 'index'])->name('transaction.btcpay.webhook');
 });
+
+Route::post('/transaction/btcpay/webhook', [BtcPayWebhookController::class, 'index'])->name('transaction.btcpay.webhook');
