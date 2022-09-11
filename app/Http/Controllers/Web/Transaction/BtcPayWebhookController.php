@@ -16,12 +16,14 @@ class BtcPayWebhookController extends Controller
     private string $host;
     private string $apiKey;
     private string $storeId;
+    private string $secret;
 
     public function __construct()
     {
         $this->host = config('services.btcpay.host');
         $this->apiKey = config('services.btcpay.api_key');
         $this->storeId = config('services.btcpay.store_id');
+        $this->secret = config('services.btcpay.webhook_secret');
     }
 
     public function index()
