@@ -32,7 +32,7 @@ class TransactionService
                     checkoutOptions: $checkoutOptions,
             );
 
-            dd($invoice);
+            return $invoice;
 
         } catch (\Throwable $e) {
             echo "Error: " . $e->getMessage();
