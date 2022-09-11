@@ -9,7 +9,7 @@ use App\Models\Transaction;
 use App\Models\User;
 use \BTCPayServer\Client\Invoice;
 use \BTCPayServer\Client\Webhook;
-
+use Illuminate\Support\Facades\Log;
 
 class BtcPayWebhookController extends Controller
 {
@@ -41,6 +41,7 @@ class BtcPayWebhookController extends Controller
         }
 
         $headers = getallheaders();
+        Log::info('BTCPayWebhookController', ['headers' => $headers]);
         $sig = $headers['Btcpay-Sig'];
 
         $webhookClient = new Webhook($this->host, $this->apiKey);
