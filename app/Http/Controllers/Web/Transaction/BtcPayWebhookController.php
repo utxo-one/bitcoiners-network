@@ -43,7 +43,7 @@ class BtcPayWebhookController extends Controller
         }
 
         $headers = getallheaders();
-        Log::info('BTCPayWebhookController', ['headers' => $headers]);
+        Log::info('BTCPayWebhookController', ['secret' => $this->secret, 'headers' => $headers]);
         $sig = $headers['BTCPay-Sig'];
 
         $webhookClient = new Webhook($this->host, $this->apiKey);
