@@ -48,9 +48,9 @@ class BtcPayWebhookController extends Controller
 
         $webhookClient = new Webhook($this->host, $this->apiKey);
 
-        if ($webhookClient->isIncomingWebhookRequestValid($raw_post_data, $sig, $this->secret)) {
+        if (!$webhookClient->isIncomingWebhookRequestValid($raw_post_data, $sig, $this->secret)) {
             throw new \RuntimeException(
-                'Invalid BTCPayServer payment notification message received - signature did not match. Received: ' . $sig . ' Expected: ' . hash('sha256', $this->secret)
+                'Invalid BTCPayServer payment notification message received - signature did not match. Received: ' . $sig . ' Expected: sha256=' . hash_hmac('sha256', $raw_post_data, $this->secret)
             );
         }
 
