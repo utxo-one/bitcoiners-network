@@ -84,6 +84,11 @@ class User extends Authenticatable
         return $this->hasMany(Transaction::class, 'user_id', 'twitter_id');
     }
 
+    public function followRequests()
+    {
+        return $this->hasMany(FollowRequest::class, 'user_id', 'twitter_id');
+    }
+
     public function getAvailableBalance(): int
     {
         $debits = $this->transactions()

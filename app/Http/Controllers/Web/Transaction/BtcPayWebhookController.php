@@ -31,6 +31,7 @@ class BtcPayWebhookController extends Controller
         $raw_post_data = file_get_contents('php://input');
 
         if (false === $raw_post_data) {
+            Log::error('Failed to read raw post data');
             throw new \RuntimeException(
                 'Could not read from the php://input stream or invalid BTCPayServer payload received.'
             );
@@ -39,22 +40,23 @@ class BtcPayWebhookController extends Controller
         $payload = json_decode($raw_post_data, false, 512, JSON_THROW_ON_ERROR);
 
         if (empty($payload)) {
+            Log::error('Failed to decode payload');
             throw new \RuntimeException('Could not decode the JSON payload from BTCPay.');
         }
 
         $headers = getallheaders();
-        Log::info('BTCPayWebhookController', ['secret' => $this->secret, 'headers' => $headers]);
         $sig = $headers['BTCPay-Sig'];
 
         $webhookClient = new Webhook($this->host, $this->apiKey);
 
         if (!$webhookClient->isIncomingWebhookRequestValid($raw_post_data, $sig, $this->secret)) {
+            Log::error('Invalid signature');
             throw new \RuntimeException(
-                'Invalid BTCPayServer payment notification message received - signature did not match. Received: ' . $sig . ' Expected: sha256=' . hash_hmac('sha256', $raw_post_data, $this->secret)
-            );
+                'Invalid BTCPayServer payment notification message received - signature did not match.');
         }
 
         if (true === empty($payload->invoiceId)) {
+            Log::error('Invoice ID is empty');
             throw new \RuntimeException(
                 'Invalid BTCPayServer payment notification message received - did not receive invoice ID.'
             );
