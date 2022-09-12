@@ -67,7 +67,7 @@ class FollowService
             'user_id' => $followRequest->user->twitter_id,
             'type' => TransactionType::DEBIT,
             'amount' => config('pricing.follow'),
-            'description' => 'Followed ' . $followRequest->follow->username,
+            'description' => 'Followed @' . $followRequest->follow->twitter_username,
             'status' => TransactionStatus::FINAL,
         ]);
 
@@ -85,7 +85,7 @@ class FollowService
         })
             ->get()
             ->map(function ($user) {
-                return $this->processFollowRequest($user->followRequests->first());
+                return $this->processFollowRequest($user->followRequests()->where('status', FollowRequestStatus::PENDING)->first());
             });
     }
 }
