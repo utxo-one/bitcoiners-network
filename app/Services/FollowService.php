@@ -6,6 +6,7 @@ use App\Enums\FollowRequestStatus;
 use App\Enums\TransactionStatus;
 use App\Enums\TransactionType;
 use App\Enums\UserType;
+use App\Models\Follow;
 use App\Models\FollowRequest;
 use App\Models\Transaction;
 use App\Models\User;
@@ -73,6 +74,12 @@ class FollowService
 
         $followRequest->transaction_id = $transaction->id;
         $followRequest->save();
+
+        // Create the follow record
+        Follow::create([
+            'follower_id' => $followRequest->user->twitter_id,
+            'followee_id' => $followRequest->follow->twitter_id,
+        ]);
 
         return $followRequest;
     }

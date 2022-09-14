@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Web\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Services\Web\Auth\TwitterAuthService;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Redirect;
 use Socialite;
-use UtxoOne\TwitterUltimatePhp\Clients\UserClient;
 
 class TwitterAuthController extends Controller
 {
@@ -14,21 +16,36 @@ class TwitterAuthController extends Controller
     {
     }
 
+    /**
+     * Redirect the user to the Twitter authentication page.
+     * 
+     * @group Authentication
+     *
+     * @return Response
+     */
     public function login()
     {
         return Socialite::driver('twitter')->redirect();
     }
 
-    public function callback()
+    /**
+     * Obtain the user information from Twitter.
+     * 
+     * @group Authentication
+     * @hideFromAPIDocumentation
+     *
+     * @return RedirectResponse
+     */
+    public function callback(): RedirectResponse
     {
         $this->twitterAuthService->callback();
 
-        $twitterUserClient = new UserClient(bearerToken: config('services.twitter.bearer_token'));
+        if (!auth()->check()) {
+            return response()->json([
+                'message' => 'Could not authenticate user',
+            ], Response::HTTP_UNAUTHORIZED);
+        }
 
-        $twitterUser = $twitterUserClient->getUserById(auth()->user()->twitter_id);
-
-        return view('dashboard', [
-            'twitterUser' => $twitterUser,
-        ]);
+        return response()->redirectTo('/dashboard');
     }
 }

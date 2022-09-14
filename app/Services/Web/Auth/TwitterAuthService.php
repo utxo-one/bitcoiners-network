@@ -39,7 +39,7 @@ class TwitterAuthService
             'oauth_token_secret' => $user->tokenSecret,
         ]);
 
-        ProcessTwitterUser::dispatch($twitterUser);
+        //ProcessTwitterUser::dispatch($twitterUser);
 
         Auth::login($newUser);
     }

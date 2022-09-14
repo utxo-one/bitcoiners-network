@@ -66,7 +66,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $appends = [
-        'profile_photo_url',
+        'profile_photo_url', 'follows_authenticated_user', 'is_followed_by_authenticated_user',
     ];
 
     public function followers()
@@ -106,19 +106,28 @@ class User extends Authenticatable
 
     public function getFollowersByType(UserType $userType)
     {
-        return $this->followers()->where('type', $userType)->get();
+        return $this->followers()->where('type', $userType);
     }
 
     public function getFollowingByType(UserType $userType)
     {
-        return $this->follows()->where('type', $userType)->get();
+        return $this->follows()->where('type', $userType);
     }
 
     public function getAvailableFollows(UserType $userType)
     {
         return User::where('type', $userType)
             ->whereNotIn('twitter_id', $this->getFollowingByType($userType)->pluck('twitter_id'))
-            ->where('twitter_id', '!=', $this->twitter_id)
-            ->get();
+            ->where('twitter_id', '!=', $this->twitter_id);
+    }
+
+    public function getFollowsAuthenticatedUserAttribute()
+    {
+        return $this->follows()->where('followee_id', auth()->user()->twitter_id)->exists();
+    }
+
+    public function getIsFollowedByAuthenticatedUserAttribute()
+    {
+        return $this->followers()->where('follower_id', auth()->user()->twitter_id)->exists();
     }
 }

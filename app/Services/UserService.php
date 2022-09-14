@@ -197,4 +197,14 @@ class UserService
             userId: $user->twitter_id,
         )->getData();
     }
+
+    public function isFollowing(User $user, User $targetUser): bool
+    {
+        return (Follow::where('follower_id', $user->twitter_id)->where('followee_id', $targetUser->twitter_id)->first() !== null);
+    }
+
+    public function isFollower(User $user, User $targetUser): bool
+    {
+        return (Follow::where('follower_id', $targetUser->twitter_id)->where('followee_id', $user->twitter_id)->first() !== null);
+    }
 }
