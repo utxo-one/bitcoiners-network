@@ -36,9 +36,7 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 
-    Route::get('/follow/available/{userType}', [AvailableFollowsController::class, 'index'])->name('follow.available');
-    Route::get('/follow/followers/{userType}', [FollowerController::class, 'index'])->name('follow.followers');
-    Route::get('/follow/following/{userType}', [FollowingController::class, 'index'])->name('follow.following');
+
 
     Route::get('/transaction/deposit', [DepositController::class, 'index'])->name('transaction.deposit.index');
     Route::post('/transaction/deposit', [DepositController::class, 'store'])->name('transaction.deposit.store');
