@@ -42,7 +42,6 @@ return new class extends Migration
             $table->timestamp('lightning_verified_at')->nullable();
             $table->timestamp('last_crawled_at')->nullable();
             $table->timestamp('last_processed_at')->nullable();
-
         });
     }
 
