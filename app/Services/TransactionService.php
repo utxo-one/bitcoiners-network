@@ -28,7 +28,7 @@ class TransactionService
                     currency: 'SATS',
                     amount: PreciseNumber::parseString($amount),
                     orderId: $orderId,
-                    buyerEmail: auth()->user()->twitter_username . '@twitter.com',
+                    buyerEmail: auth()->user()->twitter_id . '@twitter.com',
                     checkoutOptions: $checkoutOptions,
             );
 

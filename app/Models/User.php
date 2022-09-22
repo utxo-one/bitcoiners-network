@@ -66,7 +66,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $appends = [
-        'profile_photo_url', 'follows_authenticated_user', 'is_followed_by_authenticated_user',
+        'profile_photo_url', 'follows_authenticated_user', 'is_followed_by_authenticated_user', 'following_data', 'follower_data',
     ];
 
     public function followers()
@@ -134,5 +134,25 @@ class User extends Authenticatable
     public function getIsFollowedByAuthenticatedUserAttribute()
     {
         return $this->followers()->where('follower_id', auth()->user()->twitter_id)->exists();
+    }
+
+    public function getFollowingDataAttribute()
+    {
+        return [
+            'bitcoiners' => $this->follows()->where('type', UserType::BITCOINER)->count(),
+            'shitcoiners' => $this->follows()->where('type', UserType::SHITCOINER)->count(),
+            'nocoiners' => $this->follows()->where('type', UserType::NOCOINER)->count(),
+            'total' => $this->follows()->count(),
+        ];
+    }
+
+    public function getFollowerDataAttribute()
+    {
+        return [
+            'bitcoiners' => $this->followers()->where('type', UserType::BITCOINER)->count(),
+            'shitcoiners' => $this->followers()->where('type', UserType::SHITCOINER)->count(),
+            'nocoiners' => $this->followers()->where('type', UserType::NOCOINER)->count(),
+            'total' => $this->followers()->count(),
+        ];
     }
 }

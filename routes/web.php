@@ -38,8 +38,8 @@ Route::middleware([
 
 
 
-    Route::get('/transaction/deposit', [DepositController::class, 'index'])->name('transaction.deposit.index');
-    Route::post('/transaction/deposit', [DepositController::class, 'store'])->name('transaction.deposit.store');
+    // Route::get('/transaction/deposit', [DepositController::class, 'index'])->name('transaction.deposit.index');
+    // Route::post('/transaction/deposit', [DepositController::class, 'store'])->name('transaction.deposit.store');
     Route::get('/transaction/deposit/success', [DepositController::class, 'show'])->name('transaction.deposit.show');
 
 });

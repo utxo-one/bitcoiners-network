@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Frontend\User;
 
+use App\Enums\UserType;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -21,8 +22,13 @@ class UserController extends Controller
      */
     public function show(string $username): JsonResponse
     {
-        return response()->json([
-            'user' => User::where('twitter_username', $username)->firstOrFail(),
-        ]);
+        $user = User::where('twitter_username', $username)->firstOrFail();
+
+        return response()->json($user);
+    }
+
+    public function auth(): JsonResponse
+    {
+        return $this->show(auth()->user()->twitter_username);
     }
 }

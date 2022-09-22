@@ -73,7 +73,7 @@ class BtcPayWebhookController extends Controller
         $buyerEmail = $invoice->getData()['metadata']['buyerEmail'];
 
         if ($payload->type === 'InvoiceSettled') {
-            $user = User::where('twitter_username', explode('@', $buyerEmail)[0])->first();
+            $user = User::where('twitter_id', explode('@', $buyerEmail)[0])->first();
 
             $user->transactions()->create([
                 'amount' => $invoicePrice,
