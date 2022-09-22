@@ -1,0 +1,515 @@
+{
+	"info": {
+		"_postman_id": "b4ae1bdd-b798-461f-b90c-66daae49c852",
+		"name": "bitcoiners.network",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "22808795"
+	},
+	"item": [
+		{
+			"name": "Home Page (Public)",
+			"item": [
+				{
+					"name": "Profile Pictures",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/frontend/profile-pictures",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"frontend",
+								"profile-pictures"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Random Bitcoiners",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/frontend/random-bitcoiners",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"frontend",
+								"random-bitcoiners"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Random Shitcoiners",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/frontend/random-shitcoiners",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"frontend",
+								"random-shitcoiners"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Random Nocoiners",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/frontend/random-nocoiners",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"frontend",
+								"random-nocoiners"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Dashboard (Auth)",
+			"item": [
+				{
+					"name": "Mass Follow Summary",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/frontend/follow/mass-follow",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"frontend",
+								"follow",
+								"mass-follow"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Mass Follow (Auth)",
+			"item": [
+				{
+					"name": "Completed Follow Requests",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/frontend/follow/requests/completed",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"frontend",
+								"follow",
+								"requests",
+								"completed"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete All Follow Requests",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/frontend/follow/mass-follow",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"frontend",
+								"follow",
+								"mass-follow"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Specific Follow Requests",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"twitterIds\": [\n        1346926943845965825\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/frontend/follow/requests",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"frontend",
+								"follow",
+								"requests"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Pending Follow Requests",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/frontend/follow/requests/pending",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"frontend",
+								"follow",
+								"requests",
+								"pending"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Mass Follow Campaign",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": 50\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/frontend/follow/mass-follow",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"frontend",
+								"follow",
+								"mass-follow"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User (Auth)",
+			"item": [
+				{
+					"name": "Get Available Balance (Sats)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/frontend/user/available-balance",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"frontend",
+								"user",
+								"available-balance"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User Details by Username",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/frontend/user/utxo_one",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"frontend",
+								"user",
+								"utxo_one"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Auth User Details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/frontend/user/auth",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"frontend",
+								"user",
+								"auth"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Transaction (Auth)",
+			"item": [
+				{
+					"name": "Create Deposit",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": 100000\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/frontend/transaction/deposit",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"frontend",
+								"transaction",
+								"deposit"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Follows",
+			"item": [
+				{
+					"name": "Available to Follow by Type",
+					"item": [
+						{
+							"name": "Bitcoiners Available to Follow",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost/frontend/follow/available/bitcoiner",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"path": [
+										"frontend",
+										"follow",
+										"available",
+										"bitcoiner"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Authenticated User",
+					"item": [
+						{
+							"name": "Bitcoiner Follows (Auth User)",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost/frontend/follow/following/bitcoiner",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"path": [
+										"frontend",
+										"follow",
+										"following",
+										"bitcoiner"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Shitcoiner Follows (Auth User)",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost/frontend/follow/following/shitcoiner",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"path": [
+										"frontend",
+										"follow",
+										"following",
+										"shitcoiner"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Nocoiner Follows (Auth User)",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost/frontend/follow/following/nocoiner",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"path": [
+										"frontend",
+										"follow",
+										"following",
+										"nocoiner"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "New Request",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "BTCPay-Sig",
+						"value": "sha256=9adf95596669e6a99943707800ea51015267bfcc45a22818bdcc6f377bc6bbfa1e666",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"manuallyMarked\": false,\n\"deliveryId\": \"FRWuM8BzwbawewLY5pJWcc\",\n\"webhookId\": \"Mn4cZakALSkeDHYz3m14FA\",\n\"originalDeliveryId\": \"FRWuM8BzwbawewLY5pJWcc\",\n\"isRedelivery\": false,\n\"type\": \"InvoiceSettled\",\n\"timestamp\": 1662860619,\n\"storeId\": \"AFaaz6gYXM28FXNpoJiU22QUQcvMNwZutahN9jK6Swkx\",\n\"invoiceId\": \"T6VfdbEMd3rxAx2nikftgt\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/frontend/follow/available/nocoiner",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"frontend",
+						"follow",
+						"available",
+						"nocoiner"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Rates",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "BTCPay-Sig",
+						"value": "sha256=9adf95596669e6a99943707800ea51015267bfcc45a22818bdcc6f377bc6bbfa1e666",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"manuallyMarked\": false,\n\"deliveryId\": \"FRWuM8BzwbawewLY5pJWcc\",\n\"webhookId\": \"Mn4cZakALSkeDHYz3m14FA\",\n\"originalDeliveryId\": \"FRWuM8BzwbawewLY5pJWcc\",\n\"isRedelivery\": false,\n\"type\": \"InvoiceSettled\",\n\"timestamp\": 1662860619,\n\"storeId\": \"AFaaz6gYXM28FXNpoJiU22QUQcvMNwZutahN9jK6Swkx\",\n\"invoiceId\": \"T6VfdbEMd3rxAx2nikftgt\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/frontend/rates",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"frontend",
+						"rates"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
