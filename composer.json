@@ -15,6 +15,7 @@
         "laravel/socialite": "^5.5",
         "laravel/tinker": "^2.7",
         "livewire/livewire": "^2.5",
+        "orangehill/iseed": "^3.0",
         "utxo-one/twitter-ultimate-php": "*"
     },
     "require-dev": {
