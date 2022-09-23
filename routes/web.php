@@ -44,4 +44,15 @@ Route::middleware([
 
 });
 
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified'
+])->group(function () {
+
+    Route::get('/dashboard-react', function () {
+        return view('dashboard-react');
+    })->name('dashboard-react');
+});
+
 Route::post('/transaction/btcpay/webhook', [BtcPayWebhookController::class, 'index'])->name('transaction.btcpay.webhook');
