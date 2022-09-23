@@ -27,6 +27,11 @@ sudo cp .env.example .env
 sudo vendor/bin/sail up -d
 ```
 
+#### Install Composer Packages
+```sh
+sudo vendor/bin/sail composer update
+```
+
 #### Run Database Migration and Seeder
 ```sh
 sudo vendor/bin/sail artisan migrate:refresh --seed
