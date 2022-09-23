@@ -22,14 +22,14 @@ cd bitcoiners-network
 sudo cp .env.example .env
 ```
 
+#### Install Composer Packages
+```sh
+sudo composer update
+```
+
 #### Docker Up (Sail)
 ```sh
 sudo vendor/bin/sail up -d
-```
-
-#### Install Composer Packages
-```sh
-sudo vendor/bin/sail composer update
 ```
 
 #### Run Database Migration and Seeder
