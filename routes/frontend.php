@@ -8,6 +8,7 @@ use App\Http\Controllers\Frontend\Follow\Scopes\FollowingController;
 use App\Http\Controllers\Frontend\Follow\Scopes\FollowRequestScopeController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\RatesController;
+use App\Http\Controllers\Frontend\Transaction\DebitController;
 use App\Http\Controllers\Frontend\Transaction\DepositController;
 use App\Http\Controllers\Frontend\User\AvailableBalanceController;
 use App\Http\Controllers\Frontend\User\UserController;
@@ -27,9 +28,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 #If environment is local, Authenticate user with twitter_id 1558929312547577858
-// if (app()->environment('local')) {
-//     Auth::loginUsingId('1558929312547577858');
-// }
+if (app()->environment('local')) {
+    Auth::loginUsingId('1558929312547577858');
+}
 
 Route::get('/profile-pictures', [HomeController::class, 'profilesPictures'])->name('home.profile-pictures');
 Route::get('/random-bitcoiners', [HomeController::class, 'randomBitcoiners'])->name('home.random-bitcoiners');
@@ -47,8 +48,13 @@ Route::middleware('auth')->group(function () {
     Route::get('follow/requests/pending', [FollowRequestScopeController::class, 'pending'])->name('follow.requests.pending');
     Route::delete('follow/mass-follow', [MassFollowController::class, 'delete'])->name('follow.mass-follow.delete');
     Route::delete('follow/requests', [FollowRequestController::class, 'delete'])->name('follow.requests.delete');
+
+
     Route::get('user/available-balance', [AvailableBalanceController::class, 'index'])->name('user.available-balance');
     Route::post('transaction/deposit', [DepositController::class, 'store'])->name('transaction.deposit.store');
+    Route::get('transaction/deposit', [DepositController::class, 'index'])->name('transaction.deposit.index');
+    Route::get('transaction/debit', [DebitController::class, 'index'])->name('transaction.debit.index');
+    
     Route::get('/user/auth', [UserController::class, 'auth'])->name('user.auth');
     Route::get('/user/{username}', [UserController::class, 'show'])->name('user.show');
 });
