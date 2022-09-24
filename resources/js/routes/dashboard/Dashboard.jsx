@@ -25,12 +25,13 @@ export default function Dashboard() {
 
   return (
     <>
-      <div>Hi, here are some pictures from bitcoiners</div>
+      <Link to='/followers'>Followers</Link>
+      <Link to='/following'>Following</Link>
+      
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
         { pictures.map(picture => (
           <img src={picture} style={{ borderRadius: 8 }} />
         ))}
-        <Link to='/followers'>User Followers</Link>
       </div>
     </>
   );
