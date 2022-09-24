@@ -15,10 +15,12 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('crawl:bitcoiners')->everyFiveMinutes();
-        //$schedule->command('reclassify:users')->everyMinute();
-        $schedule->command('save:bitcoiner-tweets')->everyMinute();
-        //$schedule->command('process:follow-requests')->everyMinute();
+        if (env('APP_SCHEDULER') === 'true') {
+            $schedule->command('crawl:bitcoiners')->everyFiveMinutes();
+            //$schedule->command('reclassify:users')->everyMinute();
+            $schedule->command('save:bitcoiner-tweets')->everyMinute();
+            //$schedule->command('process:follow-requests')->everyMinute();
+        }
     }
 
     /**
