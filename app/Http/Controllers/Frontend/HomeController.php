@@ -12,14 +12,18 @@ class HomeController extends Controller
 {
     public function profilesPictures()
     {
-        return response()->json(
-            User::where('type', UserType::BITCOINER)
-                ->inRandomOrder()
-                ->whereNotNull('twitter_profile_image_url')
-                ->pluck('twitter_profile_image_url')
-                ->take(100)
-                ->toArray(),
-                Response::HTTP_OK);
+        $profilePictureUrls = User::where('type', UserType::BITCOINER)
+            ->inRandomOrder()
+            ->whereNotNull('twitter_profile_image_url')
+            ->pluck('twitter_profile_image_url')
+            ->take(100)
+            ->toArray();
+
+        $highResProfilePictureUrls = array_map(function ($url) {
+            return str_replace('_normal', '', $url);
+        }, $profilePictureUrls);
+
+        return response()->json($highResProfilePictureUrls, Response::HTTP_OK);
     }
 
     public function randomBitcoiners()
