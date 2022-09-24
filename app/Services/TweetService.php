@@ -19,6 +19,12 @@ class TweetService
         $tweetCollection = [];
 
         foreach ($tweets->all() as $tweet) {
+
+            // if the tweet already exists, skip it
+            if (Tweet::query()->where('id', $tweet->getId())->exists()) {
+                continue;
+            }
+
             $tweetCollection[] = Tweet::create([
                 'user_id' => $user->twitter_id,
                 'id' => $tweet->getId(),

@@ -41,8 +41,14 @@ class FollowService
             });
     }
 
-    public function processFollowRequest(FollowRequest $followRequest): FollowRequest
+    public function processFollowRequest(FollowRequest $followRequest):? FollowRequest
     {
+        // if the follow request is for this user, delete it and return null
+        if ($followRequest->follow_id == $followRequest->user_id) {
+            $followRequest->delete();
+            return null;
+        }
+
         $client = new UserClient(
             apiKey: config('services.twitter.client_id'),
             apiSecret: config('services.twitter.client_secret'),
