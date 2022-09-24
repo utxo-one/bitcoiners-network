@@ -25,9 +25,9 @@ export default function Dashboard() {
 
   return (
     <>
-      <Link to='/followers'>Followers</Link>
-      <Link to='/following'>Following</Link>
-      
+      <Link to='/followers' style={{ color: 'white', backgroundColor: 'blue', margin: 12, padding: 4, display: 'inline-block' }}>Followers</Link>
+      <Link to='/following' style={{ color: 'white', backgroundColor: 'blue', margin: 12, padding: 4, display: 'inline-block' }}>Following</Link>
+
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
         { pictures.map(picture => (
           <img src={picture} style={{ borderRadius: 8 }} />
