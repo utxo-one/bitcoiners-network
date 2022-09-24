@@ -49,10 +49,9 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified'
 ])->group(function () {
-
-    Route::get('/dashboard-react', function () {
-        return view('dashboard-react');
-    })->name('dashboard-react');
+    Route::view('/u/{path?}', 'user-dashboard')
+     ->where('path', '.*')
+     ->name('user-dashboard');
 });
 
 Route::post('/transaction/btcpay/webhook', [BtcPayWebhookController::class, 'index'])->name('transaction.btcpay.webhook');
