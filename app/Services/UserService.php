@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\ClassificationSource;
 use App\Enums\UserType;
 use App\Models\Follow;
 use App\Models\User;
@@ -13,38 +14,49 @@ use UtxoOne\TwitterUltimatePhp\Models\Users as TwitterUsers;
 
 class UserService
 {
-    public function classifyUser(?string $twitterId = null, ?TwitterUser $twitterUser = null): UserType
+    public function classifyUser(?string $twitterId = null, ?TwitterUser $twitterUser = null, ?User $user = null): UserType
     {
-        if (!$twitterId && !$twitterUser) {
-            throw new Exception('Either twitterId or twitterUser must be provided');
+        if (!$twitterId && !$twitterUser && !$user) {
+            throw new Exception('Either twitterId, user or twitterUser must be provided');
         }
 
-        $twitterUserClient = new UserClient(bearerToken: config('services.twitter.bearer_token'));
+        // if the classification source is vote, do not reclassify and return the current type
+        if ($user && $user->classification_source === ClassificationSource::VOTE) {
+            return $user->type;
+        }
 
-        if (!$twitterUser) {
+        if (!$twitterUser && !$user) {
+            $twitterUserClient = new UserClient(bearerToken: config('services.twitter.bearer_token'));
             $twitterUser = $twitterUserClient->getUserById($twitterId);
         }
 
-        $twitterBioWordCollection = collect(explode(' ', $twitterUser->getDescription()));
+        $bio = ($user->exists()) ? $user->twitter_description : $twitterUser->getDescription();
+        $username = ($user->exists()) ? $user->name : $twitterUser->getName();
+
+        $bioWords = collect(explode(' ', $bio));
 
         $bitcoinerKeywords = collect(config('classifier.bitcoinerKeywords'));
         $shitcoinerKeywords = collect(config('classifier.shitcoinerKeywords'));
 
-        $bioContainsShitcoinKeywords = $twitterBioWordCollection->contains(function ($word) use ($shitcoinerKeywords) {
-            return $shitcoinerKeywords->contains($word);
-        });
+        $bioContainsShitcoinKeywords = $bioWords
+            ->contains(function ($word) use ($shitcoinerKeywords) {
+                return $shitcoinerKeywords->contains($word);
+            });
 
-        $bioContainsBitcoinKeywords = $twitterBioWordCollection->contains(function ($word) use ($bitcoinerKeywords) {
-            return $bitcoinerKeywords->contains($word);
-        });
+        $bioContainsBitcoinKeywords = $bioWords
+            ->contains(function ($word) use ($bitcoinerKeywords) {
+                return $bitcoinerKeywords->contains($word);
+            });
 
-        $nameContainsShitcoins = collect(config('classifier.shitcoinerNames'))->contains(function ($shitcoinName) use ($twitterUser) {
-            return str_contains($twitterUser->getName(), $shitcoinName);
-        });
+        $nameContainsShitcoins = collect(config('classifier.shitcoinerNames'))
+            ->contains(function ($shitcoinName) use ($username) {
+                return str_contains($username, $shitcoinName);
+         });
 
-        $nameContainsBitcoin = collect(config('classifier.bitcoinerNames'))->contains(function ($bitcoinName) use ($twitterUser) {
-            return str_contains($twitterUser->getName(), $bitcoinName);
-        });
+        $nameContainsBitcoin = collect(config('classifier.bitcoinerNames'))
+            ->contains(function ($bitcoinName) use ($username) {
+                return str_contains($username, $bitcoinName);
+         });
 
         $type = UserType::NOCOINER;
 
@@ -52,7 +64,11 @@ class UserService
             $type = UserType::SHITCOINER;
         }
 
-        if ($bioContainsBitcoinKeywords && !$bioContainsShitcoinKeywords) {
+        if ($bioContainsBitcoinKeywords && !$bioContainsShitcoinKeywords && !$nameContainsShitcoins) {
+            $type = UserType::BITCOINER;
+        }
+
+        if ($nameContainsBitcoin && !$bioContainsShitcoinKeywords && !$nameContainsShitcoins) {
             $type = UserType::BITCOINER;
         }
 
@@ -85,6 +101,7 @@ class UserService
             'oauth_type'=> 'twitter',
             'password' => encrypt(str()->random(10)),
             'last_processed_at' => Carbon::now(),
+            'classified_by' => ClassificationSource::CRAWLER,
         ]);
     }
 
