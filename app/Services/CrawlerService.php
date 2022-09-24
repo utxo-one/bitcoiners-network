@@ -19,7 +19,7 @@ class CrawlerService
         $bitcoiner = User::query()
             ->where('type', UserType::BITCOINER)
             ->where('last_crawled_at', NULL)
-            ->where('twitter_count_followers', '>', 1000)
+            ->where('twitter_count_followers', '>', 500)
             ->where('twitter_count_followers', '<', 8000)
             ->where('twitter_count_following', '<', 5000)
             ->inRandomOrder()
@@ -44,7 +44,7 @@ class CrawlerService
         $bitcoiner->last_timeline_saved_at = Carbon::now();
         $bitcoiner->save();
 
-        Log::info('Crawled bitcoiner ' . $bitcoiner->twitter_username . ' with ' . $bitcoiner->twitter_count_followers . ' followers');
+        Log::notice('Crawled bitcoiner ' . $bitcoiner->twitter_username . ' with ' . $bitcoiner->twitter_count_followers . ' followers');
     }
 
     public function saveBitcoinerTweets(?int $limit = 50): void
@@ -62,7 +62,9 @@ class CrawlerService
             ->get();
 
         // Foreach bitcoiner, get their timeline, and save each tweet
+        $tweetCount = 0;
         foreach ($bitcoiners as $bitcoiner) {
+            $tweetCount++;
             $tweets = $tweetClient->getTimeline(
                 userId: $bitcoiner->twitter_id,
                 maxResults: 5
@@ -72,7 +74,8 @@ class CrawlerService
             $tweets = $tweetService->saveTweets($tweets, $bitcoiner);
             $bitcoiner->last_timeline_saved_at = Carbon::now();
             $bitcoiner->save();
-            Log::info('Saved ' . count($tweets) . ' tweets for ' . $bitcoiner->twitter_username);
+            
         }
+        Log::info('Saved ' . $tweetCount . ' tweets from ' . $bitcoiners->count() . ' bitcoiners');
     }
 }

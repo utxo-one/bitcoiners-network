@@ -26,7 +26,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// If environment is local, Authenticate user with twitter_id 1558929312547577858
+#If environment is local, Authenticate user with twitter_id 1558929312547577858
 // if (app()->environment('local')) {
 //     Auth::loginUsingId('1558929312547577858');
 // }

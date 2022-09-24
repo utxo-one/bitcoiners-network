@@ -68,7 +68,7 @@ class ReclassifyUsersWizard extends Command
             // if the new type is different the current type, display a message in the console with the new type, and update the last_classified_at and classified_by fields
             if ($newType->value != $user->type) {
                 $this->info('user ' . $user->twitter_username . ' changed from ' . $user->type . ' to ' . $newType->value);
-                Log::info('user ' . $user->twitter_username . ' changed from ' . $user->type . ' to ' . $newType->value);
+                //Log::info('user ' . $user->twitter_username . ' changed from ' . $user->type . ' to ' . $newType->value);
 
                 $user->type = $newType;
                 $user->last_classified_at = now();
