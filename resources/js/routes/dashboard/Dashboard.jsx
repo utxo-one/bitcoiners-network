@@ -1,21 +1,26 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
-import Button from "./layout/Button";
+import axios from "axios";
+import { Link } from "react-router-dom";
 
-export default function ReactApp() {
+export default function Dashboard() {
 
   const [pictures, setPictures] = useState([]);
+  const [userData, serUserData] = useState(null);
 
   useEffect(() => {
     const loadProfilePictures = async () => {
       const { data } = await axios.get('/frontend/profile-pictures');
-
       setPictures(data);
+    }
+
+    const loadUserData = async () => {
+      const { data } = await axios.get('frontend/user/auth');;
 
       console.log(data);
     }
 
     loadProfilePictures();
+    loadUserData();
   }, []);
 
   return (
@@ -25,7 +30,7 @@ export default function ReactApp() {
         { pictures.map(picture => (
           <img src={picture} style={{ borderRadius: 8 }} />
         ))}
-        <Button>React Button</Button>
+        <Link to='/followers'>User Followers</Link>
       </div>
     </>
   );
