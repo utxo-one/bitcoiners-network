@@ -8,6 +8,7 @@ use App\Models\Follow;
 use App\Models\User;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Support\Facades\Log;
 use UtxoOne\TwitterUltimatePhp\Clients\UserClient;
 use UtxoOne\TwitterUltimatePhp\Models\User as TwitterUser;
 use UtxoOne\TwitterUltimatePhp\Models\Users as TwitterUsers;
@@ -30,8 +31,8 @@ class UserService
             $twitterUser = $twitterUserClient->getUserById($twitterId);
         }
 
-        $bio = ($user->exists()) ? $user->twitter_description : $twitterUser->getDescription();
-        $username = ($user->exists()) ? $user->name : $twitterUser->getName();
+        $bio = ($user) ? $user->twitter_description : $twitterUser->getDescription();
+        $username = ($user) ? $user->name : $twitterUser->getName();
 
         $bioWords = collect(explode(' ', $bio));
 
@@ -105,11 +106,15 @@ class UserService
         ]);
     }
 
-    public function saveTwitterUsers(array $twitterUsers): void
+    public function saveTwitterUsers(array $twitterUsers): array
     {
+        $users = [];
+
         foreach ($twitterUsers as $twitterUser) {
-            $this->saveTwitterUser($twitterUser);
+            $users[] = $this->saveTwitterUser($twitterUser);
         }
+
+        return $users;
     }
 
     public function saveFollowing(TwitterUser $twitterUser, ?string $nextToken = null, ?array $twitterUsers = []): array
@@ -191,8 +196,11 @@ class UserService
         $followers = $this->saveFollowers($twitterUser);
         $following = $this->saveFollowing($twitterUser);
 
-        $this->saveTwitterUsers($followers);
-        $this->saveTwitterUsers($following);
+        $newFollowers = $this->saveTwitterUsers($followers);
+        $newFollowing = $this->saveTwitterUsers($following);
+
+        $newUsers = array_merge($newFollowers, $newFollowing);
+        Log::notice('New users found', ['count' => count($newUsers)]);
 
         $user->last_processed_at = Carbon::now();
         $user->save();
