@@ -1,0 +1,18 @@
+svg.__radial-bar {
+  display: inline-block; // if unset (inline), parent element will have extra empty space from line-height
+  transition: stroke-dashoffset 0.3s;
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+
+  circle {
+    fill: transparent;
+  }
+
+  .background-bar {
+    stroke: var(--gray-80);
+  }
+
+  .filled-bar {
+    stroke: var(--red);
+  }
+}

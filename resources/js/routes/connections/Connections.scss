@@ -1,0 +1,71 @@
+.__connections {
+
+  header {
+    position: sticky;
+    display: flex;
+    // justify-content: space-between;
+    align-items: center;
+    padding: 28px 12px;
+    gap: 12px;
+    border-bottom: 1px solid var(--gray-80);
+    top: 0;
+    background-color: white;
+
+    svg.back {
+      width: 24px;
+      height: auto;
+    }
+
+    h2 {
+      flex: 1;
+      font-size: 18px;
+      font-weight: bold;
+      margin: 0;
+      text-align: center;
+
+      .user-count {
+        font-weight: normal;
+        color: var(--gray-30);
+      }
+    }
+
+    .filter {
+      font-size: 18px;
+      color: var(--gray-30);
+      font-weight: 600;
+    }
+  }
+
+  .users {
+    margin: 20px 4px;
+  }
+  
+  .user-details {
+    display: flex;
+    gap: 8px;
+    padding: 8px 4px;
+    margin: 4px 0;
+
+    &:not(:first-of-type) {
+      border-top: 1px solid var(--gray-80);
+    }
+
+    img.profile {
+      width: 48px;
+      height: 48px;
+      border-radius: 100%;
+      align-items: flex-start;
+    }
+
+    .name {
+      font-size: 16px;
+      line-height: 24px;
+      font-weight: bold;
+    }
+    
+    .twitter-handle {
+      color: var(--gray-30);
+      font-size: 14px;
+    }
+  }
+}

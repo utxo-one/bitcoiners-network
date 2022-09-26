@@ -1,0 +1,21 @@
+// This file is included in React's main entry (app.jsx)
+// Any new color can be added to this file.
+
+:root {
+  --orange-dark  : #F7421A;
+  --orange       : #F56B06;
+  --orange-btc   : #F7931A;
+  --red          : #F50727;
+  --poop         : #9F4D00;
+  --blue-twitter : #1C7ED9;
+  --gray-20      : #4D4D4D;
+  --gray-30      : #5A5A5A;
+  --gray-40      : #797979;
+  --gray-50      : #878787;
+  --gray-60      : #9E9E9E;
+  --gray-70      : #A7A7A7;
+  --gray-80      : #D9D9D9;
+  --gray-90      : #F3F3F3;
+
+  --shitcoiner-color: var(--poop);
+}

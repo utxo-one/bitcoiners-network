@@ -1,0 +1,62 @@
+.__connections-chart {
+  display: flex;
+  gap: 12px;
+  margin: 32px auto;
+
+  .type {
+    flex: 1;
+    text-align: center;
+
+    .chart {
+      position: relative;
+      margin-bottom: 4px;
+
+      .chart-percent {
+        font-size: 18px;
+        font-weight: bold;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+      }
+    }
+
+    .__radial-bar {
+      width: 85%;
+      height: 85%;
+    }
+
+    &.bitcoiners {
+      color: var(--orange-btc);
+      .__radial-bar .filled-bar {
+        stroke: var(--orange-btc);
+      }
+    }
+
+    &.shitcoiners {
+      color: var(--shitcoiner-color);
+
+      .__radial-bar .filled-bar {
+        stroke: var(--shitcoiner-color);
+      }
+    }
+
+    &.nocoiners {
+      color: var(--gray-60);
+
+      .__radial-bar .filled-bar {
+        stroke: var(--gray-60);
+      }
+    }
+
+    .count {
+      font-weight: bold;
+      font-size: 26px;
+    }
+
+    .user-type {
+      font-size: 15px;
+      font-weight: 600;
+    }
+  }
+}
