@@ -3,7 +3,9 @@
 namespace App\Services;
 
 use App\Enums\ClassificationSource;
+use App\Enums\EndorsementType;
 use App\Enums\UserType;
+use App\Models\Endorsement;
 use App\Models\Follow;
 use App\Models\User;
 use Carbon\Carbon;
@@ -231,5 +233,43 @@ class UserService
     public function isFollower(User $user, User $targetUser): bool
     {
         return (Follow::where('follower_id', $targetUser->twitter_id)->where('followee_id', $user->twitter_id)->first() !== null);
+    }
+
+    public function endorseUser(string $endorserId, string $endorseeId, string $type): bool
+    {
+        $endorsement = Endorsement::query()
+            ->where('endorser_id', $endorserId)
+            ->where('endorsee_id', $endorseeId)
+            ->where('endorsement_type', $type)
+            ->first();
+
+        if ($endorsement) {
+            return false;
+        }
+
+        Endorsement::create([
+            'endorser_id' => $endorserId,
+            'endorsee_id' => $endorseeId,
+            'endorsement_type' => $type,
+        ]);
+
+        return true;
+    }
+
+    public function unendorseUser(string $endorserId, string $endorseeId, string $type): bool
+    {
+        $endorsement = Endorsement::query()
+            ->where('endorser_id', $endorserId)
+            ->where('endorsee_id', $endorseeId)
+            ->where('endorsement_type', $type)
+            ->first();
+
+        if (!$endorsement) {
+            return false;
+        }
+
+        $endorsement->delete();
+
+        return true;
     }
 }

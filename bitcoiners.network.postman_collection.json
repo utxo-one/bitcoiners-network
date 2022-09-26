@@ -213,7 +213,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"amount\": 50\n}",
+							"raw": "{\n    \"amount\": 3000\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -261,6 +261,34 @@
 					"response": []
 				},
 				{
+					"name": "Endorse User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"twitterId\": \"1558844336187523074\",\n    \"type\": \"developer\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/frontend/endorse",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"frontend",
+								"endorse"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Get User Details by Username",
 					"request": {
 						"method": "GET",
@@ -299,6 +327,67 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Get Endorsements",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"twitterId\": \"1558844336187523074\",\n    \"type\": \"developer\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/frontend/user/endorsements/1558844336187523074",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"frontend",
+								"user",
+								"endorsements",
+								"1558844336187523074"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Unendorse User",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"twitterId\": \"1558844336187523074\",\n    \"type\": \"developer\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/frontend/endorse",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"frontend",
+								"endorse"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -329,6 +418,70 @@
 								"frontend",
 								"transaction",
 								"deposit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "View Deposits",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": 100000\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/frontend/transaction/deposit",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"frontend",
+								"transaction",
+								"deposit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "View Debits",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": 100000\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/frontend/transaction/debit",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"frontend",
+								"transaction",
+								"debit"
 							]
 						}
 					},
@@ -390,6 +543,27 @@
 							"response": []
 						},
 						{
+							"name": "Bitcoiner Followers (Auth User)",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost/frontend/follow/followers/bitcoiner",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"path": [
+										"frontend",
+										"follow",
+										"followers",
+										"bitcoiner"
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "Shitcoiner Follows (Auth User)",
 							"request": {
 								"method": "GET",
@@ -404,6 +578,27 @@
 										"frontend",
 										"follow",
 										"following",
+										"shitcoiner"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Shitcoiner Followers (Auth User)",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost/frontend/follow/followers/shitcoiner",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"path": [
+										"frontend",
+										"follow",
+										"followers",
 										"shitcoiner"
 									]
 								}
@@ -426,6 +621,67 @@
 										"follow",
 										"following",
 										"nocoiner"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Nocoiner Followers (Auth User)",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost/frontend/follow/followers/nocoiner",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"path": [
+										"frontend",
+										"follow",
+										"followers",
+										"nocoiner"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "All Follows (Auth User)",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost/frontend/follow/following",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"path": [
+										"frontend",
+										"follow",
+										"following"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "All Followers (Auth User)",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost/frontend/follow/followers",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"path": [
+										"frontend",
+										"follow",
+										"followers"
 									]
 								}
 							},
@@ -506,6 +762,43 @@
 					"path": [
 						"frontend",
 						"rates"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Endorsement Types",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "BTCPay-Sig",
+						"value": "sha256=9adf95596669e6a99943707800ea51015267bfcc45a22818bdcc6f377bc6bbfa1e666",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"manuallyMarked\": false,\n\"deliveryId\": \"FRWuM8BzwbawewLY5pJWcc\",\n\"webhookId\": \"Mn4cZakALSkeDHYz3m14FA\",\n\"originalDeliveryId\": \"FRWuM8BzwbawewLY5pJWcc\",\n\"isRedelivery\": false,\n\"type\": \"InvoiceSettled\",\n\"timestamp\": 1662860619,\n\"storeId\": \"AFaaz6gYXM28FXNpoJiU22QUQcvMNwZutahN9jK6Swkx\",\n\"invoiceId\": \"T6VfdbEMd3rxAx2nikftgt\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/frontend/endorsement-types",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"frontend",
+						"endorsement-types"
 					]
 				}
 			},
