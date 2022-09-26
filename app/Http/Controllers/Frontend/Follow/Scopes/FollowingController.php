@@ -27,4 +27,13 @@ class FollowingController extends Controller
             'following' => $following->paginate(perPage: 20),
         ]);
     }
+
+    public function all(): JsonResponse
+    {
+        $following = auth()->user()->followers();
+
+        return response()->json([
+            'following' => $following->paginate(perPage: 20),
+        ]);
+    }
 }

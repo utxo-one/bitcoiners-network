@@ -11,6 +11,7 @@ use App\Http\Controllers\Frontend\RatesController;
 use App\Http\Controllers\Frontend\Transaction\DebitController;
 use App\Http\Controllers\Frontend\Transaction\DepositController;
 use App\Http\Controllers\Frontend\User\AvailableBalanceController;
+use App\Http\Controllers\Frontend\User\EndorsementController;
 use App\Http\Controllers\Frontend\User\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -37,11 +38,14 @@ Route::get('/random-bitcoiners', [HomeController::class, 'randomBitcoiners'])->n
 Route::get('/random-shitcoiners', [HomeController::class, 'randomShitcoiners'])->name('home.random-shitcoiners');
 Route::get('/random-nocoiners', [HomeController::class, 'randomNocoiners'])->name('home.random-nocoiners');
 Route::get('/rates', [RatesController::class, 'index'])->name('rates.index');
+Route::get('/endorsement-types', [EndorsementController::class, 'types'])->name('endorsements.types');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/follow/available/{userType}', [AvailableFollowsController::class, 'index'])->name('follow.available');
-    Route::get('/follow/followers/{userType}', [FollowerController::class, 'index'])->name('follow.followers');
-    Route::get('/follow/following/{userType}', [FollowingController::class, 'index'])->name('follow.following');
+    Route::get('/follow/available/{userType}', [AvailableFollowsController::class, 'index'])->name('follow.available.type');
+    Route::get('/follow/followers/{userType}', [FollowerController::class, 'index'])->name('follow.followers.type');
+    Route::get('/follow/following/{userType}', [FollowingController::class, 'index'])->name('follow.following.type');
+    Route::get('/follow/following', [FollowingController::class, 'all'])->name('follow.following.all');
+    Route::get('/follow/followers', [FollowerController::class, 'all'])->name('follow.followers.all');
     Route::get('/follow/mass-follow', [MassFollowController::class, 'index'])->name('follow.mass-follow.index');
     Route::post('follow/mass-follow', [MassFollowController::class, 'store'])->name('follow.mass-follow.store');
     Route::get('follow/requests/completed', [FollowRequestScopeController::class, 'completed'])->name('follow.requests.completed');
@@ -57,6 +61,9 @@ Route::middleware('auth')->group(function () {
     
     Route::get('/user/auth', [UserController::class, 'auth'])->name('user.auth');
     Route::get('/user/{username}', [UserController::class, 'show'])->name('user.show');
+    Route::post('/endorse', [EndorsementController::class, 'store'])->name('user.endorse.store');
+    Route::delete('/endorse', [EndorsementController::class, 'destroy'])->name('user.endorse.destroy');
+    Route::get('/endorsements/{twitterId}', [EndorsementController::class, 'index'])->name('user.endorse.index');
 });
 
 
