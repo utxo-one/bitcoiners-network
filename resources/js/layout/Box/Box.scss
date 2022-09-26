@@ -1,0 +1,12 @@
+.__box {
+  border: 1px solid var(--gray-80);
+  border-radius: 16px;
+  box-shadow: 0px 4px 6px rgba(black, 0.1);
+  padding: 12px;
+
+  hr {
+    margin: 8px 0;
+    border-top: none;
+    border-color: var(--gray-80);
+  }
+}

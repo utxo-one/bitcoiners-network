@@ -1,0 +1,26 @@
+.__connections-box {
+  text-align: center;
+  
+  .title {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 600;
+    align-items: baseline;
+
+    .label {
+      color: var(--gray-30);
+      font-size: 20px;
+    }
+
+    .count {
+      color: var(--gray-20);
+      font-size: 28px;
+    }
+  }
+
+  .__button {
+    display: inline-block;
+    min-width: 70%;
+    margin: 0 auto 20px;
+  }
+}
