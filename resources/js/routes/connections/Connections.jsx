@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import PointyArrow from "../../assets/icons/PointyArrow";
 import UserInfoOverlay from "../../components/UserInfoOverlay/UserInfoOverlay";
+import UserTypeLabel from "../../components/UserTypeLabel/UserTypeLabel";
 
 import './Connections.scss';
 
@@ -51,6 +52,8 @@ export default function Connections({ type }) {
     }
   }
 
+  console.log('connections:', connections)
+
   return (
     <div className="__connections">
       <header>
@@ -61,11 +64,19 @@ export default function Connections({ type }) {
 
       <section className="users">
         { connections?.map(connection => (
-          <div className="user-details" key={connection.twitter_id} onClick={() => onClickConnection(connection)}>
+          <div className="user" key={connection.twitter_id} onClick={() => onClickConnection(connection)}>
             <img className="profile" src={connection.twitter_profile_image_url} />
-            <div>
-              <div className="name">{ connection.name }</div>
-              <div className="twitter-handle">@{ connection.twitter_username }</div>
+            <div className="user-details">
+              <div className="name-label">
+                <div className="overflow-container">
+                  <div className="name">{ connection.name }</div>
+                  <div className="twitter-handle">@{ connection.twitter_username }</div>
+                </div>
+                <UserTypeLabel userType={connection.type} />
+              </div>
+              <div className="description">
+                { connection.twitter_description }
+              </div>
 
               { connection.follows_authenticated_user && <pre>[ Follows you ]</pre> }
               { connection.is_followed_by_authenticated_user && <pre>[ Followed ]</pre> }

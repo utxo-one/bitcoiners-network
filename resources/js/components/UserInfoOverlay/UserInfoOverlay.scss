@@ -8,6 +8,24 @@
   border-top-right-radius: 16px;
   padding-top: 0; // remove top padding for profile pic to be centered using negative margin
 
+  .__user-type-label {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+  }
+
+  &.__modal-dialog {
+    &-appear {
+      transform: translateY(50%);
+      transition: 0.3s;
+
+      &-active, &-done {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  }
+
   img.profile-pic {
     margin: -60px auto 8px;
     width: 120px;

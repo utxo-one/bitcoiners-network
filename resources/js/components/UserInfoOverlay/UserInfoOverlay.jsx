@@ -2,6 +2,7 @@ import { useState } from "react";
 import ConnectionsChart from "../../layout/Connections/ConnectionsChart";
 import Modal from "../../layout/Modal/Modal";
 import { CompactNumberFormat } from "../../utils/NumberFormatting";
+import UserTypeLabel from "../UserTypeLabel/UserTypeLabel";
 
 import './UserInfoOverlay.scss';
 
@@ -11,6 +12,8 @@ export default function UserInfoOverlay({ show, onHide, user }) {
 
   return (
     <Modal show={show} onHide={onHide} className="__user-info-modal">
+      <UserTypeLabel userType={user?.type} />
+      
       <img className="profile-pic" src={user?.twitter_profile_image_url} />
 
       <div className="username">{ user?.name }</div >

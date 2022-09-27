@@ -40,7 +40,7 @@
     margin: 20px 4px;
   }
   
-  .user-details {
+  .user {
     display: flex;
     gap: 8px;
     padding: 8px 4px;
@@ -57,15 +57,40 @@
       align-items: flex-start;
     }
 
-    .name {
-      font-size: 16px;
-      line-height: 24px;
-      font-weight: bold;
+    .user-details {
+      flex: 1;
+      overflow: hidden;
+
+      .name-label {
+        display: flex;
+        margin-bottom: 12px;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 4px;
+      }
+
+      .overflow-container {
+        overflow: hidden;
+      }
+
+      .name {
+        font-size: 16px;
+        line-height: 24px;
+        font-weight: bold;
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
+      
+      .twitter-handle {
+        color: var(--gray-30);
+        font-size: 14px;
+      }
     }
-    
-    .twitter-handle {
-      color: var(--gray-30);
-      font-size: 14px;
+
+    .description {
+      color: var(--gray-20);
+      font-size: 13px;
+      line-height: 20px;
     }
   }
 }

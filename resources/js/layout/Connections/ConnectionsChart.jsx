@@ -61,7 +61,7 @@ export default function ConnectionsChart({ connectionType, user, showCount = tru
   return (
     <div className='__connections-chart'>
       { userTypes.map(type => (
-        <div className={classNames("type", type)}>
+        <div key={type} className={classNames("type", type)}>
           <div className="chart">
             <RadialBar className={type} percent={user?.[connectionData][type] / user?.[connectionData].total * 100} />
             <div className="chart-percent">
