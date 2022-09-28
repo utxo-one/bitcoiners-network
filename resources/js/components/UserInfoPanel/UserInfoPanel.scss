@@ -1,0 +1,104 @@
+.__user-info-panel {
+  &-content {
+    position: fixed;
+    bottom: 0;
+    transform: unset;
+    top: unset;
+    left: 0;
+    right: 0;
+    border-top-left-radius: 24px;
+    border-top-right-radius: 24px;
+    padding: 0 20px 20px;
+    background-color: white;
+    outline: none;
+
+    &[data-state='open'] {
+      animation: 0.3s anim__user-info-content-in;
+    }
+  
+    .__user-type-badge {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+    }
+  
+    img.profile-pic {
+      margin: -60px auto 8px;
+      width: 120px;
+      height: 120px;
+      border: 2px solid white;
+      box-shadow: 0px 2px 4px 1px rgba(0, 0, 0, 0.1);
+      border-radius: 100%;
+    }
+  
+    .username {
+      font-weight: 700;
+      font-size: 18px;
+      line-height: 30px;
+      word-break: break-all;
+      color: var(--gray-20);
+    }
+  
+    .handle {
+      font-weight: 700;
+      font-size: 15px;
+      line-height: 22px;
+      color: var(--blue-twitter);
+      word-break: break-all;
+      margin-bottom: 20px;
+    }
+  
+    .description {
+      color: var(--gray-40);
+      font-size: 15px;
+      line-height: 24px;
+    }
+
+    .connections-tab {
+      display: flex;
+      border-bottom: 1px solid var(--gray-70);
+      font-size: 17px;
+      color: var(--gray-50);
+      margin: 20px 0;
+      justify-content: space-around;
+      gap: 4px;
+
+      .tab {
+        border-bottom: 4px solid transparent; // all tabs have a border to align the text correctly
+        padding: 8px 4px;
+        flex: 1;
+        text-align: center;
+        
+        &.selected {
+          border-color: var(--blue-twitter); // only the selected tab will have a border color
+          color: var(--blue-twitter);
+          font-weight: 600;
+        }
+      }
+    }
+  
+    .connection-totals {
+      display: flex;
+      justify-content: space-around;
+      text-align: center;
+      font-weight: bold;
+      
+      .count {
+        color: var(--gray-20);
+        font-size: 32px;
+      }
+  
+      .label {
+        color: var(--gray-30);
+        font-size: 18px;
+      }
+    }
+  }
+}
+
+@keyframes anim__user-info-content-in {
+  from {
+    transform: translateY(50%);
+    opacity: 0.5;
+  }
+}

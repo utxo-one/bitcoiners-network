@@ -8,12 +8,5 @@ html {
 
 body {
   margin: 0;
-}
-
-#root {
-  font-family: 'Inter', sans-serif;
-}
-
-.__modal-dialog {
   font-family: 'Inter', sans-serif;
 }

@@ -2,19 +2,20 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
-import Button from "../../layout/Button/Button";
 import Box from "../../layout/Box/Box";
 import ConnectionsBox from "./ConnectionsBox";
 
 import SocialNetworkIcon from "../../assets/icons/SocialNetworkIcon";
-import BoltIcon from "../../assets/icons/BoltIcon";
 
 import './Dashboard.scss';
+import MassConnectModal from "../../components/MassConnectModal/MassConnectModal";
+import ButtonWithLightning from "../../layout/Button/LightningButton";
 
 export default function Dashboard() {
 
   const [userData, setUserData] = useState(null);
   const [followBitcoiners, setFollowBitcoiners] = useState(null);
+  const [showMassConnect, setshowMassConnect] = useState(false);
 
   useEffect(() => {
     const loadUserData = async () => {
@@ -67,13 +68,17 @@ export default function Dashboard() {
 
             <hr />
 
-            <Button className="mass-follow"><BoltIcon /><div>Mass Follow</div></Button>
+            <ButtonWithLightning className="mass-follow" onClick={() => setshowMassConnect(true)}>
+              <div>Mass Follow</div>
+            </ButtonWithLightning>
           </Box>
 
           <ConnectionsBox connectionType='following' user={userData} />
           <ConnectionsBox connectionType='followers' user={userData} />
         </div>
       </main>
+
+      <MassConnectModal show={showMassConnect} onHide={() => setshowMassConnect(false)} />
     </div>
   );
 }

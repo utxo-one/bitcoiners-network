@@ -17,11 +17,11 @@ class VerifyCsrfToken extends Middleware
     ];
 
     public function handle($request, \Closure $next)
-{
-    if (in_array(env('APP_ENV'), ['local', 'dev'])) {
-        return $next($request);
-    }
+    {
+        // if (in_array(env('APP_ENV'), ['local', 'dev'])) {
+        //     return $next($request);
+        // }
 
-    return parent::handle($request, $next);
-}
+        return parent::handle($request, $next);
+    }
 }
