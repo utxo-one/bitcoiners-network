@@ -59,29 +59,4 @@ export default function UserInfoPanel({ show, onHide, user }) {
       </Dialog.Portal>
     </Dialog.Root>
   );
-
-  // return (
-  //   <Modal show={show} onHide={onHide} className="__user-info-modal">
-  //     <UserTypeLabel userType={user?.type} />
-      
-  //     <img className="profile-pic" src={user?.twitter_profile_image_url} />
-
-  //     <div className="username">{ user?.name }</div >
-  //     <div className="handle">@{ user?.twitter_username }</div>
-  //     <div className="description">{ user?.twitter_description }</div>
-
-  //     <ConnectionsChart connectionType={connectionType} user={user} showCount={false} />
-
-  //     <div className="connection-totals">
-  //       <div>
-  //         <div className="count">{ CompactNumberFormat(user?.following_data.total) }</div>
-  //         <div className="label">Following</div>
-  //       </div>
-  //       <div>
-  //         <div className="count">{ CompactNumberFormat(user?.follower_data.total) }</div>
-  //         <div className="label">Followers</div>
-  //       </div>
-  //     </div>
-  //   </Modal>
-  // )
 }
