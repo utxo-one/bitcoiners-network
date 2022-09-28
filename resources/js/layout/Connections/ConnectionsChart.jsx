@@ -20,8 +20,6 @@ const USER_TYPES = {
 
 export default function ConnectionsChart({ connectionType, user, showCount = true }) {
 
-  console.log('user:', user)
-
   const userTypes = Object.keys(USER_TYPES);
   const connectionData = connectionType === 'following' ? 'following_data' : 'follower_data';
 
@@ -32,7 +30,7 @@ export default function ConnectionsChart({ connectionType, user, showCount = tru
     let percentages = {};
     
     userTypes.forEach(type => {
-      const percentage = Math.round(connections[type] / connections.total * 100);
+      const percentage =  connections.total === 0 ? 0 : Math.round(connections[type] / connections.total * 100);
       sum += percentage;
       
       if (percentage > maxPercentage) {
@@ -52,18 +50,12 @@ export default function ConnectionsChart({ connectionType, user, showCount = tru
 
   const percentages = user && calculatePercentages(user?.[connectionData]);
 
-  if (user?.[connectionData].total === 0) {
-    return (
-      <pre>[ THIS USER HAS NO CONNECTIONS ]</pre>
-    )
-  }
-
   return (
-    <div className='__connections-chart'>
+    <div className="__connections-chart">
       { userTypes.map(type => (
         <div key={type} className={classNames("type", type)}>
           <div className="chart">
-            <RadialBar className={type} percent={user?.[connectionData][type] / user?.[connectionData].total * 100} />
+            <RadialBar className={type} percent={user?.[connectionData].total === 0 ? 0 : user?.[connectionData][type] / user?.[connectionData].total * 100} />
             <div className="chart-percent">
               { percentages[type] }%
             </div>

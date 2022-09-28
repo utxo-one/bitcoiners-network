@@ -1,31 +1,45 @@
-.__modal {
+.__dialog-overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.5);
 
-  &-backdrop {
-    z-index: 1000;
-    background-color: black;
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
+  &[data-state='open'] {
+    animation: 0.3s anim__dialog-overlay-in;
+  }
+}
 
-    &-appear {
-      opacity: 0;
-      transition: 0.3s all;
-      
-      &-active, &-done {
-        opacity: 0.5;
-      }
-    }
+@keyframes anim__dialog-overlay-in {
+  from {
+    background-color: rgba(0, 0, 0, 0);
+  }
+}
+
+.__dialog-center-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  z-index: 1000;
+  padding: 20px;
+  border-radius: 20px;
+  width: 95vmin;
+
+  &[data-state='open'] {
+    animation: 0.3s anim__dialog-center-modal-in;
   }
 
-  &-dialog {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: white;
-    z-index: 1000;
-    padding: 20px;
+  // &[data-state='close'] {
+
+  // }
+}
+
+@keyframes anim__dialog-center-modal-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -100%);
   }
 }

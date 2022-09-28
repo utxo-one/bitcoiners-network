@@ -2,8 +2,8 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import PointyArrow from "../../assets/icons/PointyArrow";
-import UserInfoOverlay from "../../components/UserInfoOverlay/UserInfoOverlay";
-import UserTypeLabel from "../../components/UserTypeLabel/UserTypeLabel";
+import UserInfoPanel from "../../components/UserInfoPanel/UserInfoPanel";
+import UserTypeBadge from "../../components/UserTypeLabel/UserTypeBadge";
 
 import './Connections.scss';
 
@@ -72,7 +72,7 @@ export default function Connections({ type }) {
                   <div className="name">{ connection.name }</div>
                   <div className="twitter-handle">@{ connection.twitter_username }</div>
                 </div>
-                <UserTypeLabel userType={connection.type} />
+                <UserTypeBadge userType={connection.type} />
               </div>
               <div className="description">
                 { connection.twitter_description }
@@ -85,7 +85,7 @@ export default function Connections({ type }) {
         ))}
       </section>
 
-      <UserInfoOverlay show={showInfo} user={selectedConnection} onHide={() => setShowInfo(false)} />
+      <UserInfoPanel show={showInfo} user={selectedConnection} onHide={() => setShowInfo(false)} />
     </div>
   );
 }

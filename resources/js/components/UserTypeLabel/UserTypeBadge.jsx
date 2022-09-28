@@ -3,7 +3,7 @@ import PoopIcon from "../../assets/icons/PoopIcon";
 import SadFaceIcon from "../../assets/icons/SadFaceIcon";
 import BitcoinSymbolIcon from "../../assets/icons/BitcoinSymbolIcon";
 
-import './UserTypeLabel.scss';
+import './UserTypeBadge.scss';
 
 const USER_TYPES = {
   bitcoiner: {
@@ -22,8 +22,8 @@ const USER_TYPES = {
   },
 }
 
-export default function UserTypeLabel({ userType, variant='solid' }) {
-  
+export default function UserTypeBadge({ userType, variant = 'outline', size = 'sm' }) {
+
   if (!userType) {
     return null;
   }
@@ -34,8 +34,8 @@ export default function UserTypeLabel({ userType, variant='solid' }) {
   }
 
   return (
-    <div className={classNames("__user-type-label", `__user-type-label-${variant}`, `__user-type-label-${userType}`)}>
-      { renderIcon() }
+    <div className={classNames("__user-type-badge", `__user-type-badge-${userType}`, `__user-type-badge-${variant}`, `__user-type-badge-${size}`)}>
+      <div className='icon'>{ renderIcon() }</div>
       <div className='label'>{ USER_TYPES[userType].phrase }</div>
     </div>
   )

@@ -2,7 +2,7 @@ import classNames from "classnames";
 
 import './Button.scss';
 
-export default function Button({ as, className,children, ...props }) {
+export default function Button({ as, className, children, ...props }) {
 
   const Component = as ? as : 'button';
 
