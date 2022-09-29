@@ -42,7 +42,7 @@ export default function MassConnectModal({ show, onHide }) {
 
   const changeSliderValue = values => {
     setSliderValue(values);
-    setTotalUsers(Math.round(totalAvailable * sliderValue[0] / 100));
+    setTotalUsers(Math.round(totalAvailable * values[0] / 100));
   }
 
   const topupLightning = () => {
@@ -65,7 +65,7 @@ export default function MassConnectModal({ show, onHide }) {
         <Dialog.Overlay className="__dialog-overlay">
           <Dialog.Content className="__mass-connect-modal __dialog-center-modal">
             <Dialog.Title className="title">Mass Follow</Dialog.Title>
-              <AmountSlider value={sliderValue} onValueChange={changeSliderValue} max={SLIDER_MAX} />
+              <AmountSlider value={sliderValue} onValueChange={changeSliderValue} min={1} max={SLIDER_MAX} />
 
               <div className="item">
                 <div className="label user">Users</div>
