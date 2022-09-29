@@ -1,0 +1,15 @@
+.__connections-filter {
+  margin: 8px 4px;
+
+  div[role="menuitem"] {
+    &.selected {
+      &.bitcoiner {
+        background-color: var(--orange);
+      }
+    
+      &.shitcoiner {
+        background-color: var(--shitcoiner-color);
+      }
+    }
+  }
+}

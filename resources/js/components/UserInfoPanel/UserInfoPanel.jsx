@@ -3,6 +3,7 @@ import classNames from "classnames";
 import { useEffect, useState } from "react";
 import ConnectionsChart from "../../layout/Connections/ConnectionsChart";
 import { CompactNumberFormat } from "../../utils/NumberFormatting";
+import ProfilePicture from "../ProfilePicture/ProfilePicture";
 import UserTypeBadge from "../UserTypeLabel/UserTypeBadge";
 
 import './UserInfoPanel.scss';
@@ -28,7 +29,7 @@ export default function UserInfoPanel({ show, onHide, user }) {
         <Dialog.Overlay className='__user-info-panel __dialog-overlay'>
           <Dialog.Content className='__user-info-panel-content'>
           <UserTypeBadge userType={user?.type} variant='solid' size='md' />
-            <img className="profile-pic" src={user?.twitter_profile_image_url} />
+            <ProfilePicture user={user} className="profile-pic" />
 
             <div className="username">{ user?.name }</div >
             <div className="handle">@{ user?.twitter_username }</div>
