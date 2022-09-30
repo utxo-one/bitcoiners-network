@@ -36,4 +36,10 @@
       box-shadow: 0px 0px 0px 1px var(--gray-80);
     }
   }
+
+  &-variant-clear {
+    background-color: unset;
+    color: var(--gray-50);
+  }
+
 }
