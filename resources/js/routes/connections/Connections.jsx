@@ -5,27 +5,35 @@ import PointyArrow from "../../assets/icons/PointyArrow";
 import UserInfoPanel from "../../components/UserInfoPanel/UserInfoPanel";
 import UserTypeBadge from "../../components/UserTypeLabel/UserTypeBadge";
 
+import ConnectionsFilter from "./ConnectionsFilter";
+import ConnectionTypeDropdown from "./ConnectionTypeDropdown";
+import ProfilePicture from "../../components/ProfilePicture/ProfilePicture";
+
 import './Connections.scss';
 
-export default function Connections({ type }) {
+export default function Connections({ initialType }) {
 
+  const [type, setType] = useState(initialType);
   const [connections, setConnections] = useState(null);
   const [count, setCount] = useState(null);
   const [showInfo, setShowInfo] = useState(false);
   const [selectedConnection, setSelectedConnection] = useState(null);
+  const [filterUserType, setFilterUserType] = useState(() => type === 'available' ? 'bitcoiner' : 'all');
 
   const navigate = useNavigate();
 
   useEffect(() => {
     const loadConnections = async () => {
+      const filterPath = filterUserType === 'all' ? '' : filterUserType;
       
-      const { data } = await axios.get(`/frontend/follow/${type}/bitcoiner`);
+      const { data } = await axios.get(`/frontend/follow/${type}/${filterPath}`);
+
       setConnections(data[type === 'available' ? 'availableFollows' : type].data);
       setCount(data[type === 'available' ? 'availableFollows' : type].total);
     }
 
     loadConnections();
-  }, []);
+  }, [filterUserType, type]);
 
   const goBack = () => {
     navigate(-1);
@@ -35,37 +43,19 @@ export default function Connections({ type }) {
     setShowInfo(true);
     setSelectedConnection(connection);
   }
-
-  const renderTitle = () => {
-    switch (type) {
-      case 'available':
-        return 'bitcoiners.network';
-
-      case 'following':
-        return <>Following <span className="user-count">({count})</span></>
-      
-      case 'followers':
-        return <>Followers <span className="user-count">({count})</span></>
-
-      default:
-        return null;
-    }
-  }
-
-  console.log('connections:', connections)
-
+  
   return (
     <div className="__connections">
       <header>
         <PointyArrow role='button' className="back" onClick={goBack} />
-        <h2>{ renderTitle() }</h2>
-        <div className="filter">Filter</div>
+        <ConnectionTypeDropdown connectionType={type} onSelect={setType} count={count} />
+        <ConnectionsFilter userType={filterUserType} onSelectUserType={setFilterUserType} disabled={type === 'available'} />
       </header>
 
       <section className="users">
         { connections?.map(connection => (
           <div className="user" key={connection.twitter_id} onClick={() => onClickConnection(connection)}>
-            <img className="profile" src={connection.twitter_profile_image_url} />
+            <ProfilePicture user={connection} />
             <div className="user-details">
               <div className="name-label">
                 <div className="overflow-container">

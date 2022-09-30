@@ -12,9 +12,9 @@ export default function AppRoutes() {
     <BrowserRouter basename="/u">
       <Routes>
         <Route path='/' element={<Dashboard />} />
-        <Route path='/followers' element={<Connections type='followers' />} />
-        <Route path='/following' element={<Connections type='following' />} />
-        <Route path='/available' element={<Connections type='available' />} />
+        <Route path='/followers' element={<Connections initialType='followers' />} />
+        <Route path='/following' element={<Connections initialType='following' />} />
+        <Route path='/available' element={<Connections initialType='available' />} />
       </Routes>
     </BrowserRouter>
   )

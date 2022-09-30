@@ -2,9 +2,9 @@ import * as Slider from '@radix-ui/react-slider';
 
 import './AmountSlider.scss';
 
-export default function AmountSlider({ value, onValueChange, max }) {
+export default function AmountSlider({ ...props }) {
   return (
-    <Slider.Root value={value} onValueChange={onValueChange} max={max} className='__amount-slider'>
+    <Slider.Root className='__amount-slider' {...props}>
       <Slider.Track className='__amount-slider-track'>
         <Slider.Range className='__amount-slider-range' />
       </Slider.Track>

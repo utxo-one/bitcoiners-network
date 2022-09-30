@@ -4,11 +4,12 @@ import { CompactNumberFormat } from "../../utils/NumberFormatting";
 import * as Dialog from "@radix-ui/react-dialog";
 
 import AmountSlider from "./AmountSlider";
-import ButtonWithLightning from "../../layout/Button/LightningButton";
+import ButtonWithLightning from "../../layout/Button/ButtonWithLightning";
 import './MassConnectModal.scss';
 
 const DEFAULT_AMOUNT = 50;
 const SLIDER_MAX = 100;
+const MAX_FOLLOWS = 5000;
 
 export default function MassConnectModal({ show, onHide }) {
 
@@ -17,7 +18,7 @@ export default function MassConnectModal({ show, onHide }) {
   const [creatingInvoice, setCreatingInvoice] = useState(false);
   
   // TODO -> get from endpoint
-  const [totalAvailable, setTotalAvailable] = useState(5000);
+  const [totalAvailable, setTotalAvailable] = useState(MAX_FOLLOWS);
   const [totalUsers, setTotalUsers] = useState(() => totalAvailable * DEFAULT_AMOUNT / 100);
 
   useEffect(() => {
@@ -30,14 +31,18 @@ export default function MassConnectModal({ show, onHide }) {
   }, []);
 
   const changeTotalUsers = e => {
-    const total = parseInt(e.target.value, 10);
+    let total = Math.max(0, Math.min(MAX_FOLLOWS, parseInt(e.target.value, 10)));
+    if (Number.isNaN(total)) {
+      total = 0;
+    }
+    
     setTotalUsers(total);
-    setSliderValue(Math.round(total * 100 / totalAvailable));
+    setSliderValue([Math.round(total * 100 / totalAvailable)]);
   }
 
   const changeSliderValue = values => {
     setSliderValue(values);
-    setTotalUsers(Math.round(totalAvailable * sliderValue[0] / 100));
+    setTotalUsers(Math.round(totalAvailable * values[0] / 100));
   }
 
   const topupLightning = () => {
@@ -60,11 +65,11 @@ export default function MassConnectModal({ show, onHide }) {
         <Dialog.Overlay className="__dialog-overlay">
           <Dialog.Content className="__mass-connect-modal __dialog-center-modal">
             <Dialog.Title className="title">Mass Follow</Dialog.Title>
-              <AmountSlider value={sliderValue} onValueChange={changeSliderValue} max={SLIDER_MAX} />
+              <AmountSlider value={sliderValue} onValueChange={changeSliderValue} min={1} max={SLIDER_MAX} />
 
               <div className="item">
                 <div className="label user">Users</div>
-                <input type="text" value={totalUsers} onChange={changeTotalUsers} />
+                <input type="number" value={totalUsers} onChange={changeTotalUsers} />
               </div>
 
               <div className="item estimation">
@@ -77,7 +82,7 @@ export default function MassConnectModal({ show, onHide }) {
                 <div className="value"><span className="number">{ CompactNumberFormat(totalUsers * rate?.pricing.follow, { digits: 12 }) }</span> Sats</div>
               </div>
 
-              <ButtonWithLightning disabled={creatingInvoice} onClick={topupLightning} className="pay-via-ln">{ creatingInvoice ? '[ Loading ]' : 'Top up Via Lightning' }</ButtonWithLightning>
+              <ButtonWithLightning disabled={creatingInvoice || !totalUsers} onClick={topupLightning} className="pay-via-ln">{ creatingInvoice ? '[ Loading ]' : 'Top up Via Lightning' }</ButtonWithLightning>
 
             {/* <Dialog.Close asChild><div>CLOSE</div></Dialog.Close> */}
           </Dialog.Content>

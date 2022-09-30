@@ -12,27 +12,44 @@
     background-color: white;
 
     svg.back {
-      width: 24px;
+      width: 32px;
       height: auto;
+      padding-right: 4px;
     }
 
-    h2 {
+    .connection-type {
+      display: flex;
       flex: 1;
-      font-size: 18px;
+      font-size: 17px;
       font-weight: bold;
-      margin: 0;
-      text-align: center;
+      font-family: inherit;
+      text-align: left;
+      border: none;
+      padding: 0;
+      background-color: transparent;
+      gap: 8px;
+      align-items: baseline;
 
       .user-count {
         font-weight: normal;
         color: var(--gray-30);
       }
+
+      > svg {
+        width: 12px;
+        height: auto;
+        fill: var(--gray-50);
+      }
     }
 
     .filter {
-      font-size: 18px;
+      background-color: unset;
+      border: none;
       color: var(--gray-30);
+      cursor: pointer;
+      font-size: 18px;
       font-weight: 600;
+      font-family: inherit;
     }
   }
 
@@ -49,14 +66,7 @@
     &:not(:first-of-type) {
       border-top: 1px solid var(--gray-80);
     }
-
-    img.profile {
-      width: 48px;
-      height: 48px;
-      border-radius: 100%;
-      align-items: flex-start;
-    }
-
+    
     .user-details {
       flex: 1;
       overflow: hidden;
@@ -79,6 +89,7 @@
         font-weight: bold;
         text-overflow: ellipsis;
         overflow: hidden;
+        white-space: nowrap;
       }
       
       .twitter-handle {
@@ -93,4 +104,8 @@
       line-height: 20px;
     }
   }
+}
+
+.__connection-type-dropdown {
+  margin-top: 8px;
 }
