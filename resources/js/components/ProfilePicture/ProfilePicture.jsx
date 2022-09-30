@@ -32,7 +32,7 @@ export default function ProfilePicture({ user, className, ...props }) {
 
     imageSrc && loadImage();
 
-  }, [imageSrc])
+  }, [imageSrc]);
 
   return (
     <div className={classNames("__profile-picture", className)}>

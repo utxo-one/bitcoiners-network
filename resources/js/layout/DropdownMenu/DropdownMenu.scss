@@ -6,6 +6,7 @@
   color: var(--gray-30);
   font-size: 16px;
   padding: 8px 12px;
+  z-index: 100;
 
   &[data-state="open"] {
     animation: 0.3s anim__dropdown-menu-in;

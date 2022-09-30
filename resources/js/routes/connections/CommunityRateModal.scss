@@ -1,0 +1,32 @@
+.__community-rate-modal {
+
+  h2.title {
+    text-align: center;
+    color: var(--gray-30);
+  }
+
+  .description {
+    color: var(--gray-30);
+    font-size: 14px;
+    line-height: 24px;
+  }
+
+  .user-types {
+    display: flex;
+    justify-content: space-between;
+    margin: 12px 0;
+  }
+
+  .__user-type-badge {
+    padding-top: 4px;
+    padding-bottom: 4px;
+  }
+
+  .close-button {
+    text-align: center;
+
+    > button {
+      padding: 8px;
+    }
+  }
+}

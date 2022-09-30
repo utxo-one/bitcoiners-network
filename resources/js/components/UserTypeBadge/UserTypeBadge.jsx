@@ -22,7 +22,7 @@ const USER_TYPES = {
   },
 }
 
-export default function UserTypeBadge({ userType, variant = 'outline', size = 'sm' }) {
+export default function UserTypeBadge({ userType, variant = 'outline', size = 'sm', ...props }) {
 
   if (!userType) {
     return null;
@@ -33,8 +33,15 @@ export default function UserTypeBadge({ userType, variant = 'outline', size = 's
     return <Icon />
   }
 
+  const badgeClasses = classNames(
+    "__user-type-badge",
+    `__user-type-badge-${userType}`,
+    `__user-type-badge-${variant}`,
+    `__user-type-badge-${size}`
+  );
+
   return (
-    <div className={classNames("__user-type-badge", `__user-type-badge-${userType}`, `__user-type-badge-${variant}`, `__user-type-badge-${size}`)}>
+    <div className={badgeClasses} {...props}>
       <div className='icon'>{ renderIcon() }</div>
       <div className='label'>{ USER_TYPES[userType].phrase }</div>
     </div>

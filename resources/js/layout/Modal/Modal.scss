@@ -5,6 +5,7 @@
   left: 0;
   right: 0;
   background-color: rgba(0, 0, 0, 0.5);
+  z-index: 100;
 
   &[data-state='open'] {
     animation: 0.3s anim__dialog-overlay-in;
@@ -17,7 +18,34 @@
   }
 }
 
-.__dialog-center-modal {
+.__modal {
+  h2.title {
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--gray-80);
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 22px;
+    color: var(--gray-60);
+    padding-bottom: 8px;
+  }
+
+  &-close-icon {
+    position: absolute;
+    right: 12px;
+    top: 12px;
+    font-size: 28px;
+    line-height: 28px;
+    font-weight: 600;
+    color: var(--gray-40);
+    cursor: pointer;
+
+    &:hover {
+      color: var(--gray-20);
+    }
+  }
+}
+
+.__modal-center {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -25,7 +53,7 @@
   background-color: white;
   z-index: 1000;
   padding: 20px;
-  border-radius: 20px;
+  border-radius: 24px;
   width: 95vmin;
 
   &[data-state='open'] {

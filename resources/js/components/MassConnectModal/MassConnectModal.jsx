@@ -63,7 +63,8 @@ export default function MassConnectModal({ show, onHide }) {
     <Dialog.Root open={show} onOpenChange={onHide}>
       <Dialog.Portal>
         <Dialog.Overlay className="__dialog-overlay">
-          <Dialog.Content className="__mass-connect-modal __dialog-center-modal">
+          <Dialog.Content className="__mass-connect-modal __modal __modal-center">
+            <Dialog.Close asChild><div role="button" className='__modal-close-icon'>×</div></Dialog.Close>
             <Dialog.Title className="title">Mass Follow</Dialog.Title>
               <AmountSlider value={sliderValue} onValueChange={changeSliderValue} min={1} max={SLIDER_MAX} />
 

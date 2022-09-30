@@ -4,14 +4,13 @@ import { useEffect, useState } from "react";
 import ConnectionsChart from "../../layout/Connections/ConnectionsChart";
 import { CompactNumberFormat } from "../../utils/NumberFormatting";
 import ProfilePicture from "../ProfilePicture/ProfilePicture";
-import UserTypeBadge from "../UserTypeLabel/UserTypeBadge";
+import UserTypeBadge from "../UserTypeBadge/UserTypeBadge";
 
 import './UserInfoPanel.scss';
 
 const CONNECTION_TYPES = {
   followers: 'Followers',
   following: 'Following',
-  combined:  'Combined',
 }
 
 export default function UserInfoPanel({ show, onHide, user }) {
