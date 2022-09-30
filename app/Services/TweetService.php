@@ -42,6 +42,10 @@ class TweetService
                 'is_possible_sensitive' => $tweet->isPossiblySensitive(),
                 'attachements' => json_encode($tweet->getAttachments()),
                 'reply_settings' => $tweet->getReplySettings(),
+                'replies' => $tweet->getPublicMetrics()['reply_count'],
+                'retweets' => $tweet->getPublicMetrics()['retweet_count'],
+                'likes' => $tweet->getPublicMetrics()['like_count'],
+                'quotes' => $tweet->getPublicMetrics()['quote_count'],
             ]);
         }
 
