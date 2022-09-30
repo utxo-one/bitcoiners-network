@@ -4,10 +4,11 @@ namespace App\Http\Controllers\Frontend\Follow\Scopes;
 
 use App\Enums\UserType;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-class FollowerController extends Controller
+class FollowerByUsernameController extends Controller
 {
     /**
      * Get All Followers
@@ -19,18 +20,22 @@ class FollowerController extends Controller
      * @param UserType $userType
      * @return JsonResponse
      */
-    public function index(UserType $userType): JsonResponse
+    public function index(string $username, UserType $userType): JsonResponse
     {
-        $followers = auth()->user()->getFollowersByType($userType);
+        $user = User::where('twitter_username', $username)->firstOrFail();
+
+        $followers = $user->getFollowersByType($userType);
 
         return response()->json([
             'followers' => $followers->paginate(perPage: 20),
         ]);
     }
 
-    public function all(): JsonResponse
+    public function all(string $username): JsonResponse
     {
-        $followers = auth()->user()->followers();
+        $user = User::where('twitter_username', $username)->firstOrFail();
+
+        $followers = $user->followers();
 
         return response()->json([
             'followers' => $followers->paginate(perPage: 20),

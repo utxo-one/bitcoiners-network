@@ -388,6 +388,43 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Refresh User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"twitterId\": \"1558844336187523074\",\n    \"type\": \"developer\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/frontend/user/{username}/refresh",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"frontend",
+								"user",
+								"{username}",
+								"refresh"
+							],
+							"query": [
+								{
+									"key": "username",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -682,6 +719,101 @@
 										"frontend",
 										"follow",
 										"followers"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "By Username",
+					"item": [
+						{
+							"name": "Get Followers by Type",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost/frontend/follow/user/followers/utxo_one/shitcoiner",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"path": [
+										"frontend",
+										"follow",
+										"user",
+										"followers",
+										"utxo_one",
+										"shitcoiner"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Followers (all)",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost/frontend/follow/user/followers/utxo_one",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"path": [
+										"frontend",
+										"follow",
+										"user",
+										"followers",
+										"utxo_one"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Following by Type",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost/frontend/follow/user/following/utxo_one/shitcoiner",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"path": [
+										"frontend",
+										"follow",
+										"user",
+										"following",
+										"utxo_one",
+										"shitcoiner"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Following (all)",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost/frontend/follow/user/following/utxo_one",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"path": [
+										"frontend",
+										"follow",
+										"user",
+										"following",
+										"utxo_one"
 									]
 								}
 							},
