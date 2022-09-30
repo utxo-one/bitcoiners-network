@@ -78,12 +78,57 @@ class UserService
         return $type;
     }
 
+    public function refreshUser(User $user): User
+    {
+        $twitterUserClient = new UserClient(bearerToken: config('services.twitter.bearer_token'));
+        $twitterUser = $twitterUserClient->getUserById($user->twitter_id);
+
+        $user->update([
+            'name' => $twitterUser->getName(),
+            'twitter_username' => $twitterUser->getUsername(),
+            'twitter_description' => $twitterUser->getDescription(),
+            'twitter_profile_image_url' => $twitterUser->getProfileImageUrl(),
+            'twitter_url' => $twitterUser->getUrl(),
+            'twitter_location' => $twitterUser->getLocation(),
+            'twitter_verified' => $twitterUser->isVerified(),
+            'twitter_pinned_tweet_id' => $twitterUser->getPinnedTweetId(),
+            'twitter_count_followers' => $twitterUser->getPublicMetrics()->getFollowersCount(),
+            'twitter_count_following' => $twitterUser->getPublicMetrics()->getFollowingCount(),
+            'twitter_count_tweets' => $twitterUser->getPublicMetrics()?->getTweetCount(),
+            'twitter_count_listed' => $twitterUser->getPublicMetrics()?->getListedCount(),
+            'last_refreshed_at' => Carbon::now(),
+        ]);
+
+        return $user->fresh();
+    }
+
     public function saveTwitterUser(TwitterUser $twitterUser): User
     {
         $user = User::query()->firstOrNew(['twitter_id' => $twitterUser->getId()]);
 
         if ($user->exists) {
-            return $user;
+            $user->update([
+                'name' => $twitterUser->getName(),
+                'type' => $this->classifyUser(twitterUser: $twitterUser),
+                'twitter_username' => $twitterUser->getUsername(),
+                'twitter_description' => $twitterUser->getDescription(),
+                'twitter_profile_image_url' => $twitterUser->getProfileImageUrl(),
+                'twitter_url' => $twitterUser->getUrl(),
+                'twitter_location' => $twitterUser->getLocation(),
+                'twitter_verified' => $twitterUser->isVerified(),
+                'twitter_pinned_tweet_id' => $twitterUser->getPinnedTweetId(),
+                'twitter_count_followers' => $twitterUser->getPublicMetrics()->getFollowersCount(),
+                'twitter_count_following' => $twitterUser->getPublicMetrics()->getFollowingCount(),
+                'twitter_count_tweets' => $twitterUser->getPublicMetrics()?->getTweetCount(),
+                'twitter_count_listed' => $twitterUser->getPublicMetrics()?->getListedCount(),
+                'oauth_type'=> 'twitter',
+                'password' => encrypt(str()->random(10)),
+                'classified_by' => ClassificationSource::CRAWLER,
+                'last_classified_at' => Carbon::now(),
+                'last_refreshed_at' => Carbon::now(),
+            ]);
+
+            return $user->fresh();
         }
 
         return User::create([
@@ -103,8 +148,9 @@ class UserService
             'twitter_count_listed' => $twitterUser->getPublicMetrics()?->getListedCount(),
             'oauth_type'=> 'twitter',
             'password' => encrypt(str()->random(10)),
-            'last_processed_at' => Carbon::now(),
             'classified_by' => ClassificationSource::CRAWLER,
+            'last_classified_at' => Carbon::now(),
+            'last_refreshed_at' => Carbon::now(),
         ]);
     }
 

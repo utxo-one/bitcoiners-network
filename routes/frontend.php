@@ -3,7 +3,9 @@
 use App\Http\Controllers\Frontend\Follow\FollowRequestController;
 use App\Http\Controllers\Frontend\Follow\MassFollowController;
 use App\Http\Controllers\Frontend\Follow\Scopes\AvailableFollowsController;
+use App\Http\Controllers\Frontend\Follow\Scopes\FollowerByUsernameController;
 use App\Http\Controllers\Frontend\Follow\Scopes\FollowerController;
+use App\Http\Controllers\Frontend\Follow\Scopes\FollowingByUsernameController;
 use App\Http\Controllers\Frontend\Follow\Scopes\FollowingController;
 use App\Http\Controllers\Frontend\Follow\Scopes\FollowRequestScopeController;
 use App\Http\Controllers\Frontend\HomeController;
@@ -12,6 +14,7 @@ use App\Http\Controllers\Frontend\Transaction\DebitController;
 use App\Http\Controllers\Frontend\Transaction\DepositController;
 use App\Http\Controllers\Frontend\User\AvailableBalanceController;
 use App\Http\Controllers\Frontend\User\EndorsementController;
+use App\Http\Controllers\Frontend\User\RefreshUserController;
 use App\Http\Controllers\Frontend\User\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -52,6 +55,10 @@ Route::middleware('auth')->group(function () {
     Route::get('follow/requests/pending', [FollowRequestScopeController::class, 'pending'])->name('follow.requests.pending');
     Route::delete('follow/mass-follow', [MassFollowController::class, 'delete'])->name('follow.mass-follow.delete');
     Route::delete('follow/requests', [FollowRequestController::class, 'delete'])->name('follow.requests.delete');
+    Route::get('follow/user/followers/{username}/{userType}', [FollowerByUsernameController::class, 'index'])->name('follow.user.followers.type');
+    Route::get('follow/user/followers/{username}', [FollowerByUsernameController::class, 'all'])->name('follow.user.followers.all');
+    Route::get('follow/user/following/{username}/{userType}', [FollowingByUsernameController::class, 'index'])->name('follow.user.following.type');
+    Route::get('follow/user/following/{username}', [FollowingByUsernameController::class, 'all'])->name('follow.user.following.all');
 
 
     Route::get('user/available-balance', [AvailableBalanceController::class, 'index'])->name('user.available-balance');
@@ -60,6 +67,7 @@ Route::middleware('auth')->group(function () {
     Route::get('transaction/debit', [DebitController::class, 'index'])->name('transaction.debit.index');
     
     Route::get('/user/auth', [UserController::class, 'auth'])->name('user.auth');
+    Route::post('/user/{username}/refresh', [RefreshUserController::class, 'store'])->name('user.refresh.store');
     Route::get('/user/{username}', [UserController::class, 'show'])->name('user.show');
     Route::post('/endorse', [EndorsementController::class, 'store'])->name('user.endorse.store');
     Route::delete('/endorse', [EndorsementController::class, 'destroy'])->name('user.endorse.destroy');
