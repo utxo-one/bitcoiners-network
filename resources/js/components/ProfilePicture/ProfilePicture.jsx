@@ -1,3 +1,4 @@
+import axios from "axios";
 import classNames from "classnames";
 import { useEffect, useState } from "react"
 import UserProfileImg from "../../assets/images/UserProfile.png";
@@ -25,8 +26,8 @@ export default function ProfilePicture({ user, className, ...props }) {
         setImageLoaded(true);
       }
       catch {
-        console.log("BE CALL -> Image could not be loaded for user_id:", user.twitter_id);
         setImageError(true);
+        axios.post(`/frontend/user/${user.twitter_username}/refresh`);
       }
     }
 

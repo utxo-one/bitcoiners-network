@@ -10,6 +10,7 @@ import SocialNetworkIcon from "../../assets/icons/SocialNetworkIcon";
 import './Dashboard.scss';
 import MassConnectModal from "../../components/MassConnectModal/MassConnectModal";
 import ButtonWithLightning from "../../layout/Button/ButtonWithLightning";
+import ProfilePicture from "../../components/ProfilePicture/ProfilePicture";
 
 export default function Dashboard() {
 
@@ -40,7 +41,7 @@ export default function Dashboard() {
       <header />
       <main>
         <section className="user-details">
-          <img className="profile-pic" src={userData?.twitter_profile_image_url} />
+          <ProfilePicture user={userData} className='profile-pic' />
           <div className="username">{ userData?.name }</div >
           <div className="handle">@{ userData?.twitter_username }</div>
         </section>

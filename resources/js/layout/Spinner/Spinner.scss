@@ -1,0 +1,14 @@
+.__spinner {
+  fill: var(--gray-70);
+  animation: anim__spinner 5s linear infinite;
+}
+
+@keyframes anim__spinner {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+    opacity: 1;
+  }
+}

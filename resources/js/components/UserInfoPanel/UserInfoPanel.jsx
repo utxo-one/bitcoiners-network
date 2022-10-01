@@ -13,7 +13,7 @@ const CONNECTION_TYPES = {
   following: 'Following',
 }
 
-export default function UserInfoPanel({ show, onHide, user }) {
+export default function UserInfoPanel({ show, onHide, user, onClickBadge, onClickConnection }) {
 
   const [connectionType, setConnectionType] = useState('followers');
 
@@ -27,7 +27,7 @@ export default function UserInfoPanel({ show, onHide, user }) {
       <Dialog.Portal>
         <Dialog.Overlay className='__user-info-panel __dialog-overlay'>
           <Dialog.Content className='__user-info-panel-content'>
-          <UserTypeBadge userType={user?.type} variant='solid' size='md' />
+          <UserTypeBadge userType={user?.type} variant='solid' size='md' onClick={onClickBadge} />
             <ProfilePicture user={user} className="profile-pic" />
 
             <div className="username">{ user?.name }</div >
@@ -42,7 +42,7 @@ export default function UserInfoPanel({ show, onHide, user }) {
               ))}
             </div>
 
-            <ConnectionsChart connectionType={connectionType} user={user} showCount={false} />
+            <ConnectionsChart connectionType={connectionType} user={user} showCount={false} onClickDiagram={userType => onClickConnection(userType, connectionType)} />
 
             <div className="connection-totals">
               <div>

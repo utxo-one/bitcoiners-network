@@ -19,7 +19,7 @@ export default function CommunityRateModal({ show, onHide }) {
               
               <div className="user-types">
                 { USER_TYPES.map(type => (
-                  <UserTypeBadge userType={type} />
+                  <UserTypeBadge key={type} userType={type} />
                 ))}
               </div>
                 

@@ -6,19 +6,22 @@ import { CompactNumberFormat } from "../../utils/NumberFormatting";
 
 const USER_TYPES = {
   bitcoiners: {
-    phrase: 'Bitcoiners',
+    phrase   : 'Bitcoiners',
+    singular : 'bitcoiner',
   },
 
   shitcoiners: {
-    phrase: 'Shitcoiners',
+    phrase   : 'Shitcoiners',
+    singular : 'shitcoiner',
   },
 
   nocoiners: {
-    phrase: 'Nocoiners',
+    phrase   : 'Nocoiners',
+    singular : 'nocoiner',
   },
 }
 
-export default function ConnectionsChart({ connectionType, user, showCount = true }) {
+export default function ConnectionsChart({ connectionType, user, showCount = true, onClickDiagram }) {
 
   const userTypes = Object.keys(USER_TYPES);
   const connectionData = connectionType === 'following' ? 'following_data' : 'follower_data';
@@ -53,7 +56,7 @@ export default function ConnectionsChart({ connectionType, user, showCount = tru
   return (
     <div className="__connections-chart">
       { userTypes.map(type => (
-        <div key={type} className={classNames("type", type)}>
+        <div key={type} className={classNames("type", type)} onClick={() => onClickDiagram(USER_TYPES[type].singular)}>
           <div className="chart">
             <RadialBar className={type} percent={user?.[connectionData].total === 0 ? 0 : user?.[connectionData][type] / user?.[connectionData].total * 100} />
             <div className="chart-percent">
