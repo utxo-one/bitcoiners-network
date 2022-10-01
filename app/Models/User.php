@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\TransactionStatus;
 use App\Enums\TransactionType;
 use App\Enums\UserType;
+use Attribute;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -66,7 +67,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $appends = [
-        'profile_photo_url', 'follows_authenticated_user', 'is_followed_by_authenticated_user', 'following_data', 'follower_data',
+        'profile_photo_url', 'twitter_profile_image_url_high_res', 'follows_authenticated_user', 'is_followed_by_authenticated_user', 'following_data', 'follower_data',
     ];
 
     public function followers()
@@ -102,6 +103,31 @@ class User extends Authenticatable
     public function endorsementsReceived()
     {
         return $this->hasMany(Endorsement::class, 'endorsee_id', 'twitter_id');
+    }
+
+    public function classificationVotesCast()
+    {
+        return $this->hasMany(ClassificationVote::class, 'classifier_id', 'twitter_id');
+    }
+
+    public function classificationVotesReceived()
+    {
+        return $this->hasMany(ClassificationVote::class, 'classified_id', 'twitter_id');
+    }
+
+    public function getClassificationSummary()
+    {
+        $votes = $this->classificationVotesReceived()->get();
+        $total = $votes->count();
+        $bitcoiner = $votes->where('classification_type', 'bitcoiner')->count();
+        $shitcoiner = $votes->where('classification_type', 'shitcoiner')->count();
+        $nocoiner = $votes->where('classification_type', 'nocoiner')->count();
+        return [
+            'total' => $total,
+            'bitcoiner' => $bitcoiner,
+            'shitcoiner' => $shitcoiner,
+            'nocoiner' => $nocoiner,
+        ];
     }
 
     public function getAvailableBalance(): int
@@ -154,6 +180,11 @@ class User extends Authenticatable
             'nocoiners' => $this->follows()->where('type', UserType::NOCOINER)->count(),
             'total' => $this->follows()->count(),
         ];
+    }
+
+    public function getTwitterProfileImageUrlHighResAttribute()
+    {
+        return str_replace('_normal', '', $this->twitter_profile_image_url);
     }
 
     public function getFollowerDataAttribute()

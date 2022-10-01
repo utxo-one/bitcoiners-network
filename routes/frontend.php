@@ -13,6 +13,7 @@ use App\Http\Controllers\Frontend\RatesController;
 use App\Http\Controllers\Frontend\Transaction\DebitController;
 use App\Http\Controllers\Frontend\Transaction\DepositController;
 use App\Http\Controllers\Frontend\User\AvailableBalanceController;
+use App\Http\Controllers\Frontend\User\ClassificationVoteController;
 use App\Http\Controllers\Frontend\User\EndorsementController;
 use App\Http\Controllers\Frontend\User\RefreshUserController;
 use App\Http\Controllers\Frontend\User\UserController;
@@ -32,9 +33,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 #If environment is local, Authenticate user with twitter_id 1558929312547577858
-if (app()->environment('local')) {
-    Auth::loginUsingId('1558929312547577858');
-}
+// if (app()->environment('local')) {
+//     Auth::loginUsingId('1558929312547577858');
+// }
 
 Route::get('/profile-pictures', [HomeController::class, 'profilesPictures'])->name('home.profile-pictures');
 Route::get('/random-bitcoiners', [HomeController::class, 'randomBitcoiners'])->name('home.random-bitcoiners');
@@ -69,9 +70,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/user/auth', [UserController::class, 'auth'])->name('user.auth');
     Route::post('/user/{username}/refresh', [RefreshUserController::class, 'store'])->name('user.refresh.store');
     Route::get('/user/{username}', [UserController::class, 'show'])->name('user.show');
+
     Route::post('/endorse', [EndorsementController::class, 'store'])->name('user.endorse.store');
     Route::delete('/endorse', [EndorsementController::class, 'destroy'])->name('user.endorse.destroy');
     Route::get('/endorsements/{twitterId}', [EndorsementController::class, 'index'])->name('user.endorse.index');
+
+    Route::post('/classify/{username}/{type}', [ClassificationVoteController::class, 'store'])->name('user.classify.store');
+    Route::delete('/classify/{username}', [ClassificationVoteController::class, 'destroy'])->name('user.classify.destroy');
+    Route::get('/classification/{username}', [ClassificationVoteController::class, 'index'])->name('user.classify.index');
 });
 
 

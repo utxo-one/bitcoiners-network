@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Enums\ClassificationSource;
 use App\Enums\EndorsementType;
 use App\Enums\UserType;
+use App\Models\ClassificationVote;
 use App\Models\Endorsement;
 use App\Models\Follow;
 use App\Models\User;
@@ -317,5 +318,73 @@ class UserService
         $endorsement->delete();
 
         return true;
+    }
+
+    public function voteClassifiction(User $user, string $type): ClassificationVote
+    {
+        if ($type !== 'bitcoiner' && $type !== 'shitcoiner' && $type !== 'nocoiner') {
+            throw new \Exception('Invalid classification type');
+        }
+
+        $classificationVote = ClassificationVote::query()
+            ->where('classified_id', $user->twitter_id)
+            ->where('classifier_id', auth()->user()->twitter_id)
+            ->first();
+
+        if ($classificationVote) {
+            return $classificationVote;
+        }
+
+        $vote = ClassificationVote::create([
+            'classified_id' => $user->twitter_id,
+            'classifier_id' => auth()->user()->twitter_id,
+            'classification_type' => $type,
+        ]);
+
+        if ($user->classificationVotesReceived()->count() >= 10) {
+            $this->classifyUserByVotes($user);
+        }
+
+        return $vote;
+    }
+
+    public function unvoteClassifiction(User $user): bool
+    {
+        $classificationVote = ClassificationVote::query()
+            ->where('classified_id', $user->twitter_id)
+            ->where('classifier_id', auth()->user()->twitter_id)
+            ->first();
+
+        if (!$classificationVote) {
+            return false;
+        }
+
+        $classificationVote->delete();
+
+        return true;
+    }
+
+    public function classifyUserByVotes(User $user)
+    {
+        $votes = $user->classificationVotesReceived()->get();
+
+        $voteCounts = [
+            'bitcoiner' => 0,
+            'shitcoiner' => 0,
+            'nocoiner' => 0,
+        ];
+
+        foreach ($votes as $vote) {
+            $voteCounts[$vote->classification_type]++;
+        }
+
+        // Get the highest vote count and the array key
+        $highestVoteCount = max($voteCounts);
+        $highestVoteType = array_search($highestVoteCount, $voteCounts);
+
+        $user->type = $highestVoteType;
+        $user->last_classified_at = Carbon::now();
+        $user->classified_by = ClassificationSource::VOTE;
+        $user->save();
     }
 }
