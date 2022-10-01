@@ -140,4 +140,100 @@ class FollowService
             return $output;
         }
     }
+
+    public function followUser(User $user): array
+    {
+        // check if the user has enough availableBalance() to follow this user
+        if (auth()->user()->getAvailableBalance() < config('pricing.follow')) {
+            throw new \Exception('You don\'t have enough sats to follow this user. Please top up your balance.');
+        }
+
+        if (auth()->user()->follows()->where('followee_id', $user->twitter_id)->exists()) {
+            throw new \Exception('You are already following this user.');
+        }
+
+        $userClient = new UserClient(
+            apiKey: config('services.twitter.client_id'),
+            apiSecret: config('services.twitter.client_secret'),
+            accessToken: auth()->user()->oauth_token,
+            accessSecret: auth()->user()->oauth_token_secret,
+        );
+        
+        $response = $userClient->follow(auth()->user()->twitter_id, $user->twitter_id);
+
+        if (!isset($response->getData()['following'])) {
+            Log::error('Failed to follow user', [
+                'user_id' => auth()->user()->twitter_id,
+                'follow_id' => $user->twitter_id,
+                'response' => $response->getData(),
+            ]);
+            throw new \Exception('Unable to follow user');
+        }
+
+        $transaction = Transaction::create([
+            'user_id' => auth()->user()->twitter_id,
+            'type' => TransactionType::DEBIT,
+            'amount' => config('pricing.follow'),
+            'description' => 'Followed @' . $user->twitter_username,
+            'status' => TransactionStatus::FINAL,
+        ]);
+
+        $follow = Follow::create([
+            'follower_id' => auth()->user()->twitter_id,
+            'followee_id' => $user->twitter_id,
+        ]);
+
+        return [
+            'follow' => $follow,
+            'transaction' => $transaction,
+        ];
+    }
+
+    public function unfollowUser(User $user): array
+    {
+        // check if the user has enough availableBalance() to follow this user
+        if (auth()->user()->getAvailableBalance() < config('pricing.follow')) {
+            throw new \Exception('You don\'t have enough sats to unfollow this user. Please top up your balance.');
+        }
+
+        if (!auth()->user()->follows()->where('followee_id', $user->twitter_id)->exists()) {
+            throw new \Exception('You are not following this user.');
+        }
+        
+        $userClient = new UserClient(
+            apiKey: config('services.twitter.client_id'),
+            apiSecret: config('services.twitter.client_secret'),
+            accessToken: auth()->user()->oauth_token,
+            accessSecret: auth()->user()->oauth_token_secret,
+        );
+        
+        $response = $userClient->unfollow(auth()->user()->twitter_id, $user->twitter_id);
+
+        if (!isset($response->getData()['following'])) {
+            Log::error('Failed to unfollow user', [
+                'user_id' => auth()->user()->twitter_id,
+                'follow_id' => $user->twitter_id,
+                'response' => $response->getData(),
+            ]);
+            throw new \Exception('Unable to unfollow user');
+        }
+
+        $transaction = Transaction::create([
+            'user_id' => auth()->user()->twitter_id,
+            'type' => TransactionType::DEBIT,
+            'amount' => config('pricing.unfollow'),
+            'description' => 'Unfollowed @' . $user->twitter_username,
+            'status' => TransactionStatus::FINAL,
+        ]);
+
+        $follow = Follow::where('follower_id', auth()->user()->twitter_id)
+            ->where('followee_id', $user->twitter_id)
+            ->first();
+
+        $follow->delete();
+
+        return [
+            'transaction' => $transaction,
+        ];
+    }
 }

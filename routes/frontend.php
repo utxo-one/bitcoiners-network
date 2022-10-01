@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Frontend\Follow\FollowActionController;
 use App\Http\Controllers\Frontend\Follow\FollowRequestController;
 use App\Http\Controllers\Frontend\Follow\MassFollowController;
 use App\Http\Controllers\Frontend\Follow\Scopes\AvailableFollowsController;
@@ -78,6 +79,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/classify/{username}/{type}', [ClassificationVoteController::class, 'store'])->name('user.classify.store');
     Route::delete('/classify/{username}', [ClassificationVoteController::class, 'destroy'])->name('user.classify.destroy');
     Route::get('/classification/{username}', [ClassificationVoteController::class, 'index'])->name('user.classify.index');
+
+    Route::post('/action/{username}/follow', [FollowActionController::class, 'follow'])->name('user.action.follow');
+    Route::delete('/action/{username}/unfollow', [FollowActionController::class, 'unfollow'])->name('user.action.unfollow');
 });
 
 
