@@ -14,10 +14,10 @@ return new class extends Migration
     public function up()
     {
         Schema::table('tweets', function (Blueprint $table) {
-            $table->integer('replies')->default(0);
-            $table->integer('retweets')->default(0);
-            $table->integer('likes')->default(0);
-            $table->integer('quotes')->default(0);
+            $table->integer('twitter_replies')->default(0);
+            $table->integer('twitter_retweets')->default(0);
+            $table->integer('twitter_likes')->default(0);
+            $table->integer('twitter_quotes')->default(0);
         });
     }
 
@@ -29,10 +29,10 @@ return new class extends Migration
     public function down()
     {
         Schema::table('tweets', function (Blueprint $table) {
-            $table->dropColumn('replies');
-            $table->dropColumn('retweets');
-            $table->dropColumn('likes');
-            $table->dropColumn('quotes');
+            $table->dropColumn('twitter_replies');
+            $table->dropColumn('twitter_retweets');
+            $table->dropColumn('twitter_likes');
+            $table->dropColumn('twitter_quotes');
         });
     }
 };
