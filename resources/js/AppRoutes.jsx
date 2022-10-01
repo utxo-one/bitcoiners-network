@@ -12,6 +12,9 @@ export default function AppRoutes() {
     <BrowserRouter basename="/u">
       <Routes>
         <Route path='/' element={<Dashboard />} />
+        <Route path='/followers/:username' element={<Connections initialType='followers' />} />
+        <Route path='/following/:username' element={<Connections initialType='following' />} />
+
         <Route path='/followers' element={<Connections initialType='followers' />} />
         <Route path='/following' element={<Connections initialType='following' />} />
         <Route path='/available' element={<Connections initialType='available' />} />
@@ -19,3 +22,7 @@ export default function AppRoutes() {
     </BrowserRouter>
   )
 }
+
+// /u/connections/followers/bitcoiners
+// /u/connections/followers/shitcoiners
+// /u/connections/all/bitcoiners

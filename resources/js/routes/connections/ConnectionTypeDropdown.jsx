@@ -11,10 +11,10 @@ const CONNECTION_TYPES = {
   available : 'Bitconers Network',
 }
 
-export default function ConnectionTypeDropdown({ connectionType, onSelect, count }) {
+export default function ConnectionTypeDropdown({ connectionType, onSelect, count, showNetwork = true }) {
 
   const renderUserItems = () => (
-    Object.entries(CONNECTION_TYPES).map(([type, phrase]) => (
+    Object.entries(CONNECTION_TYPES).filter(([type]) => showNetwork || type !== 'available').map(([type, phrase]) => (
       <DropdownMenu.Item
         key={type}
         className={classNames({ selected: connectionType === type })}
@@ -29,7 +29,7 @@ export default function ConnectionTypeDropdown({ connectionType, onSelect, count
     <DropdownMenu.Root>
       <DropdownMenu.Trigger className="connection-type">
         <div>
-          { CONNECTION_TYPES[connectionType] }{}
+          { CONNECTION_TYPES[connectionType] }
           {/* { count && <span className="user-count"> ({ CompactNumberFormat(count) })</span> } */}
         </div>
         <ArrowDownIcon />

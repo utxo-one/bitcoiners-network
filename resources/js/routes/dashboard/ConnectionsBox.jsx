@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Box from "../../layout/Box/Box";
 import Button from "../../layout/Button/Button";
 import ConnectionsChart from "../../layout/Connections/ConnectionsChart";
@@ -26,7 +26,13 @@ const TYPES = {
  */
 export default function ConnectionsBox({ connectionType, user }) {
 
+  const navigate = useNavigate();
+
   const connectionsCount = user && user[connectionType === 'followers' ? 'follower_data' : 'following_data'];
+
+  const onClickDiagram = userType => {
+    navigate(`/${connectionType}`, { state: { initialUserType: userType } });
+  } 
 
   return (
     <Box className="__connections-box">
@@ -35,7 +41,7 @@ export default function ConnectionsBox({ connectionType, user }) {
         <div className="count">{ Number(connectionsCount?.total).toLocaleString('en-US') }</div>
       </div>
       <hr />
-      <ConnectionsChart connectionType={connectionType} user={user} />
+      <ConnectionsChart connectionType={connectionType} user={user} onClickDiagram={onClickDiagram} />
       <Button as={Link} to={TYPES[connectionType].link}>View { TYPES[connectionType].phrase }</Button>
     </Box>
   );

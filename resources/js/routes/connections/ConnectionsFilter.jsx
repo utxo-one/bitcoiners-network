@@ -11,10 +11,10 @@ const USER_TYPE_FILTERS = {
   nocoiner   : 'Nocoiners'
 }
 
-export default function ConnectionsFilter({ userType, onSelectUserType, disabled }) {
+export default function ConnectionsFilter({ userType, connectionType, onSelectUserType, disabled }) {
 
   const renderUserItems = () => (
-    Object.entries(USER_TYPE_FILTERS).map(([type, phrase]) => (
+    Object.entries(USER_TYPE_FILTERS).filter(([type]) => !(connectionType === 'available' && type === 'all')).map(([type, phrase]) => (
       <DropdownMenu.Item
         key={type}
         className={classNames({ selected: userType === type, [type]: userType === type })}
