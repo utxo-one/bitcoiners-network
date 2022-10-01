@@ -241,6 +241,166 @@
 			"name": "User (Auth)",
 			"item": [
 				{
+					"name": "Endorsements",
+					"item": [
+						{
+							"name": "Endorse User",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"twitterId\": \"1558844336187523074\",\n    \"type\": \"developer\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost/frontend/endorse",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"path": [
+										"frontend",
+										"endorse"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Unendorse User",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"twitterId\": \"1558844336187523074\",\n    \"type\": \"developer\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost/frontend/endorse",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"path": [
+										"frontend",
+										"endorse"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Endorsements",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"twitterId\": \"1558844336187523074\",\n    \"type\": \"developer\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost/frontend/user/endorsements/1558844336187523074",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"path": [
+										"frontend",
+										"user",
+										"endorsements",
+										"1558844336187523074"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Classification Vote",
+					"item": [
+						{
+							"name": "Get Endorsement Summary",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost/frontend/classification/utxo_one",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"path": [
+										"frontend",
+										"classification",
+										"utxo_one"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Cast Vote",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "http://localhost/frontend/classify/utxo_one/bitcoiner",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"path": [
+										"frontend",
+										"classify",
+										"utxo_one",
+										"bitcoiner"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Retract Vote",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost/frontend/classify/utxo_one",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"path": [
+										"frontend",
+										"classify",
+										"utxo_one"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
 					"name": "Get Available Balance (Sats)",
 					"request": {
 						"method": "GET",
@@ -255,34 +415,6 @@
 								"frontend",
 								"user",
 								"available-balance"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Endorse User",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"twitterId\": \"1558844336187523074\",\n    \"type\": \"developer\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost/frontend/endorse",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"path": [
-								"frontend",
-								"endorse"
 							]
 						}
 					},
@@ -323,67 +455,6 @@
 								"frontend",
 								"user",
 								"auth"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Endorsements",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"twitterId\": \"1558844336187523074\",\n    \"type\": \"developer\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost/frontend/user/endorsements/1558844336187523074",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"path": [
-								"frontend",
-								"user",
-								"endorsements",
-								"1558844336187523074"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Unendorse User",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"twitterId\": \"1558844336187523074\",\n    \"type\": \"developer\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost/frontend/endorse",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"path": [
-								"frontend",
-								"endorse"
 							]
 						}
 					},
@@ -833,7 +904,7 @@
 				"header": [
 					{
 						"key": "BTCPay-Sig",
-						"value": "sha256=9adf95596669e6a99943707800ea51015267bfcc45a22818bdcc6f377bc6bbfa1e666",
+						"value": "",
 						"type": "text"
 					}
 				],
