@@ -19,9 +19,8 @@ class CrawlerService
         $bitcoiner = User::query()
             ->where('type', UserType::BITCOINER)
             ->where('last_crawled_at', NULL)
-            ->where('twitter_count_followers', '>', 500)
-            ->where('twitter_count_followers', '<', 8000)
-            ->where('twitter_count_following', '<', 5000)
+            ->where('twitter_count_followers', '<', 1000)
+            ->where('twitter_count_following', '<', 1000)
             ->inRandomOrder()
             ->first();
 
