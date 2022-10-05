@@ -14,6 +14,7 @@ import Spinner from "../../layout/Spinner/Spinner";
 import PointyArrow from "../../assets/icons/PointyArrow";
 
 import './Connections.scss';
+import ConnectionTypeBadge from "../../components/ConnectionTypeBadge/ConnectionTypeBadge";
 
 export default function Connections({ initialType }) {
 
@@ -190,8 +191,11 @@ export default function Connections({ initialType }) {
                 { connection.twitter_description }
               </div>
 
-              { type !== 'followers' && connection.follows_authenticated_user && <div className="is-following-badge">Follows you</div> }
-              { type !== 'following' && connection.is_followed_by_authenticated_user && <div className="is-following-badge">Followed</div> }
+              {/* { type !== 'followers' && connection.follows_authenticated_user && <div className="is-following-badge">Follows you</div> }
+              { type !== 'following' && connection.is_followed_by_authenticated_user && <div className="is-following-badge">Followed</div> } */}
+
+              { type !== 'followers' && <ConnectionTypeBadge type='follows-you' connection={connection} /> }
+              { type !== 'following' && <ConnectionTypeBadge type='following' connection={connection} /> }
             </div>
           </div>
         ))}

@@ -15,6 +15,7 @@ import './MainProfile.scss';
 import PointyArrow from "../../assets/icons/PointyArrow";
 import UserTypeBadge from "../../components/UserTypeBadge/UserTypeBadge";
 import classNames from "classnames";
+import ConnectionTypeBadge from "../../components/ConnectionTypeBadge/ConnectionTypeBadge";
 
 export default function MainProfile({ asDashboard }) {
 
@@ -78,7 +79,16 @@ export default function MainProfile({ asDashboard }) {
             <div ref={profilePicRef}><ProfilePicture user={userData} className='profile-pic' /></div>
             <div className="username">{ userData?.name }</div >
             <div className="handle">@{ userData?.twitter_username }</div>
-            { !asDashboard && <div className="description">{ userData?.twitter_description }</div> }
+            { !asDashboard && (
+            <>
+              <div className="badges">
+                <ConnectionTypeBadge type='follows-you' connection={userData} />
+                <ConnectionTypeBadge type='following' connection={userData} />
+              </div>
+              
+              <div className="description">{ userData?.twitter_description }</div>
+            </>
+            )}
           </section>
 
           { userData && (
