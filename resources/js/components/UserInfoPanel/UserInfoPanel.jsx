@@ -1,6 +1,7 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import classNames from "classnames";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import ConnectionsChart from "../../layout/Connections/ConnectionsChart";
 import { CompactNumberFormat } from "../../utils/NumberFormatting";
 import ProfilePicture from "../ProfilePicture/ProfilePicture";
@@ -31,7 +32,7 @@ export default function UserInfoPanel({ show, onHide, user, onClickBadge, onClic
             <ProfilePicture user={user} className="profile-pic" />
 
             <div className="username">{ user?.name }</div >
-            <div className="handle">@{ user?.twitter_username }</div>
+            <Link to={`/profile/${user?.twitter_username}`} className="handle">@{ user?.twitter_username }</Link>
             <div className="description">{ user?.twitter_description }</div>
 
             <div className='connections-tab'>

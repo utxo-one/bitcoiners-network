@@ -46,6 +46,12 @@
       color: var(--blue-twitter);
       word-break: break-all;
       margin-bottom: 20px;
+      display: block;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
     }
   
     .description {

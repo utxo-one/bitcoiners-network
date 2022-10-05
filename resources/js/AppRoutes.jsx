@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import CampaignOverview from "./routes/campaign/CampaignOverview";
 import Connections from "./routes/connections/Connections";
-import Dashboard from "./routes/dashboard/Dashboard";
+import MainProfile from "./routes/dashboard/MainProfile";
 
 // All React Routes are using the basename '/u' as included in the catch-all
 // laravel route in frontend.php, when using components such as <Link>, there is
@@ -11,13 +12,17 @@ export default function AppRoutes() {
   return (
     <BrowserRouter basename="/u">
       <Routes>
-        <Route path='/' element={<Dashboard />} />
+        <Route path='/' element={<MainProfile key='dashboard' asDashboard />} />
+        <Route path='/profile/:username' element={<MainProfile key='profile' />} />
+
         <Route path='/followers/:username' element={<Connections initialType='followers' />} />
         <Route path='/following/:username' element={<Connections initialType='following' />} />
 
         <Route path='/followers' element={<Connections initialType='followers' />} />
         <Route path='/following' element={<Connections initialType='following' />} />
         <Route path='/available' element={<Connections initialType='available' />} />
+
+        <Route path='/campaign' element={<CampaignOverview />} />
       </Routes>
     </BrowserRouter>
   )

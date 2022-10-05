@@ -42,7 +42,7 @@ export default function ConnectionsBox({ connectionType, user }) {
       </div>
       <hr />
       <ConnectionsChart connectionType={connectionType} user={user} onClickDiagram={onClickDiagram} />
-      <Button as={Link} to={TYPES[connectionType].link}>View { TYPES[connectionType].phrase }</Button>
+      <Button as={Link} to={TYPES[connectionType].link} variant="outline">View { TYPES[connectionType].phrase }</Button>
     </Box>
   );
 }

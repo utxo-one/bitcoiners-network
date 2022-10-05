@@ -36,20 +36,40 @@
     }
   }
 
-  &.__user-type-badge-solid {
+  &.__user-type-badge--var-outline-white {
+    border-color: white;
+    color: white;
+
+    .icon > svg {
+      fill: white;
+    }
+  }
+
+  &.__user-type-badge--var-solid {
     .icon {
       background-color: white;
     }
   }
 
-  &-bitcoiner {
-    border-color: var(--orange);
+  &.__user-type-badge--var-outline-white {
+    border-color: white;
+    color: white;
 
-    &.__user-type-badge-outline {
+    .icon > svg {
+      fill: white;
+    }
+  }
+
+  &-bitcoiner {
+    &:not(.__user-type-badge--var-outline-white) {
+      border-color: var(--orange);
+    }
+
+    &.__user-type-badge--var-outline {
       color: var(--orange);
     }
 
-    &.__user-type-badge-solid {
+    &.__user-type-badge--var-solid {
       background-color: var(--orange);
     }
 
@@ -59,13 +79,16 @@
   }
 
   &-nocoiner {
-    border-color: var(--gray-70);
 
-    &.__user-type-badge-outline {
+    &:not(.__user-type-badge--var-outline-white) {
+      border-color: var(--gray-70);
+    }
+
+    &.__user-type-badge--var-outline {
       color: var(--gray-70);
     }
 
-    &.__user-type-badge-solid {
+    &.__user-type-badge--var-solid {
       background-color: var(--gray-70);
     }
 
@@ -79,13 +102,15 @@
       font-size: 0.9em; // shitcoiner is relatively reduced by 10% since the word is longer in English
     }
 
-    border-color: var(--shitcoiner-color);
+    &:not(.__user-type-badge--var-outline-white) {
+      border-color: var(--shitcoiner-color);
+    }
 
-    &.__user-type-badge-outline {
+    &.__user-type-badge--var-outline {
       color: var(--shitcoiner-color);
     }
 
-    &.__user-type-badge-solid {
+    &.__user-type-badge--var-solid {
       background-color: var(--shitcoiner-color);
     }
 

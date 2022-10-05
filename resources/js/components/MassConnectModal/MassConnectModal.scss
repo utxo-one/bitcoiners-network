@@ -10,7 +10,7 @@
     gap: 8px;
     margin: 12px 0;
 
-    &.estimation {
+    &.balance-hidden {
       margin-top: 60px;
     }
 
@@ -61,5 +61,16 @@
 
   button.pay-via-ln {
     margin: 28px auto 8px;
+    min-width: 292px;
+  }
+
+  .top-up-required {
+    opacity: 1;
+    transition: 0.3s all;
+
+    &.invisible {
+      visibility: hidden;
+      opacity: 0;
+    }
   }
 }

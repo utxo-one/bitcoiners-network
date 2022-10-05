@@ -1,0 +1,97 @@
+.__campaign-overview {
+  header {
+    position: sticky;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid var(--gray-80);
+    top: 0;
+    background-color: white;
+    z-index: 2;
+    padding: 0 4px;
+
+    svg.back {
+      width: 28px;
+      height: auto;
+      // padding-right: 4px;
+      margin-left: 12px;
+      margin-right: 4px;
+    }
+
+    .tab {
+      color: var(--gray-60);
+      flex: 1;
+      padding: 28px 12px 20px;
+      text-align: center;
+      border-bottom: 4px solid transparent;
+      margin: 0 8px;
+      font-size: 18px;
+
+      &.selected {
+        border-color: var(--blue-twitter);
+        color: var(--blue-twitter);
+      }
+    }
+  }
+
+  main {
+    padding: 20px;
+
+    table.overview {
+      width: 100%;
+
+      tr {
+        height: 40px;
+      }
+
+      td {
+
+        .status-running {
+
+          font-weight: bold;
+          font-size: 18px;
+          color: var(--dark-green);
+          
+          > svg {
+            width: 20px;
+            height: 20px;
+            transform: scaleX(0.8);
+            margin-right: 4px;
+            vertical-align: top;
+            fill: var(--green);
+          }
+        }
+        
+        strong {
+          color: var(--gray-20);
+        }
+
+        &:first-of-type {
+          color: var(--gray-40);
+          text-transform: uppercase;
+          font-weight: 600;
+          font-size: 15px;
+        }
+
+        &:last-of-type {
+          color: var(--gray-40);
+          text-align: right;
+          font-size: 16px;
+        }
+      }
+    }
+
+    button.cancel-campaign {
+      background-color: transparent;
+      color: var(--red);
+      display: block;
+      margin: 12px auto;
+      font-size: 16px;
+      font-weight: normal;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
