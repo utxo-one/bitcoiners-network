@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import classNames from "classnames";
 
 import Box from "../../layout/Box/Box";
 import ConnectionsBox from "./ConnectionsBox";
@@ -8,24 +9,25 @@ import ButtonWithLightning from "../../layout/Button/ButtonWithLightning";
 
 import MassConnectModal from "../../components/MassConnectModal/MassConnectModal";
 import ProfilePicture from "../../components/ProfilePicture/ProfilePicture";
+import UserTypeBadge from "../../components/UserTypeBadge/UserTypeBadge";
+import ConnectionTypeBadge from "../../components/ConnectionTypeBadge/ConnectionTypeBadge";
+import CommunityRateModal from "../connections/CommunityRateModal";
 
 import SocialNetworkIcon from "../../assets/icons/SocialNetworkIcon";
 
+import BackNavigation from "../../layout/BackNavigation/BackNavigation";
+
 import './MainProfile.scss';
-import PointyArrow from "../../assets/icons/PointyArrow";
-import UserTypeBadge from "../../components/UserTypeBadge/UserTypeBadge";
-import classNames from "classnames";
-import ConnectionTypeBadge from "../../components/ConnectionTypeBadge/ConnectionTypeBadge";
 
 export default function MainProfile({ asDashboard }) {
 
   const { username } = useParams();
-  const navigate = useNavigate();
 
   const [userData, setUserData] = useState(null);
   const [followBitcoiners, setFollowBitcoiners] = useState(null);
   const [showMassConnect, setshowMassConnect] = useState(false);
   const [handleVisible, setHandleVisible] = useState(false);
+  const [showRate, setShowRate] = useState(false);
   
   const profilePicRef = useRef();
   const handleIntersector = useRef();
@@ -50,14 +52,16 @@ export default function MainProfile({ asDashboard }) {
     }
 
     const handleIntersect = ([entry]) => {
-      console.log('entry:', entry);
       setHandleVisible(entry.isIntersecting);
     }
 
-    // handleIntersector.current = new IntersectionObserver(handleIntersect); //, { threshold: [1], rootMargin: "-1px 0px 0px 0px"});
-    handleIntersector.current = new IntersectionObserver(handleIntersect, { threshold: [0] }); //, rootMargin: "-1px 0px 0px 0px"});
+    handleIntersector.current = new IntersectionObserver(handleIntersect, { threshold: [0] });
     handleIntersector.current.observe(element);
-  })
+  });
+
+  const onClickBadge = () => {
+    setShowRate(true);
+  }
 
   // if (!userData) {
   //   return (
@@ -68,9 +72,9 @@ export default function MainProfile({ asDashboard }) {
   return (
     <div className="__main-profile">
       <header className={classNames(`${userData?.type}`, {'show-background': !handleVisible })}>
-        { !asDashboard && <PointyArrow role="button" onClick={() => navigate('/')} /> }
+        { !asDashboard && <BackNavigation /> }
         { userData && <div className={classNames("username", { visible: !handleVisible })}>@{ userData?.twitter_username }</div> }
-        <UserTypeBadge userType={userData?.type} variant='outline-white' />
+        <UserTypeBadge userType={userData?.type} variant='outline-white' onClick={onClickBadge} />
       </header>
       <main>
         <div className={classNames("usertype-bg", `${userData?.type}`)} />
@@ -122,14 +126,15 @@ export default function MainProfile({ asDashboard }) {
               </Box>
             )}
 
-            <ConnectionsBox connectionType='following' user={userData} />
-            <ConnectionsBox connectionType='followers' user={userData} />
+            <ConnectionsBox connectionType='following' user={userData} isAuthUser={asDashboard} />
+            <ConnectionsBox connectionType='followers' user={userData} isAuthUser={asDashboard} />
           </div>
           )}
         </div>
       </main>
 
       <MassConnectModal show={showMassConnect} onHide={() => setshowMassConnect(false)} />
+      <CommunityRateModal show={showRate} onHide={() => setShowRate(false)} user={userData}  />
     </div>
   );
 }

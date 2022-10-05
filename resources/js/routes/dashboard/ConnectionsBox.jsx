@@ -24,15 +24,15 @@ const TYPES = {
  *  user: Object
  * }} props 
  */
-export default function ConnectionsBox({ connectionType, user }) {
+export default function ConnectionsBox({ connectionType, user, isAuthUser }) {
 
   const navigate = useNavigate();
 
   const connectionsCount = user && user[connectionType === 'followers' ? 'follower_data' : 'following_data'];
 
   const onClickDiagram = userType => {
-    navigate(`/${connectionType}`, { state: { initialUserType: userType } });
-  } 
+    navigate(`/${connectionType}/${isAuthUser ? '' : user.twitter_username}`, { state: { initialUserType: userType } });
+  }
 
   return (
     <Box className="__connections-box">
