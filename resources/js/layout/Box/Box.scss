@@ -9,4 +9,12 @@
     border-top: none;
     border-color: var(--gray-80);
   }
+
+  &-variant-info {
+    margin: 24px 0;
+    color: var(--gray-50);
+    font-size: 16px;
+    line-height: 24px;
+    padding: 12px;
+  }
 }

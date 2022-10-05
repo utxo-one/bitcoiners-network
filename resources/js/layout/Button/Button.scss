@@ -10,11 +10,34 @@
   padding: 12px 24px;
   text-align: center;
   text-decoration: none;
+  position: relative;
+
+  &-spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 24px;
+    height: 24px;
+    visibility: hidden;
+
+    .__spinner {
+      fill: white;
+    }
+
+    &-visible {
+      visibility: visible;
+    }
+  }
+
+  &-content {
+    &-invisible {
+      visibility: hidden;
+    }
+  }
 
   &-with-lightning {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: block;
     background: linear-gradient(315deg, var(--orange-dark) 18%, var(--orange) 70%);
     border: 1px solid #FFFFFF;
     box-shadow: 0px 0px 0px 1px var(--orange);
@@ -22,18 +45,22 @@
     font-weight: 600;
     font-size: 18px;
     line-height: 22px;
-    gap: 12px;
     min-width: 70%;
     
-    > svg {
-      width: 24px;
-      height: auto;
+    .__button-content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+
+      > svg {
+        width: 24px;
+        height: auto;
+      }
     }
 
     &:disabled {
-      background: none;
-      background-color: var(--gray-80);
-      box-shadow: 0px 0px 0px 1px var(--gray-80);
+      opacity: 0.8;
     }
   }
 
@@ -42,4 +69,9 @@
     color: var(--gray-50);
   }
 
+  &-variant-outline {
+    background-color: transparent;
+    border: 1px solid var(--orange);
+    color: var(--orange);
+  }
 }

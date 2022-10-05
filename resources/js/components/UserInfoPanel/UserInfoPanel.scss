@@ -11,6 +11,7 @@
     padding: 0 20px 20px;
     background-color: white;
     outline: none;
+    max-width: 480px;
 
     &[data-state='open'] {
       animation: 0.3s anim__user-info-content-in;
@@ -46,6 +47,12 @@
       color: var(--blue-twitter);
       word-break: break-all;
       margin-bottom: 20px;
+      display: inline-block;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
     }
   
     .description {

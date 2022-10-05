@@ -55,6 +55,7 @@
   padding: 20px;
   border-radius: 24px;
   width: 95vmin;
+  max-width: 380px;
 
   &[data-state='open'] {
     animation: 0.3s anim__dialog-center-modal-in;

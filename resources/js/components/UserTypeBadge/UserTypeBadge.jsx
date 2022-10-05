@@ -36,7 +36,7 @@ export default function UserTypeBadge({ userType, variant = 'outline', size = 's
   const badgeClasses = classNames(
     "__user-type-badge",
     `__user-type-badge-${userType}`,
-    `__user-type-badge-${variant}`,
+    `__user-type-badge--var-${variant}`,
     `__user-type-badge-${size}`
   );
 

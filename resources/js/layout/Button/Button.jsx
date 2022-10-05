@@ -1,8 +1,9 @@
 import classNames from "classnames";
+import Spinner from "../Spinner/Spinner";
 
 import './Button.scss';
 
-export default function Button({ as, className, children, variant, ...props }) {
+export default function Button({ as, className, children, variant, loading, ...props }) {
 
   const Component = as ? as : 'button';
 
@@ -10,7 +11,10 @@ export default function Button({ as, className, children, variant, ...props }) {
 
   return (
     <Component className={classNames('__button', variantClass, className)} {...props}>
-      { children }
+      <div className={classNames("__button-spinner", {"__button-spinner-visible": loading })}><Spinner /></div>
+      <div className={classNames("__button-content", {'__button-content-invisible': loading })}>
+        { children }
+      </div>
     </Component>
   )
 }
