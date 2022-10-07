@@ -132,14 +132,13 @@ class FollowService
             return $output;
         }
 
-
         // If the user doesn't have pending follow requests, but has completed follow requests
         if (!auth()->user()->followRequests()->where('status', FollowRequestStatus::PENDING)->exists() && 
             auth()->user()->followRequests()->where('status', FollowRequestStatus::COMPLETED)->exists()) {
 
             $output['totalCompletedFollowRequests'] = auth()->user()->followRequests()->where('status', FollowRequestStatus::COMPLETED)->count();
-            $output['totalSpent'] = auth()->user()->followRequests()->where('status', FollowRequestStatus::COMPLETED)->count() * config('pricing.follow');
-            $output['estimated_completion_time_days'] = 0;
+            $output['totalSpentSats'] = auth()->user()->followRequests()->where('status', FollowRequestStatus::COMPLETED)->count() * config('pricing.follow');
+            $output['estimatedCompletionDays'] = 0;
             $output['pendingFollowRequests'] = 0;
             $output['status'] = 'paused';
 
