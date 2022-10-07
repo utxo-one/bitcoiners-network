@@ -18,12 +18,15 @@ import SocialNetworkIcon from "../../assets/icons/SocialNetworkIcon";
 import BackNavigation from "../../layout/BackNavigation/BackNavigation";
 
 import './MainProfile.scss';
+import CampaignStats from "../../components/CampaignStats/CampaignStats";
+import Button from "../../layout/Button/Button";
 
 export default function MainProfile({ asDashboard }) {
 
   const { username } = useParams();
 
   const [userData, setUserData] = useState(null);
+  const [campaignData, setCampaignData] = useState(null);
   const [followBitcoiners, setFollowBitcoiners] = useState(null);
   const [showMassConnect, setshowMassConnect] = useState(false);
   const [handleVisible, setHandleVisible] = useState(false);
@@ -36,9 +39,12 @@ export default function MainProfile({ asDashboard }) {
     const loadUserData = async () => {
       const { data } = await axios.get(`/frontend/user/${asDashboard ? 'auth' : username}`);
       const { data: followData } = await axios.get('/frontend/follow/available/bitcoiner');
-
+      const { data: campaignData } = await axios.get('/frontend/follow/mass-follow');
+      
+      console.log('data:', data)
       setUserData(data);
       setFollowBitcoiners(followData.availableFollows);
+      setCampaignData(campaignData);
     }
 
     loadUserData();
@@ -69,6 +75,53 @@ export default function MainProfile({ asDashboard }) {
   //   );
   // }
 
+  const campaignRunning = campaignData?.status === 'running';
+
+  const renderNetworkStats = () => (
+    <Box className="bitcoiners-you-follow">
+      <div className="data">
+        <div className="label">Bitcoiners you follow</div>
+        <div className="value">{ Number(userData?.following_data.bitcoiners).toLocaleString() }</div>
+      </div>
+      
+      <div className="data">
+        <div className="label">
+          <span className="bitcoiners">bitcoiners</span><span className="network">.network</span> Pool
+        </div>
+        <div className="value pool">{ Number(followBitcoiners?.total).toLocaleString() }</div>
+      </div>
+
+      <hr />
+
+      <div className="network-info">
+        <SocialNetworkIcon />
+        <div className="info">You're currently following 1.2% of our <Link to='/available' className="bitcoin-twitter">Bitcoin Twitter</Link> user base.</div>
+      </div>
+
+      { !campaignRunning && (
+        <>
+          <hr />
+
+          <ButtonWithLightning className="mass-follow" onClick={() => setshowMassConnect(true)}>
+            <div>Mass Follow</div>
+          </ButtonWithLightning>
+        </>
+      )}
+    </Box>
+  )
+
+  const renderCampaignStats = () => (
+    <div className="mass-follow">
+      <h3>Mass Follow Campaign</h3>
+      <Box>
+        <CampaignStats campaign={campaignData} />
+        <div className="view-campaign">
+          <Button as={Link} to='/campaign' variant='outline'>View Campaign</Button>
+        </div>
+      </Box>
+    </div>
+  )
+
   return (
     <div className="__main-profile">
       <header className={classNames(`${userData?.type}`, {'show-background': !handleVisible })}>
@@ -97,34 +150,8 @@ export default function MainProfile({ asDashboard }) {
 
           { userData && (
             <div className="panels">
-            { asDashboard && (
-              <Box className="bitcoiners-you-follow">
-                <div className="data">
-                  <div className="label">Bitcoiners you follow</div>
-                  <div className="value">{ Number(userData?.following_data.bitcoiners).toLocaleString() }</div>
-                </div>
-                
-                <div className="data">
-                  <div className="label">
-                    <span className="bitcoiners">bitcoiners</span><span className="network">.network</span> Pool
-                  </div>
-                  <div className="value pool">{ Number(followBitcoiners?.total).toLocaleString() }</div>
-                </div>
-
-                <hr />
-
-                <div className="network-info">
-                  <SocialNetworkIcon />
-                  <div className="info">You're currently following 1.2% of our <Link to='/available' className="bitcoin-twitter">Bitcoin Twitter</Link> user base.</div>
-                </div>
-
-                <hr />
-
-                <ButtonWithLightning className="mass-follow" onClick={() => setshowMassConnect(true)}>
-                  <div>Mass Follow</div>
-                </ButtonWithLightning>
-              </Box>
-            )}
+            { asDashboard && campaignRunning && renderCampaignStats() }
+            { asDashboard && renderNetworkStats() }
 
             <ConnectionsBox connectionType='following' user={userData} isAuthUser={asDashboard} />
             <ConnectionsBox connectionType='followers' user={userData} isAuthUser={asDashboard} />
