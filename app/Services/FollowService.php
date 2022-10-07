@@ -106,36 +106,42 @@ class FollowService
     {
         $output = [];
 
-        // If the user has pending follow requests
-        if (auth()->user()->followRequests()->where('status', FollowRequestStatus::PENDING)->exists()) {
-            $output['totalCompletedFollowRequests'] = auth()->user()->followRequests()->where('status', FollowRequestStatus::COMPLETED)->count();
-            $output['totalSpentSats'] = auth()->user()->followRequests()->where('status', FollowRequestStatus::COMPLETED)->count() * config('pricing.follow');
-            $output['estimatedCompletionDays'] = auth()->user()->followRequests()->where('status', FollowRequestStatus::PENDING)->count() / config('limits.dailyFollows');
-            $output['pendingFollowRequests'] = auth()->user()->followRequests()->where('status', FollowRequestStatus::PENDING)->count();
-            $output['status'] = 'running';
-
-            $output['recentCompletedFollows'] = auth()->user()->followRequests()->with('follow')->where('status', FollowRequestStatus::COMPLETED)->orderBy('completed_at', 'desc')->take(10)->get();
-
-            return $output;
-        }
+        // Get all the follow requests for the authenticated user
+        $followRequests = FollowRequest::where('user_id', auth()->user()->twitter_id)
+            ->get();
 
         // If the user doesn't have any pending or completed follow requests
-        if (!auth()->user()->followRequests()->exists()) {
+        if ($followRequests->count() == 0) {
             $output['status'] = 'neverStarted';
 
             return $output;
         }
+        
+        // If the user has pending follow requests
+        if (auth()->user()->followRequests()->where('status', FollowRequestStatus::PENDING)->exists()) {
+            
+            $completedCount = auth()->user()->followRequests()->where('status', FollowRequestStatus::COMPLETED)->count();
+            $pendingCount = auth()->user()->followRequests()->where('status', FollowRequestStatus::PENDING)->count();
+
+            $output['totalCompletedFollowRequests'] = $completedCount;
+            $output['totalSpentSats'] = $completedCount * config('pricing.follow');
+            $output['estimatedCompletionDays'] = $pendingCount / config('limits.dailyFollows');
+            $output['pendingFollowRequests'] = $pendingCount;
+            $output['status'] = 'running';
+
+            return $output;
+        }
+
 
         // If the user doesn't have pending follow requests, but has completed follow requests
         if (!auth()->user()->followRequests()->where('status', FollowRequestStatus::PENDING)->exists() && 
             auth()->user()->followRequests()->where('status', FollowRequestStatus::COMPLETED)->exists()) {
+
             $output['totalCompletedFollowRequests'] = auth()->user()->followRequests()->where('status', FollowRequestStatus::COMPLETED)->count();
             $output['totalSpent'] = auth()->user()->followRequests()->where('status', FollowRequestStatus::COMPLETED)->count() * config('pricing.follow');
             $output['estimated_completion_time_days'] = 0;
             $output['pendingFollowRequests'] = 0;
             $output['status'] = 'paused';
-
-            $output['recentCompletedFollows'] = auth()->user()->followRequests()->with('follow')->where('status', FollowRequestStatus::COMPLETED)->orderBy('completed_at', 'desc')->take(10)->get();
 
             return $output;
         }
