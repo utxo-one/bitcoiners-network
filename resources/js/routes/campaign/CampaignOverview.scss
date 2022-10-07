@@ -40,6 +40,10 @@
     max-width: 400px;
     margin: 20px auto;
 
+    &.cancel-button-visible {
+      margin-bottom: 80px;
+    }
+
     .cancel-info {
       p {
         margin-top: 8px;
@@ -83,6 +87,7 @@
     max-width: 400px;
     padding: 12px;
     animation: anim__campaign-overview-cancel-request 0.3s;
+    background-color: white;
     
     button {
       display: block;

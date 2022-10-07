@@ -12,6 +12,10 @@
   text-decoration: none;
   position: relative;
 
+  &:disabled {
+    opacity: 0.8;
+  }
+
   &-spinner {
     position: absolute;
     top: 50%;
@@ -57,10 +61,6 @@
         width: 24px;
         height: auto;
       }
-    }
-
-    &:disabled {
-      opacity: 0.8;
     }
   }
 

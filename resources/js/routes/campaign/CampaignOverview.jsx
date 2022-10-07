@@ -1,16 +1,19 @@
-import axios from "axios";
-import classNames from "classnames";
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom";
-import PointyArrow from "../../assets/icons/PointyArrow";
+import { useImmer } from "use-immer";
+import axios from "axios";
+import classNames from "classnames";
+
 import CampaignStats from "../../components/CampaignStats/CampaignStats";
+import CampaignUsers from "./CampaignUsers";
+import CancelCampaignModal from "./CancelCampaignModal";
+
+import PointyArrow from "../../assets/icons/PointyArrow";
 import Box from "../../layout/Box/Box";
 import Button from "../../layout/Button/Button";
 import CenteredSpinner from "../../layout/Spinner/CenteredSpinner";
 
 import './CampaignOverview.scss';
-import CampaignUsers from "./CampaignUsers";
-import CancelCampaignModal from "./CancelCampaignModal";
 
 const CAMPAIGN_STATUS = {
   running: "Running",
@@ -26,21 +29,27 @@ export default function CampaignOverview(props) {
 
   const [selectedTab, setSelectedTab] = useState('overview');
   const [campaignData, setCampaignData] = useState(null);
-  const [pendingData, setPendingData] = useState(null);
-  const [selectedPending, setSelectedPending] = useState({});
+  const [pendingData, setPendingData] = useImmer(null);
+  const [selectedPending, setSelectedPending] = useImmer(() => new Map());
   const [showCancelCampaign, setShowCancelCampaign] = useState(false);
+  const [pendingUsers, setPendingUsers] = useImmer(null);
+  const [cancellingRequests, setCancellingRequests] = useState(false);
+  const [availableSats, setAvailableSats] = useState(0);
 
   const navigate = useNavigate();
+
+  const loadedAllPending = pendingData && pendingData.current_page === pendingData.last_page;
 
   useEffect(() => {
     const loadCampaign = async () => {
       const { data } = await axios.get('/frontend/follow/mass-follow');
       const { data: pending } = await axios.get('/frontend/follow/requests/pending');
+      const { data: available } = await axios.get('/frontend/user/available-balance');
+      setAvailableSats(available || 0);
 
       setCampaignData(data);
       setPendingData(pending);
-
-      console.log('pending:', pending)
+      setPendingUsers(pending.data);
     }
 
     loadCampaign();
@@ -51,17 +60,39 @@ export default function CampaignOverview(props) {
   }
 
   const onToggleSelected = (e, user) => {
-    const selected = JSON.parse(JSON.stringify(selectedPending));
-    
-    if (e.target.checked) {
-      selected[user.twitter_id] = true;
-    }
-    else {
-      delete selected[user.twitter_id];
-    }
-
-    setSelectedPending(selected);
+    setSelectedPending(draft => {
+      if (e.target.checked) {
+        draft.set(user.twitter_id, true);
+        // draft[user.twitter_id] = true;
+      }
+      else {
+        draft.delete(user.twitter_id);
+      }
+    });
   }
+
+  const onCancelPendingRequests = async () => {
+    console.log('delete:', selectedPending.keys());
+
+    setCancellingRequests(true);
+    const { data } = axios.delete('/frontend/follow/requests', { data: { twitterIds: Array.from(selectedPending.keys()) } });
+
+    console.log('data:', data)
+
+    // TODO -> replace array lookup with object
+    setPendingUsers(draft => {
+      selectedPending.forEach((_, id) => {
+        const index = draft.findIndex(user => user.follow.twitter_id === id);
+        index !== -1 && draft.splice(index, 1);
+      })
+    });
+
+    // reset pending:
+    setCancellingRequests(false);
+    setSelectedPending(new Map());
+  }
+
+  const showCancelRequestsButton = selectedTab === 'audience' && selectedPending.size > 0;
 
   const renderOverview = () => (
     <>
@@ -86,7 +117,7 @@ export default function CampaignOverview(props) {
         <p>Accounts that you choose to cancel will not be charged nor chosen for future campaigns.</p>
       </Box>
 
-      <CampaignUsers users={pendingData.data} selected={selectedPending} onToggleSelected={onToggleSelected} />
+      <CampaignUsers pendingUsers={pendingUsers} loadedAllPending={loadedAllPending} selected={selectedPending} onToggleSelected={onToggleSelected} />
     </>
   );
 
@@ -97,13 +128,13 @@ export default function CampaignOverview(props) {
 
     return (
       <>
-        <main>
+        <main className={classNames({ 'cancel-button-visible': showCancelRequestsButton })}>
           { selectedTab === 'overview' ? renderOverview() : renderAudience() }
         </main>
 
-        { selectedTab === 'audience' && Object.keys(selectedPending).length > 0 && (
+        { showCancelRequestsButton && (
           <div className="cancel-requests">
-            <Button>Cancel Requests</Button>
+            <Button onClick={onCancelPendingRequests} loading={cancellingRequests} disabled={cancellingRequests}>Cancel Requests</Button>
           </div>
         )}
       </>
@@ -120,7 +151,7 @@ export default function CampaignOverview(props) {
       </header>
 
       { renderCampaignContent() }
-      <CancelCampaignModal show={showCancelCampaign} onHide={() => setShowCancelCampaign(false)} />
+      <CancelCampaignModal show={showCancelCampaign} onHide={() => setShowCancelCampaign(false)} availableSats={availableSats} />
     </div>
   )
 }

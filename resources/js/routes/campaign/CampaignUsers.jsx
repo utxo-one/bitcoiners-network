@@ -2,9 +2,10 @@ import { useState } from 'react';
 import ProfilePicture from '../../components/ProfilePicture/ProfilePicture';
 import UserInfoPanel from '../../components/UserInfoPanel/UserInfoPanel';
 import Checkbox from '../../layout/Checkbox/Checkbox';
+import InfiniteLoader from '../../layout/Spinner/InfiniteLoader';
 import './CampaignUsers.scss';
 
-export default function CampaignUsers({ campaign, users, selected, onToggleSelected }) {
+export default function CampaignUsers({ campaign, pendingUsers, loadedAllPending, selected, onToggleSelected }) {
 
   const [showInfo, setShowInfo] = useState(false);
   const [user, setUser] = useState(null);
@@ -16,14 +17,14 @@ export default function CampaignUsers({ campaign, users, selected, onToggleSelec
 
   const renderUsersList = () => {
 
-    const list = campaign ? campaign.recentCompletedFollows : users;
+    const list = campaign ? campaign.recentCompletedFollows : pendingUsers;
     
     return list.map(entity => {
       const user = entity.follow;
       
       return (
         <tr key={user.twitter_id} onClick={() => onClickUser(user) }>
-          { !campaign && <td><Checkbox checked={selected[user.twitter_id] || false} onChange={e => onToggleSelected(e, user)} onClick={e => e.stopPropagation()} /></td> }
+          { !campaign && <td><Checkbox checked={selected.has(user.twitter_id) || false} onChange={e => onToggleSelected(e, user)} onClick={e => e.stopPropagation()} /></td> }
           <td><ProfilePicture user={user} /></td>
           <td className='user-info'>
             <div className='username'>{ user.name }</div>
@@ -51,6 +52,8 @@ export default function CampaignUsers({ campaign, users, selected, onToggleSelec
           { renderUsersList() }
         </tbody>
       </table>
+
+      { pendingUsers && !loadedAllPending && <InfiniteLoader onLoadMore={() => console.log('hodor')} /> }
 
       <UserInfoPanel show={showInfo} user={user} onHide={() => setShowInfo(false)} />
     </>
