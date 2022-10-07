@@ -10,12 +10,12 @@ import ConnectionTypeDropdown from "./ConnectionTypeDropdown";
 import ProfilePicture from "../../components/ProfilePicture/ProfilePicture";
 import CommunityRateModal from "./CommunityRateModal";
 
-import Spinner from "../../layout/Spinner/Spinner";
+import ConnectionTypeBadge from "../../components/ConnectionTypeBadge/ConnectionTypeBadge";
+import CenteredSpinner from "../../layout/Spinner/CenteredSpinner";
+import InfiniteLoader from "../../layout/Spinner/InfiniteLoader";
 import PointyArrow from "../../assets/icons/PointyArrow";
 
 import './Connections.scss';
-import ConnectionTypeBadge from "../../components/ConnectionTypeBadge/ConnectionTypeBadge";
-import CenteredSpinner from "../../layout/Spinner/CenteredSpinner";
 
 export default function Connections({ initialType }) {
 
@@ -40,8 +40,6 @@ export default function Connections({ initialType }) {
   const [showRate, setShowRate] = useState(false);
   const [selectedConnection, setSelectedConnection] = useState(null);
   const [filterUserType, setFilterUserType] = useState(() => initialUserType || (type === 'available' ? 'bitcoiner' : 'all'));
-  const infiniteLoaderRef = useRef();
-  const infiniteLoaderObserver = useRef();
 
   const navigate = useNavigate();
 
@@ -102,23 +100,6 @@ export default function Connections({ initialType }) {
 
     loadItems();
   });
-
-  useEffect(() => {
-    if (initialLoad) {
-      const checkIntersection = entries => {
-        entries.forEach(entry => entry.isIntersecting && loadMoreItems());
-      }
-
-      infiniteLoaderObserver.current?.disconnect();
-
-      if (infiniteLoaderRef.current) {
-        infiniteLoaderObserver.current = new IntersectionObserver(checkIntersection);
-        infiniteLoaderObserver.current.observe(infiniteLoaderRef.current);
-      }
-
-      setInitialLoad(false);
-    }
-  }, [initialLoad]);
 
   const goBack = () => {
     navigate(-1);
@@ -195,11 +176,7 @@ export default function Connections({ initialType }) {
             </div>
           </div>
         ))}
-        { !loadedAllItems && (
-          <div className='infinite-loader' ref={infiniteLoaderRef}>
-            <Spinner />
-          </div>
-        )}
+        { !loadedAllItems && <InfiniteLoader onLoadMore={loadMoreItems} /> }
       </section>
     );
   }
