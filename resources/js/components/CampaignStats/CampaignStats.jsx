@@ -9,6 +9,9 @@ export default function CampaignStats({ campaign }) {
       case 'running':
         return <div className="status-running"><PlayIcon /> <span>Running</span></div>
 
+      case 'paused':
+        return <div>Paused</div>
+
       default:
         return null;  
     }

@@ -16,8 +16,9 @@ import CenteredSpinner from "../../layout/Spinner/CenteredSpinner";
 import './CampaignOverview.scss';
 
 const CAMPAIGN_STATUS = {
-  running: "Running",
-  neverStarted: "Hodor"
+  running      : "Running",
+  neverStarted : "No Campaign",
+  paused       : "Paused",
 };
 
 const CAMPAIGN_TABS = {
