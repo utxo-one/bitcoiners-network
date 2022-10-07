@@ -34,6 +34,8 @@ export default function ConnectionsBox({ connectionType, user, isAuthUser }) {
     navigate(`/${connectionType}/${isAuthUser ? '' : user.twitter_username}`, { state: { initialUserType: userType } });
   }
 
+  const connectionsPath = `${TYPES[connectionType].link}/${isAuthUser ? '' : user.twitter_username}`;
+
   return (
     <Box className="__connections-box">
       <div className="title">
@@ -42,7 +44,7 @@ export default function ConnectionsBox({ connectionType, user, isAuthUser }) {
       </div>
       <hr />
       <ConnectionsChart connectionType={connectionType} user={user} onClickDiagram={onClickDiagram} />
-      <Button as={Link} to={TYPES[connectionType].link} variant="outline">View { TYPES[connectionType].phrase }</Button>
+      <Button as={Link} to={connectionsPath} variant="outline">View { TYPES[connectionType].phrase }</Button>
     </Box>
   );
 }

@@ -1,0 +1,42 @@
+.__campaign-stats {
+  width: 100%;
+
+  tr {
+    height: 40px;
+  }
+
+  td {
+    .status-running {
+
+      font-weight: bold;
+      font-size: 18px;
+      color: var(--dark-green);
+      
+      > svg {
+        width: 20px;
+        height: 20px;
+        transform: scaleX(0.8);
+        margin-right: 4px;
+        vertical-align: top;
+        fill: var(--green);
+      }
+    }
+    
+    strong {
+      color: var(--gray-20);
+    }
+
+    &:first-of-type {
+      color: var(--gray-40);
+      text-transform: uppercase;
+      font-weight: 600;
+      font-size: 15px;
+    }
+
+    &:last-of-type {
+      color: var(--gray-40);
+      text-align: right;
+      font-size: 16px;
+    }
+  }
+}

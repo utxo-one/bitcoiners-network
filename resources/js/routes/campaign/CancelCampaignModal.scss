@@ -1,0 +1,29 @@
+.__cancel-campaign-modal {
+  p {
+    color: var(--gray-50);
+    line-height: 28px;
+  }
+
+  .footer {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 40px;
+
+    button.cancel {
+      font-size: 18px;
+      font-weight: normal;
+      color: var(--gray-70);
+    }
+
+    button.submit {
+      background-color: var(--red);
+      text-transform: uppercase;
+    }
+  }
+
+  .back-to-dash {
+    margin: 32px auto 8px;
+    display: block;
+  }
+}

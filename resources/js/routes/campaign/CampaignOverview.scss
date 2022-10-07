@@ -1,4 +1,5 @@
 .__campaign-overview {
+
   header {
     position: sticky;
     display: flex;
@@ -35,48 +36,17 @@
   }
 
   main {
-    padding: 20px;
+    padding: 0 8px;
+    max-width: 400px;
+    margin: 20px auto;
 
-    table.overview {
-      width: 100%;
+    .cancel-info {
+      p {
+        margin-top: 8px;
+        margin-bottom: 20px;
 
-      tr {
-        height: 40px;
-      }
-
-      td {
-
-        .status-running {
-
-          font-weight: bold;
-          font-size: 18px;
-          color: var(--dark-green);
-          
-          > svg {
-            width: 20px;
-            height: 20px;
-            transform: scaleX(0.8);
-            margin-right: 4px;
-            vertical-align: top;
-            fill: var(--green);
-          }
-        }
-        
-        strong {
-          color: var(--gray-20);
-        }
-
-        &:first-of-type {
-          color: var(--gray-40);
-          text-transform: uppercase;
-          font-weight: 600;
-          font-size: 15px;
-        }
-
-        &:last-of-type {
-          color: var(--gray-40);
-          text-align: right;
-          font-size: 16px;
+        &:last-child {
+          margin-bottom: 4px;
         }
       }
     }
@@ -85,7 +55,7 @@
       background-color: transparent;
       color: var(--red);
       display: block;
-      margin: 12px auto;
+      margin: 12px auto 32px;
       font-size: 16px;
       font-weight: normal;
 
@@ -93,5 +63,38 @@
         text-decoration: underline;
       }
     }
+
+    .followed-accounts {
+      h3 {
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--gray-30);
+        margin: 0 0 12px;
+      }
+    }
+  }
+
+  .cancel-requests {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 400px;
+    padding: 12px;
+    animation: anim__campaign-overview-cancel-request 0.3s;
+    
+    button {
+      display: block;
+      width: 100%;
+      text-transform: uppercase;
+      background-color: var(--red);
+    }
+  }
+}
+
+@keyframes anim__campaign-overview-cancel-request {
+  from {
+    transform: translate(-50%, 100%);
   }
 }

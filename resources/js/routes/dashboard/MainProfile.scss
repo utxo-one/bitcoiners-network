@@ -188,5 +188,25 @@
         margin: 20px auto 8px;
       }
     }
+
+    .mass-follow {
+      
+      h3 {
+        color: var(--gray-60);
+        text-align: center;
+        font-size: 18px;
+        text-transform: uppercase;
+      }
+
+      .view-campaign {
+        text-align: center;
+      }
+
+      .__button {
+        display: inline-block;
+        min-width: 70%;
+        margin: 20px 0;
+      }
+    }
   }
 }

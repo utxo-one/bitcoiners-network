@@ -15,6 +15,7 @@ import PointyArrow from "../../assets/icons/PointyArrow";
 
 import './Connections.scss';
 import ConnectionTypeBadge from "../../components/ConnectionTypeBadge/ConnectionTypeBadge";
+import CenteredSpinner from "../../layout/Spinner/CenteredSpinner";
 
 export default function Connections({ initialType }) {
 
@@ -156,13 +157,8 @@ export default function Connections({ initialType }) {
   }
 
   const renderUsers = () => {
-
     if (!connections) {
-      return (
-        <div className="initial-load">
-          <Spinner />
-        </div>
-      );
+      return <CenteredSpinner />
     }
 
     else if (connections.length === 0) {
@@ -222,7 +218,7 @@ export default function Connections({ initialType }) {
       { renderUsers() }
 
       <UserInfoPanel show={showInfo} onClickBadge={() => setShowRate(true)} user={selectedConnection} onHide={() => setShowInfo(false)} onClickConnection={onClickPanelConnections} />
-      <CommunityRateModal show={showRate} onHide={() => setShowRate(false)} user={selectedConnection}  />
+      <CommunityRateModal show={showRate} onHide={() => setShowRate(false)} user={selectedConnection} />
     </div>
   );
 }

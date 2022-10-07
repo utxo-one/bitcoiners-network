@@ -7,7 +7,7 @@ import './ProfilePicture.scss';
 
 export default function ProfilePicture({ user, className, ...props }) {
 
-  const imageSrc = user?.twitter_profile_image_url;
+  const imageSrc = user?.twitter_profile_image_url_high_res;
 
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);

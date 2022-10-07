@@ -68,20 +68,6 @@
     }
   }
 
-  .initial-load {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    animation: anim__connections-spinner 0.3s forwards;
-    opacity: 0;
-
-    svg {
-      width: 48px;
-      height: 48px;
-    }
-  }
-
   .connection-skeleton {
     display: flex;
     padding: 4px;
@@ -192,10 +178,4 @@
 
 .__connection-type-dropdown {
   margin-top: 8px;
-}
-
-@keyframes anim__connections-spinner {
-  to {
-    opacity: 1;
-  }
 }

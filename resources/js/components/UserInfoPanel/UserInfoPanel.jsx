@@ -1,7 +1,7 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import classNames from "classnames";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ConnectionsChart from "../../layout/Connections/ConnectionsChart";
 import { CompactNumberFormat } from "../../utils/NumberFormatting";
 import ProfilePicture from "../ProfilePicture/ProfilePicture";
@@ -17,11 +17,21 @@ const CONNECTION_TYPES = {
 export default function UserInfoPanel({ show, onHide, user, onClickBadge, onClickConnection }) {
 
   const [connectionType, setConnectionType] = useState('followers');
+  const navigate = useNavigate();
 
   // For better UX, reset connections back to 'followers' when overlay is reopened:
   useEffect(() => {
     show && setConnectionType('followers');
   }, [show]);
+
+  const redirectOnConnectionClick = userType => {
+    if (onClickConnection) {
+      onClickConnection(userType, connectionType);
+    }
+    else {
+      navigate(`/${connectionType}/${user.twitter_username}`, { state: { initialUserType: userType } });
+    }
+  }
 
   return (
     <Dialog.Root open={show} onOpenChange={onHide}>
@@ -43,7 +53,7 @@ export default function UserInfoPanel({ show, onHide, user, onClickBadge, onClic
               ))}
             </div>
 
-            <ConnectionsChart connectionType={connectionType} user={user} showCount={false} onClickDiagram={userType => onClickConnection(userType, connectionType)} />
+            <ConnectionsChart connectionType={connectionType} user={user} showCount={false} onClickDiagram={userType => redirectOnConnectionClick(userType)} />
 
             <div className="connection-totals">
               <div>
