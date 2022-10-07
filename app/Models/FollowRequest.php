@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -14,6 +15,10 @@ class FollowRequest extends Model
         'follow_id',
         'status',
         'transaction_id',
+    ];
+
+    protected $appends = [
+        'completed_at_for_humans',
     ];
 
     public function user()
@@ -29,5 +34,10 @@ class FollowRequest extends Model
     public function transaction()
     {
         return $this->belongsTo(Transaction::class);
+    }
+
+    public function getCompletedAtForHumansAttribute()
+    {
+        return Carbon::parse($this->completed_at)->diffForHumans();
     }
 }

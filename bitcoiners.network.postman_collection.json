@@ -891,47 +891,115 @@
 							"response": []
 						}
 					]
+				},
+				{
+					"name": "Follow User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/frontend/action/jack/follow",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"frontend",
+								"action",
+								"jack",
+								"follow"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Unfollow User",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/frontend/action/jack/unfollow",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"frontend",
+								"action",
+								"jack",
+								"unfollow"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
 		{
-			"name": "New Request",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "BTCPay-Sig",
-						"value": "",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\"manuallyMarked\": false,\n\"deliveryId\": \"FRWuM8BzwbawewLY5pJWcc\",\n\"webhookId\": \"Mn4cZakALSkeDHYz3m14FA\",\n\"originalDeliveryId\": \"FRWuM8BzwbawewLY5pJWcc\",\n\"isRedelivery\": false,\n\"type\": \"InvoiceSettled\",\n\"timestamp\": 1662860619,\n\"storeId\": \"AFaaz6gYXM28FXNpoJiU22QUQcvMNwZutahN9jK6Swkx\",\n\"invoiceId\": \"T6VfdbEMd3rxAx2nikftgt\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+			"name": "Metrics",
+			"item": [
+				{
+					"name": "Total Bitcoiners",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/frontend/metrics/total-bitcoiners",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"frontend",
+								"metrics",
+								"total-bitcoiners"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost/frontend/follow/available/nocoiner",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"path": [
-						"frontend",
-						"follow",
-						"available",
-						"nocoiner"
-					]
+				{
+					"name": "Total Shitcoiners",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/frontend/metrics/total-shitcoiners",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"frontend",
+								"metrics",
+								"total-shitcoiners"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Total Nocoiners",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/frontend/metrics/total-nocoiners",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"frontend",
+								"metrics",
+								"total-nocoiners"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
 			"name": "Get Rates",

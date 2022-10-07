@@ -10,6 +10,7 @@ use App\Http\Controllers\Frontend\Follow\Scopes\FollowingByUsernameController;
 use App\Http\Controllers\Frontend\Follow\Scopes\FollowingController;
 use App\Http\Controllers\Frontend\Follow\Scopes\FollowRequestScopeController;
 use App\Http\Controllers\Frontend\HomeController;
+use App\Http\Controllers\Frontend\MetricController;
 use App\Http\Controllers\Frontend\RatesController;
 use App\Http\Controllers\Frontend\Transaction\DebitController;
 use App\Http\Controllers\Frontend\Transaction\DepositController;
@@ -44,6 +45,9 @@ Route::get('/random-shitcoiners', [HomeController::class, 'randomShitcoiners'])-
 Route::get('/random-nocoiners', [HomeController::class, 'randomNocoiners'])->name('home.random-nocoiners');
 Route::get('/rates', [RatesController::class, 'index'])->name('rates.index');
 Route::get('/endorsement-types', [EndorsementController::class, 'types'])->name('endorsements.types');
+Route::get('/metrics/total-bitcoiners', [MetricController::class, 'totalBitcoiners'])->name('metrics.total-bitcoiners');
+Route::get('/metrics/total-shitcoiners', [MetricController::class, 'totalShitcoiners'])->name('metrics.total-shitcoiners');
+Route::get('/metrics/total-nocoiners', [MetricController::class, 'totalNocoiners'])->name('metrics.total-nocoiners');
 
 Route::middleware('auth')->group(function () {
     Route::get('/follow/available/{userType}', [AvailableFollowsController::class, 'index'])->name('follow.available.type');

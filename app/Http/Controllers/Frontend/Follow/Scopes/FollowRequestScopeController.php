@@ -19,7 +19,11 @@ class FollowRequestScopeController extends Controller
     public function completed()
     {
         return response()->json(
-            auth()->user()->followRequests()->with('follow')->where('status', FollowRequestStatus::COMPLETED)->paginate(),
+            auth()->user()->followRequests()
+                ->with('follow')
+                ->where('status', FollowRequestStatus::COMPLETED)
+                ->orderBy('created_at', 'desc')
+                ->paginate(),
             Response::HTTP_OK
         );
     }
