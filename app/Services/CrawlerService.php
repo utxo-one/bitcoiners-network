@@ -34,7 +34,7 @@ class CrawlerService
 
         $tweets = $tweetClient->getTimeline(
             userId: $bitcoiner->twitter_id,
-            maxResults: 10
+            maxResults: 5
         );
 
         $tweetService = new TweetService();
@@ -50,12 +50,11 @@ class CrawlerService
     {
         $tweetClient = new TweetClient(bearerToken: config('services.twitter.bearer_token'));
 
-        // Select 5 Users with type bitcoiner and last_timeline_saved_at older than 1 day
+        // Select 5 Users with type bitcoiner and last_timeline_saved_at older than 1 day and last_tweeted_at this year
         $bitcoiners = User::query()
             ->where('type', UserType::BITCOINER)
-            ->where(function ($query) {
-                $query->where('last_timeline_saved_at', '<', now()->subDay());
-            })
+            ->where('last_timeline_saved_at', '<', Carbon::now()->subDay())
+            ->where('last_tweeted_at', '>', Carbon::now()->subYear())
             ->inRandomOrder()
             ->limit($limit)
             ->get();
