@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useImmer } from "use-immer";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import useEventCallback from "../../hooks/useEventCallback";
@@ -39,8 +39,12 @@ export default function Connections({ initialType }) {
   const [count, setCount] = useState(null);
   const [showInfo, setShowInfo] = useState(false);
   const [showRate, setShowRate] = useState(false);
-  const [selectedConnection, setSelectedConnection] = useState(null);
+  const [selectedConnectionId, setSelectedConnectionId] = useState(null);
   const [filterUserType, setFilterUserType] = useState(() => initialUserType || (type === 'available' ? 'bitcoiner' : 'all'));
+
+  const selectedConnection = useMemo(() => {
+    return connections?.find(user => user.twitter_id === selectedConnectionId);
+  }, [selectedConnectionId, connections]);
 
   const navigate = useNavigate();
 
@@ -109,15 +113,12 @@ export default function Connections({ initialType }) {
 
   const onClickConnection = (e, connection) => {
     setShowInfo(true);
-    setSelectedConnection(connection);
+    setSelectedConnectionId(connection.twitter_id);
   }
 
   const onToggleFollow = () => {
-    console.log('connection:', selectedConnection);
-
     setConnections(draft => {
       const index = draft.findIndex(user => user.twitter_id === selectedConnection.twitter_id);
-      console.log('index:', index)
       draft[index].is_followed_by_authenticated_user = !draft[index].is_followed_by_authenticated_user;
     });
   }
@@ -133,7 +134,7 @@ export default function Connections({ initialType }) {
 
   const clickUserTypeBadge = (e, user) => {
     setShowRate(true);
-    setSelectedConnection(user);
+    setSelectedConnectionId(user.twitter_id);
 
     // TODO -> do not use stop propagation, instead check with current target and ref:
     e.stopPropagation();
@@ -141,10 +142,7 @@ export default function Connections({ initialType }) {
 
   const onClickPanelConnections = (userType, connectionType) => {
     setShowInfo(false);
-    // setUsername(selectedConnection.twitter_username);
-
     navigate(`/${connectionType}/${selectedConnection.twitter_username}`);
-    console.log('connectionType:', connectionType)
     setFilterUserType(userType);
     setHeaderType(connectionType);
   }

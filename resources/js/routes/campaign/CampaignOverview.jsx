@@ -16,6 +16,8 @@ import CenteredSpinner from "../../layout/Spinner/CenteredSpinner";
 import './CampaignOverview.scss';
 import useEventCallback from "../../hooks/useEventCallback";
 import HamburgerMenu from "../../layout/HamburgerMenu/HamburgerMenu";
+import ButtonWithLightning from "../../layout/Button/ButtonWithLightning";
+import MassConnectModal from "../../components/MassConnectModal/MassConnectModal";
 
 const CAMPAIGN_STATUS = {
   running      : "Running",
@@ -39,6 +41,7 @@ export default function CampaignOverview(props) {
   const [cancellingRequests, setCancellingRequests] = useState(false);
   const [availableSats, setAvailableSats] = useState(0);
   const [loadMorePending, setLoadMorePending] = useState(false);
+  const [showMassConnect, setShowMassConnect] = useState(false);
 
   const navigate = useNavigate();
 
@@ -79,12 +82,8 @@ export default function CampaignOverview(props) {
   }
 
   const onCancelPendingRequests = async () => {
-    console.log('delete:', selectedPending.keys());
-
     setCancellingRequests(true);
     const { data } = axios.delete('/frontend/follow/requests', { data: { twitterIds: Array.from(selectedPending.keys()) } });
-
-    console.log('data:', data)
 
     // TODO -> replace array lookup with object
     setPendingUsers(draft => {
@@ -122,7 +121,10 @@ export default function CampaignOverview(props) {
   const renderOverview = () => (
     <>
       <CampaignStats campaign={campaignData} />
-      <Button className='cancel-campaign' onClick={() => setShowCancelCampaign(true)}>Cancel Campaign</Button>
+      { campaignData.status === 'running'
+      ? <Button className='cancel-campaign' onClick={() => setShowCancelCampaign(true)}>Cancel Campaign</Button>
+      : <ButtonWithLightning className='start-campaign' onClick={() => setShowMassConnect(true)}>Start New Campaign</ButtonWithLightning>
+      }
         
       { campaignData.recentCompletedFollows?.length > 0 && (
         <Box className='followed-accounts'>
@@ -177,6 +179,7 @@ export default function CampaignOverview(props) {
 
       { renderCampaignContent() }
       <CancelCampaignModal show={showCancelCampaign} onHide={() => setShowCancelCampaign(false)} availableSats={availableSats} />
+      <MassConnectModal show={showMassConnect} onHide={() => setShowMassConnect(false)} />
     </div>
   )
 }

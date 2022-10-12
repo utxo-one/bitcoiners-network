@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import classNames from "classnames";
 import * as Dialog from "@radix-ui/react-dialog";
@@ -9,6 +9,7 @@ import AmountSlider from "./AmountSlider";
 import ButtonWithLightning from "../../layout/Button/ButtonWithLightning";
 
 import './TopUpModal.scss';
+import AppContext from "../../store/AppContext";
 
 const DEFAULT_SLIDER = 25;
 const DEFAULT_SATS = 5000;
@@ -50,25 +51,19 @@ const satsToRange = sats => {
   return approxRange;
 }
 
-export default function TopUpModal({ show, onHide }) {
+export default function TopUpModal({ show, onHide, message }) {
+
+  const [state] = useContext(AppContext);
 
   const [sliderValue, setSliderValue] = useState([DEFAULT_SLIDER]);
-  const [rate, setRate] = useState(null);
   const [proceessingTopUp, setProcessingTopUp] = useState(false);
-  
+
+  const { rates } = state;
+
   // TODO -> get from endpoint
   const [totalSats, setTotalSats] = useState(DEFAULT_SATS);
 
-  const costPerConnection = 100;
-
-  useEffect(() => {
-    const getRate = async () => {
-      const { data } = await axios.get('/frontend/rates');
-      setRate(data);
-    }
-
-    getRate();
-  }, []);
+  const costPerConnection = rates?.pricing.follow;
 
   const changeTotalSats = e => {
     let total = Math.max(0, Math.min(MAX_SATS, parseInt(e.target.value, 10)));
@@ -95,13 +90,15 @@ export default function TopUpModal({ show, onHide }) {
     window.location.href = data.checkoutLink;
   }
 
+  const title = message === 'top-up-required' ? 'Top Up Required' : 'Top Up';
+
   return (
     <Dialog.Root open={show} onOpenChange={proceessingTopUp ? null : onHide}>
       <Dialog.Portal>
         <Dialog.Overlay className="__dialog-overlay">
           <Dialog.Content className="__top-up-modal __modal __modal-center">
             <Dialog.Close asChild><div role="button" className='__modal-close-icon'>×</div></Dialog.Close>
-            <Dialog.Title className="title">Top Up Required</Dialog.Title>
+            <Dialog.Title className="title">{ title }</Dialog.Title>
               <AmountSlider value={sliderValue} onValueChange={changeSliderValue} min={1} max={SLIDER_MAX} />
 
               <div className="item">

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useImmer } from "use-immer";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
@@ -16,38 +16,54 @@ import CommunityRateModal from "../connections/CommunityRateModal";
 
 import SocialNetworkIcon from "../../assets/icons/SocialNetworkIcon";
 
-import BackNavigation from "../../layout/BackNavigation/BackNavigation";
-
 import './MainProfile.scss';
 import CampaignStats from "../../components/CampaignStats/CampaignStats";
 import Button from "../../layout/Button/Button";
 import ConnectButton from "../../layout/Button/ConnectButton";
 import HamburgerMenu from "../../layout/HamburgerMenu/HamburgerMenu";
+import AppContext from "../../store/AppContext";
+import SatsIcon from "../../assets/icons/SatsIcon";
+import { CompactNumberFormat } from "../../utils/NumberFormatting";
+import BoltIcon from "../../assets/icons/BoltIcon";
+import TopUpModal from "../../components/MassConnectModal/TopUpModal";
 
 export default function MainProfile({ asDashboard }) {
 
+  const [state, dispatch] = useContext(AppContext);
+
   const { username } = useParams();
 
-  const [userData, setUserData] = useImmer(null);
+  const [loadedUser, setLoadedUser] = useImmer(null);
   const [campaignData, setCampaignData] = useState(null);
-  const [followBitcoiners, setFollowBitcoiners] = useState(null);
-  const [showMassConnect, setshowMassConnect] = useState(false);
+  const [showMassConnect, setShowMassConnect] = useState(false);
   const [handleVisible, setHandleVisible] = useState(false);
   const [showRate, setShowRate] = useState(false);
+  const [showTopUp, setShowTopUp] = useState(false);
   
   const profilePicRef = useRef();
   const handleIntersector = useRef();
   
+  const { currentUser, metrics, availableSats } = state;
+
+  const userData = asDashboard ? currentUser : loadedUser;
+  
   useEffect(() => {
     const loadUserData = async () => {
-      const { data } = await axios.get(`/frontend/user/${asDashboard ? 'auth' : username}`);
-      const { data: followData } = await axios.get('/frontend/follow/available/bitcoiner');
-      const { data: campaignData } = await axios.get('/frontend/follow/mass-follow');
+      if (!asDashboard) {
+        const { data } = await axios.get(`/frontend/user/${username}`);
+        setLoadedUser(data);
+      }
       
-      console.log('data:', data)
-      setUserData(data);
-      setFollowBitcoiners(followData.availableFollows);
-      setCampaignData(campaignData);
+      else {
+        const { data: campaignData } = await axios.get('/frontend/follow/mass-follow');
+        setCampaignData(campaignData);
+
+        // If metrics are not loaded:
+        if (typeof metrics.bitcoiners !== 'number') {
+          const { data: metrics } = await axios.get('/frontend/metrics/total-bitcoiners');
+          dispatch({ type: 'metrics/set-bitcoiners', payload: metrics.totalBitcoiners });
+        }
+      }
     }
 
     loadUserData();
@@ -73,7 +89,7 @@ export default function MainProfile({ asDashboard }) {
   }
 
   const onToggleConnect = () => {
-    setUserData(draft => {
+    setLoadedUser(draft => {
       draft.is_followed_by_authenticated_user = !draft.is_followed_by_authenticated_user;
     });
   }
@@ -97,21 +113,21 @@ export default function MainProfile({ asDashboard }) {
         <div className="label">
           <span className="bitcoiners">bitcoiners</span><span className="network">.network</span> Pool
         </div>
-        <div className="value pool">{ Number(followBitcoiners?.total).toLocaleString() }</div>
+        <div className="value pool">{ Number(metrics.bitcoiners).toLocaleString() }</div>
       </div>
 
       <hr />
 
       <div className="network-info">
         <SocialNetworkIcon />
-        <div className="info">You're currently following 1.2% of our <Link to='/available' className="bitcoin-twitter">Bitcoin Twitter</Link> user base.</div>
+        <div className="info">Our <Link to='/available' className="bitcoin-twitter">Bitcoin Twitter</Link> Network is operational and scanning users.</div>
       </div>
 
       { !campaignRunning && (
         <>
           <hr />
 
-          <ButtonWithLightning className="mass-follow" onClick={() => setshowMassConnect(true)}>
+          <ButtonWithLightning className="mass-follow" onClick={() => setShowMassConnect(true)}>
             <div>Mass Follow</div>
           </ButtonWithLightning>
         </>
@@ -131,13 +147,35 @@ export default function MainProfile({ asDashboard }) {
     </div>
   )
 
+  const renderSatsCounter = () => {
+    if (availableSats > 0) {
+      return (
+        <div className="sats-badge">
+          { CompactNumberFormat(availableSats, { digits: 12 })}
+          <SatsIcon />
+        </div>
+      )
+    }
+
+    return (
+      <div className="top-up" role="button" onClick={() => setShowTopUp(true)}>
+        <BoltIcon />
+        Top Up
+      </div>
+    )
+  }
+
+  const viewingOwnProfile = !asDashboard && currentUser && currentUser?.twitter_id === userData?.twitter_id;
+
   return (
     <div className="__main-profile">
       <header className={classNames(`${userData?.type}`, {'show-background': !handleVisible })}>
         <HamburgerMenu />
-        {/* { !asDashboard && <BackNavigation /> } */}
         { userData && <div className={classNames("username", { visible: !handleVisible })}>@{ userData?.twitter_username }</div> }
-        <UserTypeBadge userType={userData?.type} variant='outline-white' onClick={onClickBadge} />
+        { asDashboard
+        ? renderSatsCounter()
+        : <UserTypeBadge userType={userData?.type} variant='outline-white' onClick={onClickBadge} />
+        }
       </header>
       <main>
         <div className={classNames("usertype-bg", `${userData?.type}`)} />
@@ -156,7 +194,8 @@ export default function MainProfile({ asDashboard }) {
               <div className="description">{ userData?.twitter_description }</div>
             </>
             )}
-            { !asDashboard && <ConnectButton availableSats={50000} connection={userData} onToggle={onToggleConnect} /> }
+            { asDashboard && <div className='badge'><UserTypeBadge userType={userData?.type} /></div> }
+            { !asDashboard && !viewingOwnProfile && <ConnectButton availableSats={50000} connection={userData} onToggle={onToggleConnect} /> }
           </section>
 
           { userData && (
@@ -171,8 +210,15 @@ export default function MainProfile({ asDashboard }) {
         </div>
       </main>
 
-      <MassConnectModal show={showMassConnect} onHide={() => setshowMassConnect(false)} />
-      <CommunityRateModal show={showRate} onHide={() => setShowRate(false)} user={userData}  />
+      { viewingOwnProfile && (
+        <div className="viewing-own-profile">
+          You are viewing your own Public Profile. <br /><Link to='/'>Back to dashboard</Link>
+        </div>
+      )}
+
+      <MassConnectModal show={showMassConnect} onHide={() => setShowMassConnect(false)} />
+      <CommunityRateModal show={showRate} onHide={() => setShowRate(false)} user={userData} />
+      <TopUpModal show={showTopUp} onHide={() => setShowTopUp(false)} />
     </div>
   );
 }

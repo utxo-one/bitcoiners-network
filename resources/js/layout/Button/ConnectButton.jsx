@@ -1,22 +1,30 @@
 import classNames from "classnames";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import TopUpModal from "../../components/MassConnectModal/TopUpModal";
+import AppContext from "../../store/AppContext";
 import ButtonWithLightning from "./ButtonWithLightning";
 
 export default function ConnectButton({ connection, availableSats, onToggle, className, ...props }) {
+
+  const [state, dispatch] = useContext(AppContext);
 
   const [loading, setLoading] = useState(false);
   const [showTopUp, setShowTopUp] = useState(false);
 
   const isFollowing = connection?.is_followed_by_authenticated_user;
 
+  const { rates } = state;
+
+  const connectAction = isFollowing ? 'unfollow' : 'follow';
+  const connectionPrice = rates?.pricing[connectAction];
+
   const onClickButton = async () => {
-    if (availableSats >= 100) {
+    if (availableSats >= connectionPrice) {
       
       setLoading(true);
       const action = isFollowing ? 'delete' : 'post';
-      const routeType = isFollowing ? 'unfollow' : 'follow';
-      const { data } = await axios[action](`/frontend/action/${connection.twitter_username}/${routeType}`);
+      const { data } = await axios[action](`/frontend/action/${connection.twitter_username}/${connectAction}`);
+      dispatch({ type: 'balance/spend', payload: connectionPrice });
       setLoading(false);
 
       onToggle?.();
@@ -33,7 +41,7 @@ export default function ConnectButton({ connection, availableSats, onToggle, cla
       <ButtonWithLightning onClick={onClickButton} loading={loading} className={classes}>
         { isFollowing ? 'Unfollow' : 'Follow' }
       </ButtonWithLightning>
-      <TopUpModal show={showTopUp} onHide={() => setShowTopUp(false)} />
+      <TopUpModal show={showTopUp} onHide={() => setShowTopUp(false)} message='top-up-required' />
     </>
   );
 }

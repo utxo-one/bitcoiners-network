@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 
 import './HamburgerMenu.scss';
-import { Link, NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import ButtonWithLightning from '../Button/ButtonWithLightning';
 import SatsIcon from '../../assets/icons/SatsIcon';
 import { CompactNumberFormat } from '../../utils/NumberFormatting';
@@ -12,9 +12,11 @@ import TwitterIcon from '../../assets/icons/TwitterIcon';
 import GithubIcon from '../../assets/icons/GithubIcon';
 import TopUpModal from '../../components/MassConnectModal/TopUpModal';
 import classNames from 'classnames';
-import NavigationLink from '../NavigationLink';
+import AppContext from '../../store/AppContext';
 
-export default function HamburgerMenu({ availableSats = 135123, variant }) {
+export default function HamburgerMenu({ variant }) {
+
+  const [state] = useContext(AppContext);
 
   const [showTopup, setShowTopup] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
@@ -40,11 +42,7 @@ export default function HamburgerMenu({ availableSats = 135123, variant }) {
           <Dialog.Content className="__modal __hamburger-menu-modal">
 
             <div className='content'>
-              <div className='balance'>
-                <div className='label'>Balance</div>
-                <div>{ CompactNumberFormat(availableSats, { digits: 12 })}</div>
-                <SatsIcon />
-              </div>
+              <Dialog.Close asChild><div role="button" className='__modal-close-icon'>×</div></Dialog.Close>
 
               <div>
                 <div className='link-group'>
@@ -63,7 +61,15 @@ export default function HamburgerMenu({ availableSats = 135123, variant }) {
                 </div>
               </div>
 
-              <ButtonWithLightning onClick={onClickTopup} className="top-up">Top Up</ButtonWithLightning>
+              <div>
+                <div className='balance'>
+                  <div className='label'>Balance</div>
+                  <div>{ CompactNumberFormat(state.availableSats, { digits: 12 })}</div>
+                  <SatsIcon />
+                </div>
+
+                <ButtonWithLightning onClick={onClickTopup} className="top-up">Top Up</ButtonWithLightning>
+              </div>
 
               <div className='connect'>
                 <div className='logo'><BitcoinersNetworkLogoPlain /></div>

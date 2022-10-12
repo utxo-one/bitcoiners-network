@@ -27,7 +27,7 @@
     top: 0;
     bottom: 0;
     left: 0;
-    width: 85%;
+    width: 82%;
     background-color: var(--dark-purple);
     z-index: 999;
     padding: 20px;
@@ -44,7 +44,8 @@
       flex-direction: column;
       justify-content: space-between;
       min-height: 100vh;
-      min-height: -webkit-fill-available;    
+      min-height: -webkit-fill-available;   
+      margin-top: 20px; 
     }
 
     .balance {
@@ -85,6 +86,7 @@
       border: none;
       outline: none;
       font-size: 17px;
+      width: 100%;
 
       .__button-content {
         gap: 8px;

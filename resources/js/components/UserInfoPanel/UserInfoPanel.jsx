@@ -1,9 +1,11 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import classNames from "classnames";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import Box from "../../layout/Box/Box";
 import ConnectButton from "../../layout/Button/ConnectButton";
 import ConnectionsChart from "../../layout/Connections/ConnectionsChart";
+import AppContext from "../../store/AppContext";
 import { CompactNumberFormat } from "../../utils/NumberFormatting";
 import ProfilePicture from "../ProfilePicture/ProfilePicture";
 import UserTypeBadge from "../UserTypeBadge/UserTypeBadge";
@@ -17,8 +19,14 @@ const CONNECTION_TYPES = {
 
 export default function UserInfoPanel({ show, onHide, user, onClickBadge, onClickConnection, onToggleFollow }) {
 
+  const [state] = useContext(AppContext);
+
   const [connectionType, setConnectionType] = useState('followers');
   const navigate = useNavigate();
+
+  const { currentUser } = state;
+
+  const viewingOwnProfile = currentUser && currentUser?.twitter_id === user?.twitter_id;
 
   // For better UX, reset connections back to 'followers' when overlay is reopened:
   useEffect(() => {
@@ -39,7 +47,7 @@ export default function UserInfoPanel({ show, onHide, user, onClickBadge, onClic
       <Dialog.Portal>
         <Dialog.Overlay className='__user-info-panel __dialog-overlay'>
           <Dialog.Content className='__user-info-panel-content'>
-          <UserTypeBadge userType={user?.type} variant='solid' size='md' onClick={onClickBadge} />
+          <UserTypeBadge userType={user?.type} variant='solid' size='md' onClick={viewingOwnProfile ? null : onClickBadge} />
             <ProfilePicture user={user} className="profile-pic" />
 
             <div className="username">{ user?.name }</div >
@@ -67,7 +75,10 @@ export default function UserInfoPanel({ show, onHide, user, onClickBadge, onClic
               </div>
             </div>
             
-            <ConnectButton connection={user} availableSats={100} onToggle={onToggleFollow} />
+            { viewingOwnProfile
+            ? <Box className="viewing-own-profile">You are viewing your own Profile</Box>
+            : <ConnectButton connection={user} availableSats={100} onToggle={onToggleFollow} />
+            }
           </Dialog.Content>
         </Dialog.Overlay>
       </Dialog.Portal>
