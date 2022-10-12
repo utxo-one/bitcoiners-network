@@ -25,6 +25,7 @@ class StoreDepositRequest extends FormRequest
     {
         return [
             'amount' => 'required|integer|min:100|max:500000',
+            'redirectUrl' => 'required|string',
         ];
     }
 }
