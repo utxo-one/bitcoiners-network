@@ -18,7 +18,7 @@ class DebitController extends Controller
     public function index(): JsonResponse
     {
         return response()->json(
-            auth()->user()->transactions()->where('type', TransactionType::DEBIT)->paginate(),
+            auth()->user()->transactions()->where('type', TransactionType::DEBIT)->orderBy('created_at', 'desc')->paginate(),
             Response::HTTP_OK
         );
     }

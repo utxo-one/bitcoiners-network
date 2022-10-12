@@ -18,7 +18,10 @@ class DepositController extends Controller
     public function index(): JsonResponse
     {
         return response()->json(
-            auth()->user()->transactions()->where('type', TransactionType::CREDIT)->paginate(),
+            auth()->user()->transactions()
+                ->where('type', TransactionType::CREDIT)
+                ->orderBy('created_at', 'desc')
+                ->paginate(),
             Response::HTTP_OK
         );
     }
