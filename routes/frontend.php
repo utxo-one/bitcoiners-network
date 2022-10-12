@@ -48,6 +48,7 @@ Route::get('/endorsement-types', [EndorsementController::class, 'types'])->name(
 Route::get('/metrics/total-bitcoiners', [MetricController::class, 'totalBitcoiners'])->name('metrics.total-bitcoiners');
 Route::get('/metrics/total-shitcoiners', [MetricController::class, 'totalShitcoiners'])->name('metrics.total-shitcoiners');
 Route::get('/metrics/total-nocoiners', [MetricController::class, 'totalNocoiners'])->name('metrics.total-nocoiners');
+Route::get('/user/{username}', [UserController::class, 'show'])->name('user.show');
 
 Route::middleware('auth')->group(function () {
     Route::get('/follow/available/{userType}', [AvailableFollowsController::class, 'index'])->name('follow.available.type');
@@ -74,7 +75,7 @@ Route::middleware('auth')->group(function () {
     
     Route::get('/user/auth', [UserController::class, 'auth'])->name('user.auth');
     Route::post('/user/{username}/refresh', [RefreshUserController::class, 'store'])->name('user.refresh.store');
-    Route::get('/user/{username}', [UserController::class, 'show'])->name('user.show');
+
 
     Route::post('/endorse', [EndorsementController::class, 'store'])->name('user.endorse.store');
     Route::delete('/endorse', [EndorsementController::class, 'destroy'])->name('user.endorse.destroy');
