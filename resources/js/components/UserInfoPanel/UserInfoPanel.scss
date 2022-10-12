@@ -100,6 +100,22 @@
         font-size: 18px;
       }
     }
+
+    .__button-connect {
+      display: block;
+      width: 100%;
+      margin: 20px 0 0;
+    }
+
+    .viewing-own-profile {
+      background-color: var(--gray-40);
+      margin-top: 32px;
+      text-align: center;
+      color: white;
+      text-transform: uppercase;
+      font-size: 13px;
+      font-weight: 600;
+    }
   }
 }
 

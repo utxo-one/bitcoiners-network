@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useReducer, useState } from "react";
 import axios from "axios";
 import classNames from "classnames";
 import * as Dialog from "@radix-ui/react-dialog";
@@ -10,25 +10,40 @@ import ButtonWithLightning from "../../layout/Button/ButtonWithLightning";
 
 import './MassConnectModal.scss';
 import CampaignSuccessModal from "../CampaignSuccessModal/CampaignSuccessModal";
+import AppContext from "../../store/AppContext";
 
 const DEFAULT_AMOUNT = 50;
 const SLIDER_MAX = 100;
 const MAX_FOLLOWS = 5000;
 
-export default function MassConnectModal({ show, onHide, onCampaignStart }) {
+export default function MassConnectModal({ show, onHide }) {
+
+  const [state, dispatch] = useContext(AppContext);
 
   const [sliderValue, setSliderValue] = useState([DEFAULT_AMOUNT]);
-  const [rate, setRate] = useState(null);
   const [proceessingCampaign, setProcessingCampaign] = useState(false);
-  const [availableSats, setAvailableSats] = useState(0);
   const [showCampaignSuccess, setShowCampaignSuccess] = useState(false);
+
+  const { availableSats, rates } = state;
+
+  // Balance is refetched to make sure the user has enough for the transaction:
+  useEffect(() => {
+    if (show) {
+      const getBalance = async () => {
+        const { data: balance } = await axios.get('/frontend/user/available-balance');
+        dispatch({ type: 'balance/set', payload: balance });
+      }
+
+      getBalance();
+    }
+  }, [show]);
   
-  // TODO -> get from endpoint
+  // TODO -> for now just set max to MAX_FOLLOWS
   const [totalAvailable, setTotalAvailable] = useState(MAX_FOLLOWS);
   const [totalUsers, setTotalUsers] = useState(() => totalAvailable * DEFAULT_AMOUNT / 100);
 
   const balanceVisible = availableSats > 0;
-  const campaignCost = totalUsers * rate?.pricing.follow;
+  const campaignCost = totalUsers * rates?.pricing.follow;
   const missingSats = campaignCost - availableSats;
 
   let ctaTitle = 'Pay Via Lightning';
@@ -36,23 +51,6 @@ export default function MassConnectModal({ show, onHide, onCampaignStart }) {
   if (balanceVisible) {
     ctaTitle = (missingSats > 0) ? 'Top up Via Lightning' : 'Start Campaign';
   }
-
-  useEffect(() => {
-    const getRate = async () => {
-      const { data } = await axios.get('/frontend/rates');
-      setRate(data);
-    }
-
-    const getBalance = async () => {
-      const { data } = await axios.get('/frontend/user/available-balance');
-      setAvailableSats(data || 0);
-
-      console.log('data:', data)
-    }
-
-    getRate();
-    getBalance();
-  }, []);
 
   const changeTotalUsers = e => {
     let total = Math.max(0, Math.min(MAX_FOLLOWS, parseInt(e.target.value, 10)));
@@ -71,17 +69,17 @@ export default function MassConnectModal({ show, onHide, onCampaignStart }) {
 
   const topupLightning = async () => {
     const { data } = await axios.post('/frontend/transaction/deposit', {
-      amount: totalUsers * rate?.pricing.follow,
+      amount: totalUsers * rates?.pricing.follow,
     });
 
-    console.log('creating invoice for amount:', totalUsers * rate?.pricing.follow);
+    console.log('creating invoice for amount:', totalUsers * rates?.pricing.follow);
     window.location.href = data.checkoutLink;
   }
 
   const startCampaign = async () => {
-    // const { data } = await axios.post('/frontend/follow/mass-follow', {
-    //   amount: totalUsers,
-    // });
+    const { data } = await axios.post('/frontend/follow/mass-follow', {
+      amount: totalUsers,
+    });
 
     onHide();
     setShowCampaignSuccess(true);
@@ -119,7 +117,7 @@ export default function MassConnectModal({ show, onHide, onCampaignStart }) {
 
                 <div className={classNames("item", {'balance-hidden': !balanceVisible})}>
                   <div className="label">Estimated Time</div>
-                  <div className="value"><span className="number">{ Math.ceil(totalUsers / rate?.limits.dailyFollows) }</span> days</div>
+                  <div className="value"><span className="number">{ Math.ceil(totalUsers / rates?.limits.dailyFollows) }</span> days</div>
                 </div>
 
                 { balanceVisible && (
@@ -140,7 +138,7 @@ export default function MassConnectModal({ show, onHide, onCampaignStart }) {
                   </div>
                 )}
 
-                <ButtonWithLightning disabled={proceessingCampaign || !totalUsers} loading={proceessingCampaign} onClick={handleCta} className="pay-via-ln">{ ctaTitle }</ButtonWithLightning>
+                <ButtonWithLightning disabled={!totalUsers} loading={proceessingCampaign} onClick={handleCta} className="pay-via-ln">{ ctaTitle }</ButtonWithLightning>
             </Dialog.Content>
           </Dialog.Overlay>
         </Dialog.Portal>

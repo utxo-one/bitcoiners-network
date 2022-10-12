@@ -45,7 +45,7 @@ export default function CancelCampaignModal({ show, onHide, availableSats }) {
 
       <div className="footer">
         <Dialog.Close asChild><Button disabled={cancellingCampaign} className="cancel" variant='clear'>Cancel</Button></Dialog.Close>
-        <Button disabled={cancellingCampaign} loading={cancellingCampaign} className="submit" onClick={onCancelCampaign}>Confirm</Button>
+        <Button loading={cancellingCampaign} className="submit" onClick={onCancelCampaign}>Confirm</Button>
       </div>
     </>
   );

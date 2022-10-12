@@ -9,7 +9,7 @@
     top: 0;
     background-color: white;
     z-index: 2;
-    padding: 0 4px;
+    padding: 0 8px;
 
     svg.back {
       width: 28px;
@@ -53,6 +53,10 @@
           margin-bottom: 4px;
         }
       }
+    }
+
+    button.start-campaign {
+      margin: 20px auto;
     }
 
     button.cancel-campaign {
