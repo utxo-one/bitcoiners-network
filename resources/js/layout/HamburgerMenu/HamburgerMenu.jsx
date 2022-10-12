@@ -7,7 +7,7 @@ import ButtonWithLightning from '../Button/ButtonWithLightning';
 import SatsIcon from '../../assets/icons/SatsIcon';
 import { CompactNumberFormat } from '../../utils/NumberFormatting';
 import BitcoinersNetworkLogoPlain from '../../assets/icons/BitcoinersNetworkLogoPlain';
-import MatterMostIcon from '../../assets/icons/MattermostIcon';
+import MatterMostIcon from '../../assets/icons/MatterMostIcon';
 import TwitterIcon from '../../assets/icons/TwitterIcon';
 import GithubIcon from '../../assets/icons/GithubIcon';
 import TopUpModal from '../../components/MassConnectModal/TopUpModal';
