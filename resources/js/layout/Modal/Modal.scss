@@ -60,10 +60,6 @@
   &[data-state='open'] {
     animation: 0.3s anim__dialog-center-modal-in;
   }
-
-  // &[data-state='close'] {
-
-  // }
 }
 
 @keyframes anim__dialog-center-modal-in {

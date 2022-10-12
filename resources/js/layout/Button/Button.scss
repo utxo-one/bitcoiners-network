@@ -74,4 +74,21 @@
     border: 1px solid var(--orange);
     color: var(--orange);
   }
+
+  &-connect {
+    box-shadow: none;
+    background: none;
+    
+    &-bitcoiner {
+      background-color: var(--orange);
+    }
+
+    &-shitcoiner {
+      background-color: var(--shitcoiner-color);
+    }
+
+    &-nocoiner {
+      background-color: var(--gray-30);
+    }
+  }
 }

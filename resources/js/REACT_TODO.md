@@ -5,3 +5,4 @@
 - Fix arrow back if there is no nagivation, go back to dashboard
 - Follow button everywhere
 - immer or immutable instead of deep object/array cloning
+- Use Redux to fetch rates/sats balance/current user

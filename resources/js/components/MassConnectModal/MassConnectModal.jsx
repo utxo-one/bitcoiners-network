@@ -79,9 +79,9 @@ export default function MassConnectModal({ show, onHide, onCampaignStart }) {
   }
 
   const startCampaign = async () => {
-    // const { data } = await axios.post('/frontend/follow/mass-follow', {
-    //   amount: totalUsers,
-    // });
+    const { data } = await axios.post('/frontend/follow/mass-follow', {
+      amount: totalUsers,
+    });
 
     onHide();
     setShowCampaignSuccess(true);
@@ -140,7 +140,7 @@ export default function MassConnectModal({ show, onHide, onCampaignStart }) {
                   </div>
                 )}
 
-                <ButtonWithLightning disabled={proceessingCampaign || !totalUsers} loading={proceessingCampaign} onClick={handleCta} className="pay-via-ln">{ ctaTitle }</ButtonWithLightning>
+                <ButtonWithLightning disabled={!totalUsers} loading={proceessingCampaign} onClick={handleCta} className="pay-via-ln">{ ctaTitle }</ButtonWithLightning>
             </Dialog.Content>
           </Dialog.Overlay>
         </Dialog.Portal>

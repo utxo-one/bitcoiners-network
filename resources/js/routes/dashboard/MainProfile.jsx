@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useImmer } from "use-immer";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 import classNames from "classnames";
@@ -20,12 +21,14 @@ import BackNavigation from "../../layout/BackNavigation/BackNavigation";
 import './MainProfile.scss';
 import CampaignStats from "../../components/CampaignStats/CampaignStats";
 import Button from "../../layout/Button/Button";
+import ConnectButton from "../../layout/Button/ConnectButton";
+import HamburgerMenu from "../../layout/HamburgerMenu/HamburgerMenu";
 
 export default function MainProfile({ asDashboard }) {
 
   const { username } = useParams();
 
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useImmer(null);
   const [campaignData, setCampaignData] = useState(null);
   const [followBitcoiners, setFollowBitcoiners] = useState(null);
   const [showMassConnect, setshowMassConnect] = useState(false);
@@ -67,6 +70,12 @@ export default function MainProfile({ asDashboard }) {
 
   const onClickBadge = () => {
     setShowRate(true);
+  }
+
+  const onToggleConnect = () => {
+    setUserData(draft => {
+      draft.is_followed_by_authenticated_user = !draft.is_followed_by_authenticated_user;
+    });
   }
 
   // if (!userData) {
@@ -125,7 +134,8 @@ export default function MainProfile({ asDashboard }) {
   return (
     <div className="__main-profile">
       <header className={classNames(`${userData?.type}`, {'show-background': !handleVisible })}>
-        { !asDashboard && <BackNavigation /> }
+        <HamburgerMenu />
+        {/* { !asDashboard && <BackNavigation /> } */}
         { userData && <div className={classNames("username", { visible: !handleVisible })}>@{ userData?.twitter_username }</div> }
         <UserTypeBadge userType={userData?.type} variant='outline-white' onClick={onClickBadge} />
       </header>
@@ -146,6 +156,7 @@ export default function MainProfile({ asDashboard }) {
               <div className="description">{ userData?.twitter_description }</div>
             </>
             )}
+            { !asDashboard && <ConnectButton availableSats={50000} connection={userData} onToggle={onToggleConnect} /> }
           </section>
 
           { userData && (

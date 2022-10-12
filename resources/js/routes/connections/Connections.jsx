@@ -1,5 +1,6 @@
 import axios from "axios";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
+import { useImmer } from "use-immer";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import useEventCallback from "../../hooks/useEventCallback";
 
@@ -13,9 +14,9 @@ import CommunityRateModal from "./CommunityRateModal";
 import ConnectionTypeBadge from "../../components/ConnectionTypeBadge/ConnectionTypeBadge";
 import CenteredSpinner from "../../layout/Spinner/CenteredSpinner";
 import InfiniteLoader from "../../layout/Spinner/InfiniteLoader";
-import PointyArrow from "../../assets/icons/PointyArrow";
 
 import './Connections.scss';
+import HamburgerMenu from "../../layout/HamburgerMenu/HamburgerMenu";
 
 export default function Connections({ initialType }) {
 
@@ -34,7 +35,7 @@ export default function Connections({ initialType }) {
   const [loadedAllItems, setLoadedAllItems] = useState(false);
 
   const [connectionsData, setConnectionsData] = useState(null);
-  const [connections, setConnections] = useState(null);
+  const [connections, setConnections] = useImmer(null);
   const [count, setCount] = useState(null);
   const [showInfo, setShowInfo] = useState(false);
   const [showRate, setShowRate] = useState(false);
@@ -72,13 +73,11 @@ export default function Connections({ initialType }) {
   }, [username, filterUserType, headerType]);
 
   const loadMoreItems = useEventCallback(() => {
-    setLoadMore(true);
-
-    console.log('loadMore:', loadMore)
-
     if (loadMore) {
       return;
     }
+
+    setLoadMore(true);
 
     const loadItems = async () => {
       const filterPath = filterUserType === 'all' ? '' : filterUserType;
@@ -93,7 +92,10 @@ export default function Connections({ initialType }) {
 
       setConnectionsData(responseConnections);
 
-      setConnections([...connections, ...responseConnections.data]);
+      setConnections(draft => {
+        draft.push(...responseConnections.data);
+      });
+
       setLoadMore(false);
 
     }
@@ -108,6 +110,16 @@ export default function Connections({ initialType }) {
   const onClickConnection = (e, connection) => {
     setShowInfo(true);
     setSelectedConnection(connection);
+  }
+
+  const onToggleFollow = () => {
+    console.log('connection:', selectedConnection);
+
+    setConnections(draft => {
+      const index = draft.findIndex(user => user.twitter_id === selectedConnection.twitter_id);
+      console.log('index:', index)
+      draft[index].is_followed_by_authenticated_user = !draft[index].is_followed_by_authenticated_user;
+    });
   }
 
   const onSelectConnectionType = async type => {
@@ -184,7 +196,8 @@ export default function Connections({ initialType }) {
   return (
     <div className="__connections">
       <header>
-        <PointyArrow role='button' className="back" onClick={goBack} />
+        <HamburgerMenu variant="inverted" />
+        {/* <PointyArrow role='button' className="back" onClick={goBack} /> */}
         <div className='username-connection-type'> 
           { username && <div className='username'>@{username }</div> }
           <ConnectionTypeDropdown showNetwork={!username} connectionType={headerType} onSelect={onSelectConnectionType} count={count} />
@@ -194,7 +207,7 @@ export default function Connections({ initialType }) {
 
       { renderUsers() }
 
-      <UserInfoPanel show={showInfo} onClickBadge={() => setShowRate(true)} user={selectedConnection} onHide={() => setShowInfo(false)} onClickConnection={onClickPanelConnections} />
+      <UserInfoPanel show={showInfo} onClickBadge={() => setShowRate(true)} user={selectedConnection} onHide={() => setShowInfo(false)} onClickConnection={onClickPanelConnections} onToggleFollow={onToggleFollow} />
       <CommunityRateModal show={showRate} onHide={() => setShowRate(false)} user={selectedConnection} />
     </div>
   );

@@ -78,6 +78,11 @@
       padding: 0 8px 20px;
       margin: 0 auto;
       max-width: 400px;
+
+      .__button-connect {
+        margin: 32px auto;
+        min-width: 85%;
+      }
     }
 
     .panels {
@@ -108,7 +113,7 @@
       }
  
       .badges {
-        margin-bottom: 8px;
+        margin-bottom: 12px;
         text-align: center;
         padding: 0 8px;
       }

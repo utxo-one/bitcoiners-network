@@ -2,6 +2,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import classNames from "classnames";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import ConnectButton from "../../layout/Button/ConnectButton";
 import ConnectionsChart from "../../layout/Connections/ConnectionsChart";
 import { CompactNumberFormat } from "../../utils/NumberFormatting";
 import ProfilePicture from "../ProfilePicture/ProfilePicture";
@@ -14,7 +15,7 @@ const CONNECTION_TYPES = {
   following: 'Following',
 }
 
-export default function UserInfoPanel({ show, onHide, user, onClickBadge, onClickConnection }) {
+export default function UserInfoPanel({ show, onHide, user, onClickBadge, onClickConnection, onToggleFollow }) {
 
   const [connectionType, setConnectionType] = useState('followers');
   const navigate = useNavigate();
@@ -65,6 +66,8 @@ export default function UserInfoPanel({ show, onHide, user, onClickBadge, onClic
                 <div className="label">Followers</div>
               </div>
             </div>
+            
+            <ConnectButton connection={user} availableSats={100} onToggle={onToggleFollow} />
           </Dialog.Content>
         </Dialog.Overlay>
       </Dialog.Portal>
