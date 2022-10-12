@@ -25,7 +25,7 @@ class DepositController extends Controller
 
     public function store(StoreDepositRequest $request)
     {
-        $invoice = $this->transactionService->createInvoice($request->amount);
+        $invoice = $this->transactionService->createInvoice($request->amount, $request->redirectUrl);
 
         return response()->json($invoice->getData(), Response::HTTP_OK);
     }

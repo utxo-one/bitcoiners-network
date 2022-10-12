@@ -242,11 +242,12 @@ class UserService
     public function processTwitterUser(TwitterUser $twitterUser): User
     {
         $user = $this->saveTwitterUser($twitterUser);
-        $followers = $this->saveFollowers($twitterUser);
         $following = $this->saveFollowing($twitterUser);
-
-        $newFollowers = $this->saveTwitterUsers($followers);
+        $followers = $this->saveFollowers($twitterUser);
+        
         $newFollowing = $this->saveTwitterUsers($following);
+        $newFollowers = $this->saveTwitterUsers($followers);
+        
 
         $newUsers = array_merge($newFollowers, $newFollowing);
         Log::notice('New users found', ['count' => count($newUsers)]);
