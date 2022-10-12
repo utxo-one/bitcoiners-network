@@ -406,14 +406,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost/frontend/user/available-balance",
+							"raw": "http://localhost/frontend/current-user/available-balance",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"path": [
 								"frontend",
-								"user",
+								"current-user",
 								"available-balance"
 							]
 						}
@@ -446,14 +446,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost/frontend/user/auth",
+							"raw": "http://localhost/frontend/current-user/auth",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"path": [
 								"frontend",
-								"user",
+								"current-user",
 								"auth"
 							]
 						}
@@ -475,16 +475,16 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost/frontend/user/{username}/refresh",
+							"raw": "http://localhost/frontend/refresh/user/utxo_one",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"path": [
 								"frontend",
+								"refresh",
 								"user",
-								"{username}",
-								"refresh"
+								"utxo_one"
 							],
 							"query": [
 								{
