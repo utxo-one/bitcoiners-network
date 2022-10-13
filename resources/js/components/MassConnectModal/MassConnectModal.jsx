@@ -16,7 +16,7 @@ const DEFAULT_AMOUNT = 50;
 const SLIDER_MAX = 100;
 const MAX_FOLLOWS = 5000;
 
-export default function MassConnectModal({ show, onHide }) {
+export default function MassConnectModal({ show, onHide, fromCampaign, onSuccess }) {
 
   const [state, dispatch] = useContext(AppContext);
 
@@ -30,7 +30,7 @@ export default function MassConnectModal({ show, onHide }) {
   useEffect(() => {
     if (show) {
       const getBalance = async () => {
-        const { data: balance } = await axios.get('/frontend/user/available-balance');
+        const { data: balance } = await axios.get('/frontend/current-user/available-balance');
         dispatch({ type: 'balance/set', payload: balance });
       }
 
@@ -69,7 +69,8 @@ export default function MassConnectModal({ show, onHide }) {
 
   const topupLightning = async () => {
     const { data } = await axios.post('/frontend/transaction/deposit', {
-      amount: totalUsers * rates?.pricing.follow,
+      amount      : totalUsers * rates?.pricing.follow,
+      redirectUrl : `/u/transactions?top_up_time=${Date.now()}`
     });
 
     console.log('creating invoice for amount:', totalUsers * rates?.pricing.follow);
@@ -83,6 +84,9 @@ export default function MassConnectModal({ show, onHide }) {
 
     onHide();
     setShowCampaignSuccess(true);
+
+    console.log('onSuccess:', onSuccess)
+    onSuccess?.();
   }
 
   const handleCta = async () => {
@@ -90,11 +94,11 @@ export default function MassConnectModal({ show, onHide }) {
     setProcessingCampaign(true);
     
     if (missingSats > 0) {
-      topupLightning();
+      await topupLightning();
     }
 
     else {
-      startCampaign();
+      await startCampaign();
     }
 
     setProcessingCampaign(false);
@@ -109,7 +113,6 @@ export default function MassConnectModal({ show, onHide }) {
               <Dialog.Close asChild><div role="button" className='__modal-close-icon'>×</div></Dialog.Close>
               <Dialog.Title className="title">Mass Follow</Dialog.Title>
                 <AmountSlider value={sliderValue} onValueChange={changeSliderValue} min={1} max={SLIDER_MAX} />
-
                 <div className="item">
                   <div className="label user">Users</div>
                   <input type="number" value={totalUsers} onChange={changeTotalUsers} />
@@ -144,7 +147,7 @@ export default function MassConnectModal({ show, onHide }) {
         </Dialog.Portal>
       </Dialog.Root>
 
-      <CampaignSuccessModal show={showCampaignSuccess} redirectToCampaign cost={campaignCost} accounts={totalUsers} />
+      <CampaignSuccessModal show={showCampaignSuccess} redirectToCampaign={!fromCampaign} cost={campaignCost} accounts={totalUsers} onHide={() => setShowCampaignSuccess(false)} />
     </>
   )
 }

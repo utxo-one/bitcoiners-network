@@ -27,7 +27,7 @@ export default function ProfilePicture({ user, className, ...props }) {
       }
       catch {
         setImageError(true);
-        axios.post(`/frontend/user/${user.twitter_username}/refresh`);
+        axios.post(`/frontend/refresh/user/${user.twitter_username}`);
       }
     }
 
