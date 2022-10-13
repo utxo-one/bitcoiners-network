@@ -3,10 +3,11 @@ import { createContext } from "react";
 const AppContext = createContext();
 
 export const APP_INITIAL_STATE = {
-  availableSats   : 0,
+  availableSats   : null,
   currentUser     : null,
   rates           : null,
   metrics         : {},
+  publicUser      : false,
 }
 
 export const appReducer = (draft, action) => {
@@ -30,6 +31,9 @@ export const appReducer = (draft, action) => {
     case 'metrics/set-bitcoiners':
       draft.metrics.bitcoiners = action.payload;
       break;
+
+    case 'publicUser/set':
+      draft.publicUser = action.payload;
   }
 }
 

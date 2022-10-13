@@ -164,12 +164,16 @@ class User extends Authenticatable
 
     public function getFollowsAuthenticatedUserAttribute()
     {
-        return $this->follows()->where('followee_id', auth()->user()->twitter_id)->exists();
+        if ( auth()->user() ) {
+            return $this->follows()->where('followee_id', auth()->user()->twitter_id)->exists();
+        }
     }
 
     public function getIsFollowedByAuthenticatedUserAttribute()
     {
-        return $this->followers()->where('follower_id', auth()->user()->twitter_id)->exists();
+        if ( auth()->user() ) {
+            return $this->followers()->where('follower_id', auth()->user()->twitter_id)->exists();
+        }
     }
 
     public function getFollowingDataAttribute()

@@ -1,0 +1,47 @@
+.__top-up-success-modal {
+  .bolt-icon {
+    display: block;
+    margin: 12px auto;
+  }
+
+  h2 {
+    color: var(--gray-30);
+    font-size: 16px;
+    text-align: center;
+    text-transform: uppercase;
+    margin: 0 0 20px;
+  }
+
+  button {
+    margin: 20px auto 0;
+    display: block;
+  }
+
+  .item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+    margin: 12px 0;
+  }
+
+  .label {
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--gray-70);
+    font-size: 15px;
+    flex: 1;
+  }
+
+  .value {
+    color: var(--gray-50);
+    font-size: 17px;
+
+    .number {
+      font-size: 19px;
+      font-weight: 600;
+      color: var(--gray-20);
+      font-variant-numeric: tabular-nums;
+    }
+  }
+}

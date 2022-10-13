@@ -88,11 +88,11 @@
       display: flex;
       justify-content: space-around;
       text-align: center;
-      font-weight: bold;
       
       .count {
         color: var(--gray-20);
         font-size: 32px;
+        font-weight: bold;
       }
   
       .label {

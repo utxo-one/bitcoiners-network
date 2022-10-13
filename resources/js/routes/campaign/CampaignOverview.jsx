@@ -8,16 +8,16 @@ import CampaignStats from "../../components/CampaignStats/CampaignStats";
 import CampaignUsers from "./CampaignUsers";
 import CancelCampaignModal from "./CancelCampaignModal";
 
-import PointyArrow from "../../assets/icons/PointyArrow";
 import Box from "../../layout/Box/Box";
 import Button from "../../layout/Button/Button";
 import CenteredSpinner from "../../layout/Spinner/CenteredSpinner";
 
-import './CampaignOverview.scss';
 import useEventCallback from "../../hooks/useEventCallback";
 import HamburgerMenu from "../../layout/HamburgerMenu/HamburgerMenu";
 import ButtonWithLightning from "../../layout/Button/ButtonWithLightning";
 import MassConnectModal from "../../components/MassConnectModal/MassConnectModal";
+
+import './CampaignOverview.scss';
 
 const CAMPAIGN_STATUS = {
   running      : "Running",
@@ -47,18 +47,18 @@ export default function CampaignOverview(props) {
 
   const loadedAllPending = pendingData && pendingData.current_page === pendingData.last_page;
 
+  const loadCampaign = async () => {
+    const { data } = await axios.get('/frontend/follow/mass-follow');
+    const { data: pending } = await axios.get('/frontend/follow/requests/pending');
+    const { data: available } = await axios.get('/frontend/current-user/available-balance');
+    setAvailableSats(available || 0);
+
+    setCampaignData(data);
+    setPendingData(pending);
+    setPendingUsers(pending.data);
+  }
+
   useEffect(() => {
-    const loadCampaign = async () => {
-      const { data } = await axios.get('/frontend/follow/mass-follow');
-      const { data: pending } = await axios.get('/frontend/follow/requests/pending');
-      const { data: available } = await axios.get('/frontend/user/available-balance');
-      setAvailableSats(available || 0);
-
-      setCampaignData(data);
-      setPendingData(pending);
-      setPendingUsers(pending.data);
-    }
-
     loadCampaign();
   }, []);
 
@@ -108,7 +108,6 @@ export default function CampaignOverview(props) {
     const { data: pending } = await axios.get(`/frontend/follow/requests/pending?page=${page}`);
     setPendingData(pending);
 
-    console.log('pending:', pending)
     setPendingUsers(draft => {
       draft.push(...pending.data);
     });
@@ -179,7 +178,7 @@ export default function CampaignOverview(props) {
 
       { renderCampaignContent() }
       <CancelCampaignModal show={showCancelCampaign} onHide={() => setShowCancelCampaign(false)} availableSats={availableSats} />
-      <MassConnectModal show={showMassConnect} onHide={() => setShowMassConnect(false)} />
+      <MassConnectModal show={showMassConnect} fromCampaign onSuccess={loadCampaign} onHide={() => setShowMassConnect(false)} />
     </div>
   )
 }

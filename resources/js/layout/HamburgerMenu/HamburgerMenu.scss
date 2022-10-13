@@ -39,6 +39,10 @@
       animation: 0.3s anim__hamburger-menu-in;
     }
 
+    &[data-state='closed'] {
+      animation: 0.3s anim__hamburger-menu-out;
+    }
+
     .content {
       display: flex;
       flex-direction: column;
@@ -118,6 +122,12 @@
   @keyframes anim__hamburger-menu-in {
     from {
       transform: translateX(-50%);
+    }
+  }
+
+  @keyframes anim__hamburger-menu-out {
+    to {
+      transform: translateX(-100%);
     }
   }
 }

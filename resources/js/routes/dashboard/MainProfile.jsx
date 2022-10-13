@@ -43,7 +43,7 @@ export default function MainProfile({ asDashboard }) {
   const profilePicRef = useRef();
   const handleIntersector = useRef();
   
-  const { currentUser, metrics, availableSats } = state;
+  const { currentUser, metrics, availableSats, publicUser } = state;
 
   const userData = asDashboard ? currentUser : loadedUser;
   
@@ -170,7 +170,7 @@ export default function MainProfile({ asDashboard }) {
   return (
     <div className="__main-profile">
       <header className={classNames(`${userData?.type}`, {'show-background': !handleVisible })}>
-        <HamburgerMenu />
+        { !publicUser && <HamburgerMenu /> }
         { userData && <div className={classNames("username", { visible: !handleVisible })}>@{ userData?.twitter_username }</div> }
         { asDashboard
         ? renderSatsCounter()

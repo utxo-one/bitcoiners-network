@@ -84,7 +84,8 @@ export default function TopUpModal({ show, onHide, message }) {
     
     setProcessingTopUp(true);
     const { data } = await axios.post('/frontend/transaction/deposit', {
-      amount: totalSats
+      amount      : totalSats,
+      redirectUrl : `/u/transactions?top_up_time=${Date.now()}`
     });
 
     window.location.href = data.checkoutLink;

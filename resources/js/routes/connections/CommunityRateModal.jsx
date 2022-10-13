@@ -1,12 +1,57 @@
 import * as Dialog from "@radix-ui/react-dialog";
+import axios from "axios";
+import classNames from "classnames";
+import { useEffect, useState } from "react";
 import UserTypeBadge from '../../components/UserTypeBadge/UserTypeBadge';
 import Button from '../../layout/Button/Button';
+import RadialBar from "../../layout/Connections/RadialBar";
+import { calculatePercentages, CompactNumberFormat } from "../../utils/NumberFormatting";
 
 const USER_TYPES = ['bitcoiner', 'shitcoiner', 'nocoiner'];
 
 import './CommunityRateModal.scss';
 
-export default function CommunityRateModal({ show, onHide }) {
+export default function CommunityRateModal({ show, user, onHide }) {
+
+  const [votes, setVotes] = useState(null);
+  const [selectedType, setSelectedType] = useState(null);
+
+  useEffect(() => {
+    if (show) {
+      setVotes(null);
+      setSelectedType(null);
+    }
+  }, [show]);
+
+  const onCastVote = async type => {
+    setSelectedType(type);
+    const { data } = await axios.post(`/frontend/classify/${user.twitter_username}/${type}`);
+    setVotes(data);
+  }
+
+  const renderVotes = () => {
+    const userTypes = ['bitcoiner', 'shitcoiner', 'nocoiner'];
+  
+    const percentages = user && calculatePercentages(votes, userTypes);
+  
+    return (
+      <div className="votes-chart">
+        { userTypes.map(type => (
+          <div key={type} className={classNames("type", type)}>
+            <div className="chart">
+              <RadialBar className={type} percent={votes.total === 0 ? 0 : votes[type] / votes.total * 100} />
+              <div className="chart-percent">
+                { percentages[type] }%
+              </div>
+            </div>
+            <div className="count">{ CompactNumberFormat(votes[type]) } votes</div>
+            {/* <div className="user-type">{ USER_TYPES[type].phrase }</div> */}
+          </div>
+        ))}
+      </div>
+    );
+  }
+
   return (
     <Dialog.Root open={show} onOpenChange={onHide}>
       <Dialog.Portal>
@@ -19,9 +64,11 @@ export default function CommunityRateModal({ show, onHide }) {
               
               <div className="user-types">
                 { USER_TYPES.map(type => (
-                  <UserTypeBadge key={type} userType={type} />
+                  <UserTypeBadge key={type} userType={type} onClick={() => onCastVote(type)} variant={selectedType === type ? 'solid' : 'outline'}  />
                 ))}
               </div>
+              
+              { votes && renderVotes() }
                 
               <div className="close-button">
                 <Dialog.Close asChild><Button variant='clear'>Close</Button></Dialog.Close>

@@ -4,6 +4,8 @@ import TopUpModal from "../../components/MassConnectModal/TopUpModal";
 import AppContext from "../../store/AppContext";
 import ButtonWithLightning from "./ButtonWithLightning";
 
+import './Button.scss';
+
 export default function ConnectButton({ connection, availableSats, onToggle, className, ...props }) {
 
   const [state, dispatch] = useContext(AppContext);
