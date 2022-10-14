@@ -21,6 +21,7 @@ class TransactionService
             $checkoutOptions
               ->setSpeedPolicy($checkoutOptions::SPEED_HIGH)
               ->setPaymentMethods(['BTC_LightningLike'])
+              ->setRedirectAutomatically(true)
               ->setRedirectURL(config('app.url') . $redirectUrl);
         
             $invoice = $client->createInvoice(
