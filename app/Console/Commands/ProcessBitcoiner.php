@@ -37,8 +37,11 @@ class ProcessBitcoiner extends Command
         $twitterUserClient = new UserClient(bearerToken: config('services.twitter.bearer_token'));
         $twitterUser = $twitterUserClient->getUserByUsername($twitterUsername);
         $userService = new UserService();
-        $userService->processTwitterUser($twitterUser);
+        $user = $userService->processTwitterUser($twitterUser);
 
+        $followChunkCount = $user->followChunks()->count();
+
+        $this->info("User {$user->name} has {$followChunkCount} follow chunks");
         $this->info('Done');
 
         return 0;

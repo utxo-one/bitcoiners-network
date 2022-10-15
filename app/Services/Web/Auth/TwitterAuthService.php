@@ -39,7 +39,13 @@ class TwitterAuthService
             'oauth_token_secret' => $user->tokenSecret,
         ]);
 
-        //ProcessTwitterUser::dispatch($twitterUser);
+        // If user hasn't been processed yet or hasn't been processed in 30 days, process them
+        if (!$newUser->last_crawled_at || $newUser->last_crawled_at->diffInDays(now()) > 30) {
+            $userService->processTwitterUser($twitterUser);
+            $newUser->update([
+                'last_crawled_at' => now(),
+            ]);
+        }
 
         Auth::login($newUser);
     }
