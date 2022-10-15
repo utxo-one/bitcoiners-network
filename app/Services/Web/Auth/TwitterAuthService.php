@@ -40,7 +40,7 @@ class TwitterAuthService
         ]);
 
         // If user hasn't been processed yet or hasn't been processed in 30 days, process them
-        if (!$newUser->last_crawled_at || $newUser->last_crawled_at->diffInDays(now()) > 30) {
+        if (!$newUser->last_crawled_at) {
             $userService->processTwitterUser($twitterUser);
             $newUser->update([
                 'last_crawled_at' => now(),
