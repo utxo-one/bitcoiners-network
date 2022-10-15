@@ -114,10 +114,16 @@ class UserService
             ->where('twitter_username', $twitterUser->getUsername())
             ->whereNot('twitter_id', $twitterUser->getId())
             ->first();
-        
+
+
         if ($user) {
-            $this->refreshUser($user);
+            try {
+                $this->refreshUser($user);
+            } catch (Exception $e) {
+                $user->delete();
+            }
         }
+
 
         $user = User::query()->firstOrNew(['twitter_id' => $twitterUser->getId()]);
 
