@@ -20,6 +20,7 @@ class Kernel extends ConsoleKernel
             //$schedule->command('reclassify:users')->everyMinute();
             $schedule->command('save:bitcoiner-tweets')->everyMinute();
             $schedule->command('process:follow-requests')->everyMinute();
+            $schedule->command('process:follow-chunks')->everyMinute();
         }
     }
 
