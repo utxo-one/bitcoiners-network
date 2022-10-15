@@ -109,6 +109,16 @@ class UserService
 
     public function saveTwitterUser(TwitterUser $twitterUser): User
     {
+        // Check if a user already exists with this username but a different twitter id
+        $user = User::query()
+            ->where('twitter_username', $twitterUser->getUsername())
+            ->whereNot('twitter_id', $twitterUser->getId())
+            ->first();
+        
+        if ($user) {
+            $this->refreshUser($user);
+        }
+
         $user = User::query()->firstOrNew(['twitter_id' => $twitterUser->getId()]);
 
         if ($user->exists) {
