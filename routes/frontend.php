@@ -35,11 +35,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-#If environment is local, Authenticate user with twitter_id 1558929312547577858
-if (app()->environment('local')) {
-    Auth::loginUsingId('1558929312547577858');
-}
-
 Route::get('/profile-pictures', [HomeController::class, 'profilesPictures'])->name('home.profile-pictures');
 Route::get('/random-bitcoiners', [HomeController::class, 'randomBitcoiners'])->name('home.random-bitcoiners');
 Route::get('/random-shitcoiners', [HomeController::class, 'randomShitcoiners'])->name('home.random-shitcoiners');
