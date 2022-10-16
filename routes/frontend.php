@@ -17,6 +17,7 @@ use App\Http\Controllers\Frontend\Transaction\DepositController;
 use App\Http\Controllers\Frontend\User\AvailableBalanceController;
 use App\Http\Controllers\Frontend\User\ClassificationVoteController;
 use App\Http\Controllers\Frontend\User\EndorsementController;
+use App\Http\Controllers\Frontend\User\FollowDataController;
 use App\Http\Controllers\Frontend\User\RefreshUserController;
 use App\Http\Controllers\Frontend\User\UserController;
 use Illuminate\Http\Request;
@@ -35,9 +36,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 #If environment is local, Authenticate user with twitter_id 1558929312547577858
-// if (app()->environment('local')) {
-//     Auth::loginUsingId('1558929312547577858');
-// }
+if (app()->environment('local')) {
+    Auth::loginUsingId('1558929312547577858');
+}
 
 Route::get('/profile-pictures', [HomeController::class, 'profilesPictures'])->name('home.profile-pictures');
 Route::get('/random-bitcoiners', [HomeController::class, 'randomBitcoiners'])->name('home.random-bitcoiners');
@@ -48,10 +49,8 @@ Route::get('/endorsement-types', [EndorsementController::class, 'types'])->name(
 Route::get('/metrics/total-bitcoiners', [MetricController::class, 'totalBitcoiners'])->name('metrics.total-bitcoiners');
 Route::get('/metrics/total-shitcoiners', [MetricController::class, 'totalShitcoiners'])->name('metrics.total-shitcoiners');
 Route::get('/metrics/total-nocoiners', [MetricController::class, 'totalNocoiners'])->name('metrics.total-nocoiners');
-<<<<<<< HEAD
-=======
 Route::get('/user/{username}', [UserController::class, 'show'])->name('user.show');
->>>>>>> master
+Route::get('/user/{username}/follow-data', [FollowDataController::class, 'show'])->name('user.follow-data.show');
 
 Route::middleware('auth')->group(function () {
     Route::get('/follow/available/{userType}', [AvailableFollowsController::class, 'index'])->name('follow.available.type');

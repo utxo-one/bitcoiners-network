@@ -67,7 +67,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $appends = [
-        'profile_photo_url', 'twitter_profile_image_url_high_res', 'follows_authenticated_user', 'is_followed_by_authenticated_user', 'following_data', 'follower_data',
+        'twitter_profile_image_url_high_res', 'follows_authenticated_user', 'is_followed_by_authenticated_user',
     ];
 
     public function followers()
