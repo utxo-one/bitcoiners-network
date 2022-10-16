@@ -90,7 +90,7 @@ class FollowService
         return $followRequest;
     }
 
-    public function processFollowRequests(): Collection
+    public function processFollowRequests()
     {
         // Process one follow request per user where the user has a pending follow request
         return User::whereHas('followRequests', function ($query) {
@@ -98,7 +98,19 @@ class FollowService
         })
             ->get()
             ->map(function ($user) {
-                return $this->processFollowRequest($user->followRequests()->where('status', FollowRequestStatus::PENDING)->first());
+                try {
+                    $this->processFollowRequest($user->followRequests()->where('status', FollowRequestStatus::PENDING)->first());
+                } catch (\Exception $e) {
+                    Log::error('Failed to process follow request', [
+                        'user_id' => $user->twitter_id,
+                        'error' => $e->getMessage(),
+                    ]);
+
+                    $user->followRequests()->where('status', FollowRequestStatus::PENDING)->first()->update([
+                        'status' => FollowRequestStatus::REJECTED,
+                        'completed_at' => now(),
+                    ]);
+                }
             });
     }
 

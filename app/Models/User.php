@@ -115,6 +115,11 @@ class User extends Authenticatable
         return $this->hasMany(ClassificationVote::class, 'classified_id', 'twitter_id');
     }
 
+    public function followChunks()
+    {
+        return $this->hasMany(FollowChunk::class, 'user_id', 'twitter_id');
+    }
+
     public function getClassificationSummary()
     {
         $votes = $this->classificationVotesReceived()->get();
@@ -164,12 +169,16 @@ class User extends Authenticatable
 
     public function getFollowsAuthenticatedUserAttribute()
     {
-        return $this->follows()->where('followee_id', auth()->user()->twitter_id)->exists();
+        if ( auth()->user() ) {
+            return $this->follows()->where('followee_id', auth()->user()->twitter_id)->exists();
+        }
     }
 
     public function getIsFollowedByAuthenticatedUserAttribute()
     {
-        return $this->followers()->where('follower_id', auth()->user()->twitter_id)->exists();
+        if ( auth()->user() ) {
+            return $this->followers()->where('follower_id', auth()->user()->twitter_id)->exists();
+        }
     }
 
     public function getFollowingDataAttribute()

@@ -20,3 +20,28 @@ export function CompactNumberFormat(value, config = {}) {
     return Number(value).toLocaleString('en-US');
   }
 }
+
+export function calculatePercentages(connections, userTypes) {
+  let maxPercentage = -1;
+  let maxPercentageType;
+  let sum = 0;
+  let percentages = {};
+  
+  userTypes.forEach(type => {
+    const percentage = connections.total === 0 ? 0 : Math.round(connections[type] / connections.total * 100);
+    sum += percentage;
+    
+    if (percentage > maxPercentage) {
+      maxPercentageType = type;
+      maxPercentage = percentage;
+    }
+
+    percentages[type] = percentage;
+  });
+
+  if (sum > 100) {
+    percentages[maxPercentageType] -= (sum - 100);
+  }
+
+  return (percentages); 
+}

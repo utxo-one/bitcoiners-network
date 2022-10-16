@@ -10,10 +10,20 @@
   &[data-state='open'] {
     animation: 0.3s anim__dialog-overlay-in;
   }
+
+  &[data-state='closed'] {
+    animation: 0.3s anim__dialog-overlay-out;
+  }
 }
 
 @keyframes anim__dialog-overlay-in {
   from {
+    background-color: rgba(0, 0, 0, 0);
+  }
+}
+
+@keyframes anim__dialog-overlay-out {
+  to {
     background-color: rgba(0, 0, 0, 0);
   }
 }
@@ -61,14 +71,21 @@
     animation: 0.3s anim__dialog-center-modal-in;
   }
 
-  // &[data-state='close'] {
-
-  // }
+  &[data-state='closed'] {
+    animation: 0.3s anim__dialog-center-modal-out;
+  }
 }
 
 @keyframes anim__dialog-center-modal-in {
   from {
     opacity: 0;
     transform: translate(-50%, -100%);
+  }
+}
+
+@keyframes anim__dialog-center-modal-out {
+  to {
+    opacity: 0;
+    transform: translate(-50%, -75%);
   }
 }

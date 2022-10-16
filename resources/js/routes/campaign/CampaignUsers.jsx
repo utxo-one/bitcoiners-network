@@ -3,9 +3,10 @@ import ProfilePicture from '../../components/ProfilePicture/ProfilePicture';
 import UserInfoPanel from '../../components/UserInfoPanel/UserInfoPanel';
 import Checkbox from '../../layout/Checkbox/Checkbox';
 import InfiniteLoader from '../../layout/Spinner/InfiniteLoader';
+import { CompactNumberFormat } from '../../utils/NumberFormatting';
 import './CampaignUsers.scss';
 
-export default function CampaignUsers({ campaign, pendingUsers, loadedAllPending, selected, onToggleSelected }) {
+export default function CampaignUsers({ campaign, pendingUsers, loadedAllPending, selected, onToggleSelected, onLoadMorePending }) {
 
   const [showInfo, setShowInfo] = useState(false);
   const [user, setUser] = useState(null);
@@ -30,7 +31,7 @@ export default function CampaignUsers({ campaign, pendingUsers, loadedAllPending
             <div className='username'>{ user.name }</div>
             <div className='handle'>@{ user.twitter_username }</div>
           </td>
-          <td className='followers'>{ user.twitter_count_followers }</td>
+          <td className='followers'>{ CompactNumberFormat(user.twitter_count_followers, { digits: 3}) }</td>
         </tr>
       );
     });
@@ -53,7 +54,7 @@ export default function CampaignUsers({ campaign, pendingUsers, loadedAllPending
         </tbody>
       </table>
 
-      { pendingUsers && !loadedAllPending && <InfiniteLoader onLoadMore={() => console.log('hodor')} /> }
+      { pendingUsers && !loadedAllPending && <InfiniteLoader onLoadMore={onLoadMorePending} /> }
 
       <UserInfoPanel show={showInfo} user={user} onHide={() => setShowInfo(false)} />
     </>

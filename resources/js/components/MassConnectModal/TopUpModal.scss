@@ -1,0 +1,80 @@
+.__top-up-modal {
+  .__amount-slider {
+    margin: 20px 0;
+  }
+
+  .item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+    margin: 12px 0;
+
+    &.balance-hidden {
+      margin-top: 60px;
+    }
+
+    input[type="number"] {
+      border: 1px solid var(--gray-80);
+      background-color: var(--gray-90);
+      border-radius: 4px;
+      font-size: 20px;
+      font-weight: 600;
+      text-align: right;
+      color: var(--gray-20);
+      flex: 1;
+      width: 100%;
+      padding: 8px;
+      outline: none;
+      font-variant-numeric: tabular-nums;
+      
+      &:active, &:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(28, 126, 217, 0.1);
+      }
+    }
+  }
+
+  .label {
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--gray-70);
+    font-size: 15px;
+    flex: 1;
+
+    &.user {
+      flex: 1.5;
+    }
+  }
+
+  .value {
+    color: var(--gray-50);
+    font-size: 17px;
+
+    .number {
+      font-size: 19px;
+      font-weight: 600;
+      color: var(--gray-20);
+      font-variant-numeric: tabular-nums;
+    }
+  }
+
+  button.pay-via-ln {
+    margin: 28px auto 8px;
+    min-width: 292px;
+  }
+
+  .top-up-required {
+    opacity: 1;
+    transition: 0.3s all;
+
+    strong {
+      font-variant-numeric: tabular-nums;
+    }
+
+    &.invisible {
+      visibility: hidden;
+      opacity: 0;
+    }
+  }
+}

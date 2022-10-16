@@ -44,6 +44,12 @@ Route::middleware([
 
 });
 
+// Allow non-auth users to fetch any user profile:
+Route::get('/u/profile/{username}', function () {
+    return view('user-dashboard');
+});
+
+// All other routes will require the user to be authenticated:
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),

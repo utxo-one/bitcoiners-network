@@ -88,17 +88,33 @@
       display: flex;
       justify-content: space-around;
       text-align: center;
-      font-weight: bold;
       
       .count {
         color: var(--gray-20);
         font-size: 32px;
+        font-weight: bold;
       }
   
       .label {
         color: var(--gray-30);
         font-size: 18px;
       }
+    }
+
+    .__button-connect {
+      display: block;
+      width: 100%;
+      margin: 20px 0 0;
+    }
+
+    .viewing-own-profile {
+      background-color: var(--gray-40);
+      margin-top: 32px;
+      text-align: center;
+      color: white;
+      text-transform: uppercase;
+      font-size: 13px;
+      font-weight: 600;
     }
   }
 }

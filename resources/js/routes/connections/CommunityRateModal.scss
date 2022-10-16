@@ -29,4 +29,76 @@
       padding: 8px;
     }
   }
+
+  .votes-chart {
+    display: flex;
+    gap: 12px;
+    margin: 24px auto;
+    max-height: 120px;
+    animation: anim__community-rate-votes-in 0.6s;
+  
+    .type {
+      flex: 1;
+      text-align: center;
+  
+      .chart {
+        position: relative;
+        margin-bottom: 4px;
+  
+        .chart-percent {
+          font-size: 18px;
+          font-weight: bold;
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+        }
+      }
+  
+      .__radial-bar {
+        width: 85%;
+        height: 85%;
+      }
+  
+      &.bitcoiner {
+        color: var(--orange-btc);
+        .__radial-bar .filled-bar {
+          stroke: var(--orange-btc);
+        }
+      }
+  
+      &.shitcoiner {
+        color: var(--shitcoiner-color);
+  
+        .__radial-bar .filled-bar {
+          stroke: var(--shitcoiner-color);
+        }
+      }
+  
+      &.nocoiner {
+        color: var(--gray-60);
+  
+        .__radial-bar .filled-bar {
+          stroke: var(--gray-60);
+        }
+      }
+  
+      .count {
+        font-size: 15px;
+        font-weight: 600;
+      }
+    }
+  }  
+}
+
+@keyframes anim__community-rate-votes-in {
+  0% {
+    margin: 0 auto;
+    opacity: 0;
+    max-height: 0;
+  }
+
+  33% {
+    opacity: 0;
+  }
 }

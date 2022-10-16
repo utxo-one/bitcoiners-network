@@ -10,7 +10,7 @@ use \BTCPayServer\Util\PreciseNumber;
 
 class TransactionService
 {
-    public function createInvoice(int $amount)
+    public function createInvoice(int $amount, string $redirectUrl)
     {
         try {
             $client = new Invoice(config('services.btcpay.host'), config('services.btcpay.api_key'));
@@ -21,7 +21,8 @@ class TransactionService
             $checkoutOptions
               ->setSpeedPolicy($checkoutOptions::SPEED_HIGH)
               ->setPaymentMethods(['BTC_LightningLike'])
-              ->setRedirectURL(config('app.url') . '/transaction/deposit/success');
+              ->setRedirectAutomatically(true)
+              ->setRedirectURL(config('app.url') . $redirectUrl);
         
             $invoice = $client->createInvoice(
                     storeId: config('services.btcpay.store_id'),

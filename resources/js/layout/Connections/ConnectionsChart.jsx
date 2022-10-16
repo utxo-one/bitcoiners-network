@@ -2,7 +2,7 @@ import RadialBar from "./RadialBar";
 
 import './ConnectionsChart.scss';
 import classNames from "classnames";
-import { CompactNumberFormat } from "../../utils/NumberFormatting";
+import { calculatePercentages, CompactNumberFormat } from "../../utils/NumberFormatting";
 
 const USER_TYPES = {
   bitcoiners: {
@@ -22,36 +22,11 @@ const USER_TYPES = {
 }
 
 export default function ConnectionsChart({ connectionType, user, showCount = true, onClickDiagram }) {
-
-  const userTypes = Object.keys(USER_TYPES);
+  
   const connectionData = connectionType === 'following' ? 'following_data' : 'follower_data';
+  const userTypes = Object.keys(USER_TYPES);
 
-  const calculatePercentages = connections => {
-    let maxPercentage = -1;
-    let maxPercentageType;
-    let sum = 0;
-    let percentages = {};
-    
-    userTypes.forEach(type => {
-      const percentage =  connections.total === 0 ? 0 : Math.round(connections[type] / connections.total * 100);
-      sum += percentage;
-      
-      if (percentage > maxPercentage) {
-        maxPercentageType = type;
-        maxPercentage = percentage;
-      }
-
-      percentages[type] = percentage;
-    });
-
-    if (sum > 100) {
-      percentages[maxPercentageType] -= (sum - 100);
-    }
-
-    return (percentages); 
-  }
-
-  const percentages = user && calculatePercentages(user?.[connectionData]);
+  const percentages = user && calculatePercentages(user?.[connectionData], userTypes);
 
   return (
     <div className="__connections-chart">

@@ -39,6 +39,11 @@ export default function CampaignStats({ campaign }) {
           <td>Amount Spent</td>
           <td><strong>{ CompactNumberFormat(campaign.totalSpentSats, { digits: 7 })}</strong> Sats</td>
         </tr>
+
+        <tr>
+          <td>Pending Requests</td>
+          <td><strong>{ CompactNumberFormat(campaign.pendingFollowRequests, { digits: 6 })}</strong> Users</td>
+        </tr>
       </tbody>
     </table>
   );

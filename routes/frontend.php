@@ -48,6 +48,10 @@ Route::get('/endorsement-types', [EndorsementController::class, 'types'])->name(
 Route::get('/metrics/total-bitcoiners', [MetricController::class, 'totalBitcoiners'])->name('metrics.total-bitcoiners');
 Route::get('/metrics/total-shitcoiners', [MetricController::class, 'totalShitcoiners'])->name('metrics.total-shitcoiners');
 Route::get('/metrics/total-nocoiners', [MetricController::class, 'totalNocoiners'])->name('metrics.total-nocoiners');
+<<<<<<< HEAD
+=======
+Route::get('/user/{username}', [UserController::class, 'show'])->name('user.show');
+>>>>>>> master
 
 Route::middleware('auth')->group(function () {
     Route::get('/follow/available/{userType}', [AvailableFollowsController::class, 'index'])->name('follow.available.type');
@@ -67,14 +71,14 @@ Route::middleware('auth')->group(function () {
     Route::get('follow/user/following/{username}', [FollowingByUsernameController::class, 'all'])->name('follow.user.following.all');
 
 
-    Route::get('user/available-balance', [AvailableBalanceController::class, 'index'])->name('user.available-balance');
+    Route::get('current-user/available-balance', [AvailableBalanceController::class, 'index'])->name('user.available-balance');
     Route::post('transaction/deposit', [DepositController::class, 'store'])->name('transaction.deposit.store');
     Route::get('transaction/deposit', [DepositController::class, 'index'])->name('transaction.deposit.index');
     Route::get('transaction/debit', [DebitController::class, 'index'])->name('transaction.debit.index');
     
-    Route::get('/user/auth', [UserController::class, 'auth'])->name('user.auth');
-    Route::post('/user/{username}/refresh', [RefreshUserController::class, 'store'])->name('user.refresh.store');
-    Route::get('/user/{username}', [UserController::class, 'show'])->name('user.show');
+    Route::get('/current-user/auth', [UserController::class, 'auth'])->name('user.auth');
+    Route::post('/refresh/user/{username}', [RefreshUserController::class, 'store'])->name('user.refresh.store');
+
 
     Route::post('/endorse', [EndorsementController::class, 'store'])->name('user.endorse.store');
     Route::delete('/endorse', [EndorsementController::class, 'destroy'])->name('user.endorse.destroy');

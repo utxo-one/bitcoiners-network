@@ -1,0 +1,116 @@
+.__transactions-overview {
+
+  header {
+    position: sticky;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid var(--gray-80);
+    top: 0;
+    background-color: white;
+    z-index: 2;
+    padding: 0 8px;
+    
+    .tab {
+      color: var(--gray-60);
+      flex: 1;
+      padding: 28px 12px 20px;
+      text-align: center;
+      border-bottom: 4px solid transparent;
+      margin: 0 8px;
+      font-size: 18px;
+
+      &.selected {
+        border-color: var(--blue-twitter);
+        color: var(--blue-twitter);
+      }
+    }
+  }
+
+  main {
+    padding: 0 12px;
+    max-width: 400px;
+    margin: 32px auto 80px;
+
+    .__box {
+      h3 {
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 22px;
+        text-transform: uppercase;
+        margin: 0 auto 8px;
+        text-align: center;
+        color: var(--gray-40);
+      }
+
+      .sats {
+        font-variant-numeric: tabular-nums;
+        font-size: 24px;
+        text-align: center;
+        color: var(--gray-40);
+        font-weight: 400;
+
+        strong {
+          font-weight: 600;
+          color: var(--gray-20);
+        }
+      }
+
+      margin: 20px auto;
+    }
+
+    .transaction {
+      display: flex;
+      justify-content: space-between;
+      padding: 16px 0;
+      
+      &:not(:last-of-type) {
+        border-bottom: 1px solid var(--gray-85);
+      }
+
+      .description {
+        color: var(--gray-30);
+        font-weight: 600;
+        line-height: 30px;
+        font-size: 17px;
+      }
+
+      .date {
+        color: var(--gray-35);
+      }
+
+      .amount {
+        color: var(--gray-10);
+        font-weight: 600;
+        text-align: right;
+        font-size: 20px;
+        line-height: 30px;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .currency {
+        color: var(--gray-40);
+        text-align: right;
+        font-size: 17px;
+      }
+    }
+  }
+
+  .bottom-top-up {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    max-width: 400px;
+    padding: 12px;
+    background-color: white;
+    left: 50%;
+    transform: translateX(-50%);
+    
+    button {
+      display: block;
+      width: 100%;
+      text-transform: uppercase;
+      background-color: var(--red);
+    }
+  }
+}
