@@ -16,6 +16,7 @@ use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redis;
 use UtxoOne\TwitterUltimatePhp\Clients\UserClient;
 use UtxoOne\TwitterUltimatePhp\Models\User as TwitterUser;
 use UtxoOne\TwitterUltimatePhp\Models\Users as TwitterUsers;
@@ -516,5 +517,41 @@ class UserService
         $user->last_classified_at = Carbon::now();
         $user->classified_by = ClassificationSource::VOTE;
         $user->save();
+    }
+
+    public function getFollowData(User $user): array
+    {
+        $followDataCache = Redis::get("follow_data:{$user->twitter_id}");
+
+        if ($followDataCache) {
+            return json_decode($followDataCache, true);
+        }
+
+        $followData = [
+            'following_data' => $user->following_data,
+            'follower_data' => $user->follower_data,
+        ];
+
+        $cacheTime = 60;
+
+        if ($user->twitter_count_followers > 1000) {
+            $cacheTime = 600;
+        }
+
+        if ($user->twitter_count_followers > 5000) {
+            $cacheTime = 1800;
+        }
+
+        if ($user->twitter_count_followers > 10000) {
+            $cacheTime = 86400;
+        }
+
+        if ($user->twitter_count_followers > 50000) {
+            $cacheTime = 604800;
+        }
+
+        Redis::setex("follow_data:{$user->twitter_id}", $cacheTime, json_encode($followData));
+
+        return $followData;
     }
 }
