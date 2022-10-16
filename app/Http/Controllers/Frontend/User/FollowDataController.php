@@ -39,6 +39,10 @@ class FollowDataController extends Controller
             $cacheTime = 86400;
         }
 
+        if ($user->twitter_count_followers > 50000) {
+            $cacheTime = 604800;
+        }
+
         Redis::setex("follow_data:{$user->twitter_id}", $cacheTime, json_encode($followData));
 
         return response()->json($followData, Response::HTTP_OK);
