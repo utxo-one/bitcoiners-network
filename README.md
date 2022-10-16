@@ -1,3 +1,22 @@
+# Bitcoiners.Network
+
+Bitcoiners.Network is the ultimate way to manage your Bitcoin Twitter experience. Discover new bitcoiners to follow, unfollow shitcoiners and nocoiners and discover the best content from fellow bitcoiners.
+
+To get started, visit https://bitcoiners.network
+
+## Local Installation
+
+If you're interested in running a local instance of this app and building your own database of users, read the instructions below.
+
+### Prerequisites
+
+ - 150GB Disk Space
+ - 8GB RAM
+ - Linux
+ - Docker
+ - Twitter Developer Credentials
+ - BTCPayServer + Lightning Node
+
 ## Installation
 
 #### Clone Repository
