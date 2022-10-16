@@ -889,6 +889,27 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "Get Follow Data",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost/frontend/user/utxo_one/follow-data",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"path": [
+										"frontend",
+										"user",
+										"utxo_one",
+										"follow-data"
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				},
