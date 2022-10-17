@@ -229,7 +229,7 @@ export default function MainProfile({ asDashboard }) {
         ? renderSatsCounter()
         : <UserTypeBadge userType={userData?.type} variant='outline-white' onClick={viewingOwnProfile ? null : onClickBadge} />
         }
-        { !viewingOwnProfile && !asDashboard && handleVisible && (
+        { !publicUser && !viewingOwnProfile && !asDashboard && handleVisible && (
           <div className="rate-user-tooltip" role="button" onClick={onClickBadge}>
             <div>Vote</div>
             <div className="close">×</div>
