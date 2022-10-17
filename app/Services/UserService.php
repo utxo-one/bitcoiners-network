@@ -4,14 +4,19 @@ namespace App\Services;
 
 use App\Enums\ClassificationSource;
 use App\Enums\EndorsementType;
+use App\Enums\FollowChunkType;
 use App\Enums\UserType;
 use App\Models\ClassificationVote;
 use App\Models\Endorsement;
 use App\Models\Follow;
+use App\Models\FollowChunk;
 use App\Models\User;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redis;
 use UtxoOne\TwitterUltimatePhp\Clients\UserClient;
 use UtxoOne\TwitterUltimatePhp\Models\User as TwitterUser;
 use UtxoOne\TwitterUltimatePhp\Models\Users as TwitterUsers;
@@ -55,12 +60,12 @@ class UserService
         $nameContainsShitcoins = collect(config('classifier.shitcoinerNames'))
             ->contains(function ($shitcoinName) use ($username) {
                 return str_contains($username, $shitcoinName);
-         });
+            });
 
         $nameContainsBitcoin = collect(config('classifier.bitcoinerNames'))
             ->contains(function ($bitcoinName) use ($username) {
                 return str_contains($username, $bitcoinName);
-         });
+            });
 
         $type = UserType::NOCOINER;
 
@@ -105,6 +110,22 @@ class UserService
 
     public function saveTwitterUser(TwitterUser $twitterUser): User
     {
+        // Check if a user already exists with this username but a different twitter id
+        $user = User::query()
+            ->where('twitter_username', $twitterUser->getUsername())
+            ->whereNot('twitter_id', $twitterUser->getId())
+            ->first();
+
+
+        if ($user) {
+            try {
+                $this->refreshUser($user);
+            } catch (Exception $e) {
+                $user->delete();
+            }
+        }
+
+
         $user = User::query()->firstOrNew(['twitter_id' => $twitterUser->getId()]);
 
         if ($user->exists) {
@@ -122,7 +143,7 @@ class UserService
                 'twitter_count_following' => $twitterUser->getPublicMetrics()->getFollowingCount(),
                 'twitter_count_tweets' => $twitterUser->getPublicMetrics()?->getTweetCount(),
                 'twitter_count_listed' => $twitterUser->getPublicMetrics()?->getListedCount(),
-                'oauth_type'=> 'twitter',
+                'oauth_type' => 'twitter',
                 'password' => encrypt(str()->random(10)),
                 'classified_by' => ClassificationSource::CRAWLER,
                 'last_classified_at' => Carbon::now(),
@@ -147,7 +168,7 @@ class UserService
             'twitter_count_following' => $twitterUser->getPublicMetrics()->getFollowingCount(),
             'twitter_count_tweets' => $twitterUser->getPublicMetrics()?->getTweetCount(),
             'twitter_count_listed' => $twitterUser->getPublicMetrics()?->getListedCount(),
-            'oauth_type'=> 'twitter',
+            'oauth_type' => 'twitter',
             'password' => encrypt(str()->random(10)),
             'classified_by' => ClassificationSource::CRAWLER,
             'last_classified_at' => Carbon::now(),
@@ -199,6 +220,100 @@ class UserService
         return $twitterUsers;
     }
 
+    public function chunkFollows(TwitterUser $twitterUser): ?SupportCollection
+    {
+        $followingCount = $twitterUser->getPublicMetrics()->getFollowingCount();
+        $followerCount = $twitterUser->getPublicMetrics()->getFollowersCount();
+
+        $chunkSize = 1000;
+
+        $followingChunkCount = ceil($followingCount / $chunkSize);
+        $followerChunkCount = ceil($followerCount / $chunkSize);
+
+        $followChunks = [];
+
+        for ($i = 0; $i < $followingChunkCount; $i++) {
+            $followChunks[] = FollowChunk::create([
+                'user_id' => $twitterUser->getId(),
+                'type' => FollowChunkType::FOLLOWING,
+            ]);
+        }
+
+        for ($i = 0; $i < $followerChunkCount; $i++) {
+            $followChunks[] = FollowChunk::create([
+                'user_id' => $twitterUser->getId(),
+                'type' => FollowChunkType::FOLLOWER,
+            ]);
+        }
+
+        return collect($followChunks);
+    }
+
+    public function processFollowChunk(FollowChunk $followChunk): SupportCollection
+    {
+        $typeMethod = $followChunk->type === FollowChunkType::FOLLOWING->value ? 'getFollowing' : 'getFollowers';
+
+        $userClient = new UserClient(bearerToken: config('services.twitter.bearer_token'));
+
+        $paginationToken = $followChunk->user()->first()->last_pagination_token;
+
+        $follows = $userClient->$typeMethod(
+            id: $followChunk->user_id,
+            maxResults: 1000,
+            paginationToken: $paginationToken,
+        );
+
+        $users = [];
+
+        foreach ($follows->all() as $follow) {
+
+            $users[] = $this->saveTwitterUser($follow);
+
+            if ($followChunk->type === FollowChunkType::FOLLOWING->value) {
+                $followeeExists = Follow::query()
+                    ->where('followee_id', $follow->getId())
+                    ->where('follower_id', $followChunk->user_id)
+                    ->first();
+
+                if (!$followeeExists) {
+                    Follow::create([
+                        'followee_id' => $follow->getId(),
+                        'follower_id' => $followChunk->user_id,
+                    ]);
+                }
+            } else {
+                $followerExists = Follow::query()
+                    ->where('followee_id', $followChunk->user_id)
+                    ->where('follower_id', $follow->getId())
+                    ->first();
+
+                if (!$followerExists) {
+                    Follow::create([
+                        'followee_id' => $followChunk->user_id,
+                        'follower_id' => $follow->getId(),
+                    ]);
+                }
+            }
+        }
+
+        // If a pagination token exists, update the user's last_pagination_token, else set it to blank
+        if ($follows->getPaginationToken() !== null) {
+            $followChunk->user()->update([
+                'last_pagination_token' => $follows->getPaginationToken(),
+            ]);
+        } else {
+            $followChunk->user()->update([
+                'last_pagination_token' => null,
+            ]);
+        }
+
+        $followChunk->update([
+            'processed_at' => Carbon::now(),
+        ]);
+
+        return collect($users);
+    }
+
     public function saveFollowers(TwitterUser $twitterUser, ?string $nextToken = null, ?array $twitterUsers = []): array
     {
         $userClient = new UserClient(bearerToken: config('services.twitter.bearer_token'));
@@ -242,12 +357,27 @@ class UserService
     public function processTwitterUser(TwitterUser $twitterUser): User
     {
         $user = $this->saveTwitterUser($twitterUser);
+
+        $chunks = $this->chunkFollows($twitterUser);
+
+        Log::info('Processing ' . $chunks->count() . ' follow chunks for user ' . $twitterUser->getId());
+
+        $user->last_processed_at = Carbon::now();
+        $user->save();
+
+        return $user;
+    }
+
+    public function processTwitterUserOld(TwitterUser $twitterUser): User
+    {
+        $user = $this->saveTwitterUser($twitterUser);
+
         $following = $this->saveFollowing($twitterUser);
         $followers = $this->saveFollowers($twitterUser);
-        
+
         $newFollowing = $this->saveTwitterUsers($following);
         $newFollowers = $this->saveTwitterUsers($followers);
-        
+
 
         $newUsers = array_merge($newFollowers, $newFollowing);
         Log::notice('New users found', ['count' => count($newUsers)]);
@@ -387,5 +517,41 @@ class UserService
         $user->last_classified_at = Carbon::now();
         $user->classified_by = ClassificationSource::VOTE;
         $user->save();
+    }
+
+    public function getFollowData(User $user): array
+    {
+        $followDataCache = Redis::get("follow_data:{$user->twitter_id}");
+
+        if ($followDataCache) {
+            return json_decode($followDataCache, true);
+        }
+
+        $followData = [
+            'following_data' => $user->following_data,
+            'follower_data' => $user->follower_data,
+        ];
+
+        $cacheTime = 60;
+
+        if ($user->twitter_count_followers > 1000) {
+            $cacheTime = 600;
+        }
+
+        if ($user->twitter_count_followers > 5000) {
+            $cacheTime = 1800;
+        }
+
+        if ($user->twitter_count_followers > 10000) {
+            $cacheTime = 86400;
+        }
+
+        if ($user->twitter_count_followers > 50000) {
+            $cacheTime = 604800;
+        }
+
+        Redis::setex("follow_data:{$user->twitter_id}", $cacheTime, json_encode($followData));
+
+        return $followData;
     }
 }

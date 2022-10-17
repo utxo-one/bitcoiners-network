@@ -46,6 +46,6 @@ class TwitterAuthController extends Controller
             ], Response::HTTP_UNAUTHORIZED);
         }
 
-        return response()->redirectTo('/dashboard');
+        return response()->redirectTo('/u');
     }
 }
