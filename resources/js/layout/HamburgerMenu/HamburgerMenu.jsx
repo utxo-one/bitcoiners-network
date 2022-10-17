@@ -26,6 +26,8 @@ export default function HamburgerMenu({ variant }) {
     setShowTopup(true);
   }
 
+  const { currentUser, availableSats } = state;
+
   const classes = classNames("__hamburger-menu", `__hamburger-menu-variant-${variant}`)
 
   return (   
@@ -47,6 +49,7 @@ export default function HamburgerMenu({ variant }) {
               <div>
                 <div className='link-group'>
                   <div><NavLink to='/dashboard'>Dashboard</NavLink></div>
+                  <div><NavLink to={`/profile/${currentUser?.twitter_username}`}>View Public Profile</NavLink></div>
                 </div>
                 
                 <div className='link-group'>
@@ -56,7 +59,7 @@ export default function HamburgerMenu({ variant }) {
                 </div>
     
                 <div className='link-group'>
-                  <div><NavLink to='/campaign'>Mass Follow Campaign</NavLink></div>
+                  <div><NavLink to='/campaign'>Follow Campaign</NavLink></div>
                   <div><NavLink to='/transactions'>Transaction History</NavLink></div>
                 </div>
               </div>
@@ -64,7 +67,7 @@ export default function HamburgerMenu({ variant }) {
               <div>
                 <div className='balance'>
                   <div className='label'>Balance</div>
-                  <div>{ CompactNumberFormat(state.availableSats, { digits: 12 })}</div>
+                  <div>{ CompactNumberFormat(availableSats, { digits: 12 })}</div>
                   <SatsIcon />
                 </div>
 

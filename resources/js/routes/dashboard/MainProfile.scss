@@ -57,6 +57,10 @@
       }
     }
 
+    a.link-transactions {
+      text-decoration: none;
+    }
+
     .sats-badge {
       background-color: white;
       display: flex;
@@ -94,6 +98,44 @@
         }
       }
     }
+
+    .rate-user-tooltip {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin: 12px auto;
+      
+      display: flex;
+      right: 6px;
+      top: 34px;
+      position: absolute;
+      padding: 6px 8px;
+      color: var(--gray-90);
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      gap: 12px;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--gray-10);
+      z-index: 10;
+      animation: anim__main-profile-rate-tooltip-in 0.3s 0.3s forwards;
+      opacity: 0;
+
+      &::after {
+        content: '';
+        position: absolute;
+        border: 8px solid transparent;
+        border-bottom-color: var(--gray-10);
+        bottom: 100%;
+      }
+
+      &.invisible {
+        visibility: hidden;
+        opacity: 0;
+        transition: 0.3s;
+      }
+    }
   }
 
   main {
@@ -113,7 +155,7 @@
     }
     
     .content {
-      padding: 0 8px 20px;
+      padding: 0 8px 80px;
       margin: 0 auto;
       max-width: 400px;
 
@@ -167,6 +209,58 @@
       .badge {
         text-align: center;
         margin: 12px auto;
+      }
+
+      .not-bitcoiner-warning {
+        text-align: center;
+        margin: 20px 0;
+        font-weight: 600;
+        font-size: 15px;
+        line-height: 22px;
+        padding: 16px 12px;
+
+        &.shitcoiner {
+          border-color: var(--shitcoiner-color);
+          color: var(--shitcoiner-color);
+        }
+
+        &.nocoiner {
+          border-color: var(--gray-60);
+          color: var(--gray-30);
+        }
+
+        span[role=button] {
+          text-decoration: underline;
+          color: var(--blue-twitter);
+        }
+      }
+
+      .user-actions {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        margin: 12px auto;
+        
+        .action {
+          display: flex;
+          right: 12px;
+          padding: 6px 8px;
+          color: var(--orange);
+          border-radius: 32px;
+          font-size: 14px;
+          font-weight: 600;
+          gap: 8px;
+          align-items: center;
+          justify-content: center;
+          min-width: 120px;
+          border: 1px solid var(--orange-btc);
+    
+          > svg {
+            fill: var(--orange-btc);
+            width: 18px;
+            height: auto;
+          }
+        }
       }
     }
 
@@ -272,5 +366,34 @@
     a {
       color: var(--blue-twitter);
     }
+  }
+
+  .signup-footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    max-width: 400px;
+    padding: 12px;
+    background-color: white;
+    left: 50%;
+    transform: translateX(-50%);
+    border-top: 1px solid var(--gray-85);
+    
+    button {
+      display: block;
+      width: 100%;
+      text-transform: uppercase;
+    }
+  }
+}
+
+@keyframes anim__main-profile-rate-tooltip-in {
+  from {
+    transform: translateY(-8px);
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
   }
 }

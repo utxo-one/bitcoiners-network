@@ -27,7 +27,7 @@ export default function TopUpSuccessModal({ show, onHide }) {
             <h2>Top Up Success</h2>
 
             <Box variant='info'>
-              You can now start Mass Follow Campaigns and manually follow or unfollow users.
+              You can now start Follow Bitcoiners Campaigns and manually follow or unfollow users.
             </Box>
 
             <div className="item">

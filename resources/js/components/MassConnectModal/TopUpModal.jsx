@@ -15,6 +15,7 @@ const DEFAULT_SLIDER = 25;
 const DEFAULT_SATS = 5000;
 const SLIDER_MAX = 100;
 const MAX_SATS = 500000;
+const MIN_SATS = 10;
 
 const RANGE_TO_SATS = [
   { value: 86, add: 10000, cumulative: 360000 },
@@ -77,7 +78,7 @@ export default function TopUpModal({ show, onHide, message }) {
 
   const changeSliderValue = values => {
     setSliderValue(values);
-    setTotalSats(rangeToSats(values[0]))
+    setTotalSats(values[0] > 0 ? rangeToSats(values[0]) : MIN_SATS);
   }
 
   const onClickTopUp = async () => {
@@ -100,15 +101,15 @@ export default function TopUpModal({ show, onHide, message }) {
           <Dialog.Content className="__top-up-modal __modal __modal-center">
             <Dialog.Close asChild><div role="button" className='__modal-close-icon'>×</div></Dialog.Close>
             <Dialog.Title className="title">{ title }</Dialog.Title>
-              <AmountSlider value={sliderValue} onValueChange={changeSliderValue} min={1} max={SLIDER_MAX} />
+              <AmountSlider value={sliderValue} onValueChange={changeSliderValue} min={0} max={SLIDER_MAX} />
 
               <div className="item">
                 <div className="label user">Sats</div>
                 <input type="number" value={totalSats} onChange={changeTotalSats} />
               </div>
 
-              <Box variant='info' className='top-up-required'>
-              <strong>{ CompactNumberFormat(totalSats, { digits: 5 }) }</strong> Sats allows you to follow or unfollow <strong>{ CompactNumberFormat(Math.floor(totalSats / costPerConnection)) }</strong> users manually, or through a Mass Follow campaign.
+              <Box variant='info' className={classNames('top-up-required', { invisible: totalSats < costPerConnection })}>
+              <strong>{ CompactNumberFormat(totalSats, { digits: 5 }) }</strong> Sats allows you to follow or unfollow <strong>{ CompactNumberFormat(Math.floor(totalSats / costPerConnection)) }</strong> users manually, or through a Follow Campaign.
               </Box>
 
               <ButtonWithLightning disabled={!totalSats} loading={proceessingTopUp} onClick={onClickTopUp} className="pay-via-ln">Top Up Via Lightning</ButtonWithLightning>

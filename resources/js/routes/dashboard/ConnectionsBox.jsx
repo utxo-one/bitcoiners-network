@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Box from "../../layout/Box/Box";
 import Button from "../../layout/Button/Button";
 import ConnectionsChart from "../../layout/Connections/ConnectionsChart";
+import { CompactNumberFormat } from '../../utils/NumberFormatting';
 
 import './ConnectionsBox.scss';
 
@@ -24,11 +25,11 @@ const TYPES = {
  *  user: Object
  * }} props 
  */
-export default function ConnectionsBox({ connectionType, user, isAuthUser }) {
+export default function ConnectionsBox({ connectionType, user, isAuthUser, preventActions, ...props }) {
 
   const navigate = useNavigate();
 
-  const connectionsCount = user && user[connectionType === 'followers' ? 'follower_data' : 'following_data'];
+  const connectionsCount = user?.[`twitter_count_${connectionType}`] || 0;
 
   const onClickDiagram = userType => {
     navigate(`/${connectionType}/${isAuthUser ? '' : user.twitter_username}`, { state: { initialUserType: userType } });
@@ -37,14 +38,14 @@ export default function ConnectionsBox({ connectionType, user, isAuthUser }) {
   const connectionsPath = `${TYPES[connectionType].link}/${isAuthUser ? '' : user.twitter_username}`;
 
   return (
-    <Box className="__connections-box">
+    <Box className="__connections-box" {...props}>
       <div className="title">
         <div className="label">{ TYPES[connectionType].phrase }</div>
-        <div className="count">{ Number(connectionsCount?.total).toLocaleString('en-US') }</div>
+        <div className="count">{ CompactNumberFormat(connectionsCount, {digits: 6 }) }</div>
       </div>
       <hr />
       <ConnectionsChart connectionType={connectionType} user={user} onClickDiagram={onClickDiagram} />
-      <Button as={Link} to={connectionsPath} variant="outline">View { TYPES[connectionType].phrase }</Button>
+      <Button as={preventActions ? 'div' : Link} to={connectionsPath} variant="outline">View { TYPES[connectionType].phrase }</Button>
     </Box>
   );
 }

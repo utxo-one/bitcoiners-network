@@ -3,32 +3,37 @@ import { useImmer } from "use-immer";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 import classNames from "classnames";
+import { CompactNumberFormat } from "../../utils/NumberFormatting";
+
+import AppContext from "../../store/AppContext";
 
 import Box from "../../layout/Box/Box";
 import ConnectionsBox from "./ConnectionsBox";
 import ButtonWithLightning from "../../layout/Button/ButtonWithLightning";
+import TwitterButton from "../../layout/Button/TwitterButton";
+import Button from "../../layout/Button/Button";
+import ConnectButton from "../../layout/Button/ConnectButton";
+import HamburgerMenu from "../../layout/HamburgerMenu/HamburgerMenu";
 
 import MassConnectModal from "../../components/MassConnectModal/MassConnectModal";
 import ProfilePicture from "../../components/ProfilePicture/ProfilePicture";
 import UserTypeBadge from "../../components/UserTypeBadge/UserTypeBadge";
 import ConnectionTypeBadge from "../../components/ConnectionTypeBadge/ConnectionTypeBadge";
 import CommunityRateModal from "../connections/CommunityRateModal";
-
-import SocialNetworkIcon from "../../assets/icons/SocialNetworkIcon";
-
-import './MainProfile.scss';
 import CampaignStats from "../../components/CampaignStats/CampaignStats";
-import Button from "../../layout/Button/Button";
-import ConnectButton from "../../layout/Button/ConnectButton";
-import HamburgerMenu from "../../layout/HamburgerMenu/HamburgerMenu";
-import AppContext from "../../store/AppContext";
-import SatsIcon from "../../assets/icons/SatsIcon";
-import { CompactNumberFormat } from "../../utils/NumberFormatting";
-import BoltIcon from "../../assets/icons/BoltIcon";
 import TopUpModal from "../../components/MassConnectModal/TopUpModal";
 
-export default function MainProfile({ asDashboard }) {
+import SocialNetworkIcon from "../../assets/icons/SocialNetworkIcon";
+import SatsIcon from "../../assets/icons/SatsIcon";
+import BoltIcon from "../../assets/icons/BoltIcon";
 
+import './MainProfile.scss';
+import SignUpModal from "./SignUpModal";
+import StarIcon from "../../assets/icons/StarIcon";
+import EndorseIcon from "../../assets/icons/EndorseIcon";
+
+
+export default function MainProfile({ asDashboard }) {
   const [state, dispatch] = useContext(AppContext);
 
   const { username } = useParams();
@@ -39,6 +44,8 @@ export default function MainProfile({ asDashboard }) {
   const [handleVisible, setHandleVisible] = useState(false);
   const [showRate, setShowRate] = useState(false);
   const [showTopUp, setShowTopUp] = useState(false);
+  const [showSignup, setShowSignup] = useState(false);
+  const [initialLoad, setInitialLoad] = useState(false);
   
   const profilePicRef = useRef();
   const handleIntersector = useRef();
@@ -64,6 +71,8 @@ export default function MainProfile({ asDashboard }) {
           dispatch({ type: 'metrics/set-bitcoiners', payload: metrics.totalBitcoiners });
         }
       }
+
+      setInitialLoad(true);
     }
 
     loadUserData();
@@ -85,20 +94,36 @@ export default function MainProfile({ asDashboard }) {
   });
 
   const onClickBadge = () => {
+    if (publicUser) {
+      setShowSignup(true);
+      return;
+    }
+
     setShowRate(true);
   }
 
   const onToggleConnect = () => {
+    if (publicUser) {
+      setShowSignup(true);
+      return;
+    }
+
     setLoadedUser(draft => {
       draft.is_followed_by_authenticated_user = !draft.is_followed_by_authenticated_user;
     });
   }
 
-  // if (!userData) {
-  //   return (
-  //     <pre>[ LOADING... ]</pre>
-  //   );
-  // }
+  const onClickSignup = () => {
+    window.location.href = "/auth/twitter";
+  }
+
+  // TODO -> change conditional
+  const checkSignedUp = e => {
+    if (publicUser) {
+      e.stopPropagation();
+      setShowSignup(true);
+    }
+  }
 
   const campaignRunning = campaignData?.status === 'running';
 
@@ -128,7 +153,7 @@ export default function MainProfile({ asDashboard }) {
           <hr />
 
           <ButtonWithLightning className="mass-follow" onClick={() => setShowMassConnect(true)}>
-            <div>Mass Follow</div>
+            <div>Follow Bitcoiners</div>
           </ButtonWithLightning>
         </>
       )}
@@ -137,7 +162,7 @@ export default function MainProfile({ asDashboard }) {
 
   const renderCampaignStats = () => (
     <div className="mass-follow">
-      <h3>Mass Follow Campaign</h3>
+      <h3>Current Follow Campaign</h3>
       <Box>
         <CampaignStats campaign={campaignData} />
         <div className="view-campaign">
@@ -150,10 +175,12 @@ export default function MainProfile({ asDashboard }) {
   const renderSatsCounter = () => {
     if (availableSats > 0) {
       return (
-        <div className="sats-badge">
-          { CompactNumberFormat(availableSats, { digits: 12 })}
-          <SatsIcon />
-        </div>
+        <Link to='/transactions' className="link-transactions">
+          <div className="sats-badge">
+            { CompactNumberFormat(availableSats, { digits: 12 })}
+            <SatsIcon />
+          </div>
+        </Link>
       )
     }
 
@@ -165,6 +192,12 @@ export default function MainProfile({ asDashboard }) {
     )
   }
 
+  const renderNotBitcoiner = () => (
+    <Box className={classNames('not-bitcoiner-warning', currentUser?.type)}>
+      OOOPS! We believe that you might be a {currentUser?.type === 'shitcoiner' ? 'Shitcoiner 💩' : 'Nocoiner 😭' } <span role="button">Learn how you can to fix this</span>
+    </Box>
+  )
+
   const viewingOwnProfile = !asDashboard && currentUser && currentUser?.twitter_id === userData?.twitter_id;
 
   return (
@@ -174,8 +207,14 @@ export default function MainProfile({ asDashboard }) {
         { userData && <div className={classNames("username", { visible: !handleVisible })}>@{ userData?.twitter_username }</div> }
         { asDashboard
         ? renderSatsCounter()
-        : <UserTypeBadge userType={userData?.type} variant='outline-white' onClick={onClickBadge} />
+        : <UserTypeBadge userType={userData?.type} variant='outline-white' onClick={viewingOwnProfile ? null : onClickBadge} />
         }
+        { !viewingOwnProfile && !asDashboard && handleVisible && (
+          <div className="rate-user-tooltip" role="button" onClick={onClickBadge}>
+            <div>Rate User</div>
+            <div className="close">×</div>
+          </div>
+        )}
       </header>
       <main>
         <div className={classNames("usertype-bg", `${userData?.type}`)} />
@@ -194,8 +233,14 @@ export default function MainProfile({ asDashboard }) {
               <div className="description">{ userData?.twitter_description }</div>
             </>
             )}
-            { asDashboard && <div className='badge'><UserTypeBadge userType={userData?.type} /></div> }
-            { !asDashboard && !viewingOwnProfile && <ConnectButton availableSats={50000} connection={userData} onToggle={onToggleConnect} /> }
+
+            { asDashboard && (
+              <>
+                <div className='badge'><UserTypeBadge userType={userData?.type} /></div>
+                { userData && userData.type !== 'bitcoiner' && renderNotBitcoiner() }
+              </>
+            )}
+            { !asDashboard && !viewingOwnProfile && <ConnectButton connection={userData} onToggle={onToggleConnect} onClickCapture={checkSignedUp} /> }
           </section>
 
           { userData && (
@@ -203,12 +248,18 @@ export default function MainProfile({ asDashboard }) {
             { asDashboard && campaignRunning && renderCampaignStats() }
             { asDashboard && renderNetworkStats() }
 
-            <ConnectionsBox connectionType='following' user={userData} isAuthUser={asDashboard} />
-            <ConnectionsBox connectionType='followers' user={userData} isAuthUser={asDashboard} />
+            <ConnectionsBox connectionType='following' user={userData} isAuthUser={asDashboard} onClickCapture={checkSignedUp} preventActions={publicUser} />
+            <ConnectionsBox connectionType='followers' user={userData} isAuthUser={asDashboard} onClickCapture={checkSignedUp} preventActions={publicUser} />
           </div>
           )}
         </div>
       </main>
+
+      { publicUser && (
+      <div className="signup-footer">
+        <TwitterButton onClick={onClickSignup}>Login Via Twitter</TwitterButton>
+      </div>
+      )}
 
       { viewingOwnProfile && (
         <div className="viewing-own-profile">
@@ -219,6 +270,7 @@ export default function MainProfile({ asDashboard }) {
       <MassConnectModal show={showMassConnect} onHide={() => setShowMassConnect(false)} />
       <CommunityRateModal show={showRate} onHide={() => setShowRate(false)} user={userData} />
       <TopUpModal show={showTopUp} onHide={() => setShowTopUp(false)} />
+      <SignUpModal show={showSignup} onHide={() => setShowSignup(false)} />
     </div>
   );
 }

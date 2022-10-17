@@ -17,6 +17,8 @@ export default function AppAuth() {
         const { data: balance } = await axios.get('/frontend/current-user/available-balance');
         const { data: rates } = await axios.get('/frontend/rates');
 
+        currentUser.type = 'shitcoiner';
+
         dispatch({ type: 'balance/set', payload: balance });
         dispatch({ type: 'currentUser/set', payload: currentUser });
         dispatch({ type: 'rates/set', payload: rates });

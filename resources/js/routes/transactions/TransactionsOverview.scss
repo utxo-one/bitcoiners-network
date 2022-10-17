@@ -100,17 +100,18 @@
     position: fixed;
     bottom: 0;
     width: 100%;
-    max-width: 400px;
     padding: 12px;
     background-color: white;
     left: 50%;
     transform: translateX(-50%);
+    border-top: 1px solid var(--gray-85);
     
     button {
+      max-width: 400px;
+      margin: 0 auto;
       display: block;
       width: 100%;
       text-transform: uppercase;
-      background-color: var(--red);
     }
   }
 }
