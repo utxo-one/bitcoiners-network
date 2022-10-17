@@ -211,7 +211,7 @@ export default function MainProfile({ asDashboard }) {
         }
         { !viewingOwnProfile && !asDashboard && handleVisible && (
           <div className="rate-user-tooltip" role="button" onClick={onClickBadge}>
-            <div>Rate User</div>
+            <div>Vote</div>
             <div className="close">×</div>
           </div>
         )}

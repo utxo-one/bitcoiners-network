@@ -52,7 +52,7 @@ export default function UserInfoPanel({ show, onHide, user, onClickBadge, onClic
 
             {!viewingOwnProfile && (
               <div className="rate-user-tooltip" role="button" onClick={onClickBadge}>
-                <div>Rate User</div>
+                <div>Vote</div>
                 <div className="close">×</div>
               </div>
             )}
