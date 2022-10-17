@@ -1,9 +1,8 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import classNames from "classnames";
+import { useImmer } from "use-immer";
 import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import EndorseIcon from "../../assets/icons/EndorseIcon";
-import StarIcon from "../../assets/icons/StarIcon";
 import Box from "../../layout/Box/Box";
 import ConnectButton from "../../layout/Button/ConnectButton";
 import ConnectionsChart from "../../layout/Connections/ConnectionsChart";
@@ -24,11 +23,28 @@ export default function UserInfoPanel({ show, onHide, user, onClickBadge, onClic
   const [state] = useContext(AppContext);
 
   const [connectionType, setConnectionType] = useState('followers');
+  const [userWithFollowData, setUserWithFollowData] = useImmer(null);
   const navigate = useNavigate();
 
   const { currentUser } = state;
 
   const viewingOwnProfile = currentUser && currentUser?.twitter_id === user?.twitter_id;
+
+  // Refetch user data when panel is shown:
+  useEffect(() => {
+    const loadFollowData = async () => {
+      const { data } = await axios.get(`/frontend/user/${user.twitter_username}/follow-data`);
+
+      setUserWithFollowData(draft => {
+        draft.following_data = data.following_data;
+        draft.follower_data = data.follower_data;
+      });
+    }
+    
+    setUserWithFollowData(user);
+
+    show && loadFollowData();
+  }, [show]);
 
   // For better UX, reset connections back to 'followers' when overlay is reopened:
   useEffect(() => {
@@ -64,29 +80,19 @@ export default function UserInfoPanel({ show, onHide, user, onClickBadge, onClic
             <Link to={`/profile/${user?.twitter_username}`} className="handle">@{ user?.twitter_username }</Link>
             <div className="description">{ user?.twitter_description }</div>
 
-            {/* { !viewingOwnProfile && (
-              <div className="user-actions">
-                <div className="action" role="button" onClick={onClickBadge}>
-                  <StarIcon />
-                  Rate User
+            { userWithFollowData?.following_data && (
+              <>
+                <div className='connections-tab'>
+                  { Object.entries(CONNECTION_TYPES).map(([type, phrase]) => (
+                    <div key={type} role="button" className={classNames('tab', { selected: type === connectionType })} onClick={() => setConnectionType(type)}>
+                      { phrase }
+                    </div>
+                  ))}
                 </div>
-
-                <div className="action" role="button">
-                  <EndorseIcon />
-                  Endorse
-                </div>
-              </div>
-            )} */}
-
-            <div className='connections-tab'>
-              { Object.entries(CONNECTION_TYPES).map(([type, phrase]) => (
-                <div key={type} role="button" className={classNames('tab', { selected: type === connectionType })} onClick={() => setConnectionType(type)}>
-                  { phrase }
-                </div>
-              ))}
-            </div>
-
-            <ConnectionsChart connectionType={connectionType} user={user} showCount={false} onClickDiagram={userType => redirectOnConnectionClick(userType)} />
+    
+                <ConnectionsChart connectionType={connectionType} user={userWithFollowData} showCount={false} onClickDiagram={userType => redirectOnConnectionClick(userType)} />
+              </>
+            )}
 
             <div className="connection-totals">
               <div>
@@ -98,7 +104,7 @@ export default function UserInfoPanel({ show, onHide, user, onClickBadge, onClic
                 <div className="label">Followers</div>
               </div>
             </div>
-            
+        
             { viewingOwnProfile
             ? <Box className="viewing-own-profile">You are viewing your own Profile</Box>
             : <ConnectButton connection={user} onToggle={onToggleFollow} />

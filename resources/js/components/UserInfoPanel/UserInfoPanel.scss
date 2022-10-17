@@ -24,8 +24,8 @@
       margin: 12px auto;
       
       display: flex;
-      right: 24px;
-      top: -40px;
+      right: 40px;
+      top: -36px;
       position: absolute;
       padding: 6px 8px;
       color: var(--gray-90);
@@ -48,34 +48,6 @@
         top: 100%;
       }
     }
-
-    // .user-actions {
-    //   display: flex;
-    //   gap: 12px;
-    //   justify-content: center;
-    //   margin: 12px auto;
-      
-    //   .action {
-    //     display: flex;
-    //     right: 12px;
-    //     padding: 6px 8px;
-    //     color: var(--orange);
-    //     border-radius: 32px;
-    //     font-size: 14px;
-    //     font-weight: 600;
-    //     gap: 8px;
-    //     align-items: center;
-    //     justify-content: center;
-    //     min-width: 120px;
-    //     border: 1px solid var(--orange-btc);
-  
-    //     > svg {
-    //       fill: var(--orange-btc);
-    //       width: 18px;
-    //       height: auto;
-    //     }
-    //   }
-    // }
 
     .__user-type-badge {
       position: absolute;

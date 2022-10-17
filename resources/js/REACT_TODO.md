@@ -7,6 +7,8 @@
 - Rename Mass Follow -> "Follow Bitcoiners"
 - Slider allows min 1 user / 10 sats
 - Connection removed from 'following' when clicking follow/unfollow
+- Add extra follow_data call to profile page and user panel
+- "Vote" (rate user) tooltip
 
 ### TODO
 

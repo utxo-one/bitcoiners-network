@@ -106,7 +106,7 @@
       margin: 12px auto;
       
       display: flex;
-      right: 6px;
+      right: 22px;
       top: 34px;
       position: absolute;
       padding: 6px 8px;
@@ -372,7 +372,6 @@
     position: fixed;
     bottom: 0;
     width: 100%;
-    max-width: 400px;
     padding: 12px;
     background-color: white;
     left: 50%;
@@ -380,8 +379,11 @@
     border-top: 1px solid var(--gray-85);
     
     button {
+      min-width: unset;
+      width: 400px;
+      max-width: 100%;
+      margin: 0 auto;
       display: block;
-      width: 100%;
       text-transform: uppercase;
     }
   }

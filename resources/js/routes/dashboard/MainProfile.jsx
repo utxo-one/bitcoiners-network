@@ -29,9 +29,6 @@ import BoltIcon from "../../assets/icons/BoltIcon";
 
 import './MainProfile.scss';
 import SignUpModal from "./SignUpModal";
-import StarIcon from "../../assets/icons/StarIcon";
-import EndorseIcon from "../../assets/icons/EndorseIcon";
-
 
 export default function MainProfile({ asDashboard }) {
   const [state, dispatch] = useContext(AppContext);
@@ -50,7 +47,7 @@ export default function MainProfile({ asDashboard }) {
   const profilePicRef = useRef();
   const handleIntersector = useRef();
   
-  const { currentUser, metrics, availableSats, publicUser } = state;
+  const { currentUser, metrics, availableSats, publicUser, requestsLoaded } = state;
 
   const userData = asDashboard ? currentUser : loadedUser;
   
@@ -77,6 +74,29 @@ export default function MainProfile({ asDashboard }) {
 
     loadUserData();
   }, []);
+
+  useEffect(() => {
+    const loadFollowData = async () => {
+      if (!userData.following_data) {
+        const { data } = await axios.get(`/frontend/user/${userData.twitter_username}/follow-data`);
+        
+        if (asDashboard) {
+          dispatch({ type: 'currentUser/set-follow-data', payload: data });
+        }
+        else {
+          setLoadedUser(draft => {
+            draft.following_data = data.following_data;
+            draft.follower_data = data.follower_data;
+          });
+        }
+      }
+    }
+    
+    if (requestsLoaded && initialLoad) {
+    loadFollowData();
+  }
+
+  }, [requestsLoaded, initialLoad])
 
   useEffect(() => {
     const element = profilePicRef.current;
@@ -246,10 +266,14 @@ export default function MainProfile({ asDashboard }) {
           { userData && (
             <div className="panels">
             { asDashboard && campaignRunning && renderCampaignStats() }
-            { asDashboard && renderNetworkStats() }
+            { asDashboard && userData.follower_data && renderNetworkStats() }
 
-            <ConnectionsBox connectionType='following' user={userData} isAuthUser={asDashboard} onClickCapture={checkSignedUp} preventActions={publicUser} />
-            <ConnectionsBox connectionType='followers' user={userData} isAuthUser={asDashboard} onClickCapture={checkSignedUp} preventActions={publicUser} />
+            { userData.follower_data && (
+              <>
+                <ConnectionsBox connectionType='following' user={userData} isAuthUser={asDashboard} onClickCapture={checkSignedUp} preventActions={publicUser} />
+                <ConnectionsBox connectionType='followers' user={userData} isAuthUser={asDashboard} onClickCapture={checkSignedUp} preventActions={publicUser} />
+              </>
+            )}
           </div>
           )}
         </div>
