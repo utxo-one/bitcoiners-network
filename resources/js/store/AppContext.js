@@ -8,6 +8,7 @@ export const APP_INITIAL_STATE = {
   rates           : null,
   metrics         : {},
   publicUser      : false,
+  requestsLoaded  : false,
 }
 
 export const appReducer = (draft, action) => {
@@ -24,6 +25,11 @@ export const appReducer = (draft, action) => {
       draft.currentUser = action.payload;
       break;
 
+    case 'currentUser/set-follow-data':
+      draft.currentUser.follower_data = action.payload.follower_data;
+      draft.currentUser.following_data = action.payload.following_data;
+      break;
+
     case 'rates/set':
       draft.rates = action.payload;
       break;
@@ -34,6 +40,9 @@ export const appReducer = (draft, action) => {
 
     case 'publicUser/set':
       draft.publicUser = action.payload;
+
+    case 'requestsLoaded/set':
+      draft.requestsLoaded = action.payload;
   }
 }
 

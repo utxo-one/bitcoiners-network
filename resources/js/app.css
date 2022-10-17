@@ -10,3 +10,11 @@ body {
   margin: 0;
   font-family: 'Inter', sans-serif;
 }
+
+button {
+  cursor: pointer;
+}
+
+*[role=button] {
+  cursor: pointer;
+}

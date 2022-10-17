@@ -64,7 +64,9 @@ export default function MassConnectModal({ show, onHide, fromCampaign, onSuccess
 
   const changeSliderValue = values => {
     setSliderValue(values);
-    setTotalUsers(Math.round(totalAvailable * values[0] / 100));
+    // if 0 is chosen on the slider, round to 1 user:
+    const users = Math.round(totalAvailable * values[0] / 100) || 1;
+    setTotalUsers(users);
   }
 
   const topupLightning = async () => {
@@ -111,8 +113,8 @@ export default function MassConnectModal({ show, onHide, fromCampaign, onSuccess
           <Dialog.Overlay className="__dialog-overlay">
             <Dialog.Content className="__mass-connect-modal __modal __modal-center">
               <Dialog.Close asChild><div role="button" className='__modal-close-icon'>×</div></Dialog.Close>
-              <Dialog.Title className="title">Mass Follow</Dialog.Title>
-                <AmountSlider value={sliderValue} onValueChange={changeSliderValue} min={1} max={SLIDER_MAX} />
+              <Dialog.Title className="title">Follow Bitcoiners</Dialog.Title>
+                <AmountSlider value={sliderValue} onValueChange={changeSliderValue} min={0} max={SLIDER_MAX} />
                 <div className="item">
                   <div className="label user">Users</div>
                   <input type="number" value={totalUsers} onChange={changeTotalUsers} />
