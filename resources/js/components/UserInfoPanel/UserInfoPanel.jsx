@@ -10,6 +10,7 @@ import AppContext from "../../store/AppContext";
 import { CompactNumberFormat } from "../../utils/NumberFormatting";
 import ProfilePicture from "../ProfilePicture/ProfilePicture";
 import UserTypeBadge from "../UserTypeBadge/UserTypeBadge";
+import Spinner from "../../layout/Spinner/Spinner";
 
 import './UserInfoPanel.scss';
 
@@ -80,19 +81,18 @@ export default function UserInfoPanel({ show, onHide, user, onClickBadge, onClic
             <Link to={`/profile/${user?.twitter_username}`} className="handle">@{ user?.twitter_username }</Link>
             <div className="description">{ user?.twitter_description }</div>
 
-            { userWithFollowData?.following_data && (
-              <>
-                <div className='connections-tab'>
-                  { Object.entries(CONNECTION_TYPES).map(([type, phrase]) => (
-                    <div key={type} role="button" className={classNames('tab', { selected: type === connectionType })} onClick={() => setConnectionType(type)}>
-                      { phrase }
-                    </div>
-                  ))}
+            <div className='connections-tab'>
+              { Object.entries(CONNECTION_TYPES).map(([type, phrase]) => (
+                <div key={type} role="button" className={classNames('tab', { selected: type === connectionType })} onClick={() => setConnectionType(type)}>
+                  { phrase }
                 </div>
-    
-                <ConnectionsChart connectionType={connectionType} user={userWithFollowData} showCount={false} onClickDiagram={userType => redirectOnConnectionClick(userType)} />
-              </>
-            )}
+              ))}
+            </div>
+  
+            <div className='follow-data'>
+              <div className={classNames('loading', { hidden: userWithFollowData.following_data })}><Spinner /></div>
+              <ConnectionsChart connectionType={connectionType} user={userWithFollowData} showCount={false} onClickDiagram={userType => redirectOnConnectionClick(userType)} />
+            </div>
 
             <div className="connection-totals">
               <div>

@@ -12,6 +12,11 @@
   text-decoration: none;
   position: relative;
 
+  &:active, &:focus {
+    outline: none;
+    box-shadow: 0 0 2px 2px rgba(#1c7ed9, 0.1);
+  }
+
   &:disabled {
     opacity: 0.8;
   }

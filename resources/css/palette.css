@@ -1,7 +1,6 @@
-// This file is included in React's main entry (app.jsx)
-// Any new color can be added to this file.
+/* Any new color can be added to this file. */
 
-:root {
+body {
   --orange-dark  : #F7421A;
   --orange       : #F56B06;
   --orange-btc   : #F7931A;
@@ -9,6 +8,7 @@
   --green        : #20BF55;
   --dark-green   : #315504;
   --dark-purple  : #2F2F39;
+  --light-purple : #9696B4;
   --poop         : #9F4D00;
   --blue-twitter : #1c7ed9;
   --gray-10      : #3A3A3A;

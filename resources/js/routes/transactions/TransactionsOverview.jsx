@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useImmer } from "use-immer";
 import TopUpModal from "../../components/MassConnectModal/TopUpModal";
@@ -37,6 +37,10 @@ export default function TransactionsOverview(props) {
   const [loadingDebits, setLoadingDebits] = useState(false);
   const [showTopUpSuccess, setShowTopUpSuccess] = useState(false);
 
+  const verifiedBitcoiner = useMemo(() => {
+    return searchParams.get('verified_bitcoiner') === 'true';
+  }, [searchParams]);
+
   const { availableSats } = state;
 
   useEffect(() => {
@@ -44,7 +48,7 @@ export default function TransactionsOverview(props) {
     // Keep in session storage (IE: while browser is open) the previous top up times that have been shown already,
     // to prevent the user from pressing back or going to a route with time and seing the modal:
     const topUpTime = searchParams.get('top_up_time');
-    const cookie = Cookies.get("__bn__top_up_times")
+    const cookie = Cookies.get("__bn__top_up_times");
     const shownTimes = cookie?.split(',') || [];
 
     if (topUpTime && !shownTimes.includes(topUpTime)) {
@@ -184,7 +188,7 @@ export default function TransactionsOverview(props) {
       </header>
       { renderContent() }
       <TopUpModal show={showTopUp} onHide={() => setShowTopUp(false)} />
-      <TopUpSuccessModal show={showTopUpSuccess} onHide={() => setShowTopUpSuccess(false)} />
+      <TopUpSuccessModal show={showTopUpSuccess} onHide={() => setShowTopUpSuccess(false)} verifiedBitcoiner={verifiedBitcoiner} />
     </div>
   );
 }

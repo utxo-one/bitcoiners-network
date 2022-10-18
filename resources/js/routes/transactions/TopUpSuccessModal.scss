@@ -12,6 +12,21 @@
     margin: 0 0 20px;
   }
 
+  .verified-bitcoiner {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--orange);
+    justify-content: center;
+    border-radius: 8px;
+    font-weight: 600;
+
+    > svg {
+      width: 24px;
+      height: auto;
+    }
+  }
+
   button {
     margin: 20px auto 0;
     display: block;

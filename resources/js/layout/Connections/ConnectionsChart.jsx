@@ -26,10 +26,10 @@ export default function ConnectionsChart({ connectionType, user, showCount = tru
   const connectionData = connectionType === 'following' ? 'following_data' : 'follower_data';
   const userTypes = Object.keys(USER_TYPES);
 
-  const percentages = user && calculatePercentages(user?.[connectionData], userTypes);
+  const percentages = user?.[connectionData] && calculatePercentages(user?.[connectionData], userTypes);
 
   const connectionsCount = user?.[`twitter_count_${connectionType}`] || 0;
-  const analyzedConnections = user?.[connectionType === 'followers' ? 'follower_data' : 'following_data'].total || 0;
+  const analyzedConnections = user?.[connectionType === 'followers' ? 'follower_data' : 'following_data']?.total || 0;
 
   const renderAnalyzedConnections = () => {
     const percentage = analyzedConnections * 100 / connectionsCount;
@@ -48,12 +48,12 @@ export default function ConnectionsChart({ connectionType, user, showCount = tru
         { userTypes.map(type => (
           <div key={type} className={classNames("type", type)} onClick={() => onClickDiagram(USER_TYPES[type].singular)} role='button'>
             <div className="chart">
-              <RadialBar className={type} percent={user?.[connectionData].total === 0 ? 0 : user?.[connectionData][type] / user?.[connectionData].total * 100} />
+              <RadialBar className={type} percent={user?.[connectionData]?.total === 0 ? 0 : user?.[connectionData]?.[type] / user?.[connectionData]?.total * 100} />
               <div className="chart-percent">
-                { percentages[type] }%
+                { percentages?.[type] }%
               </div>
             </div>
-            { showCount && <div className="count">{ CompactNumberFormat(user?.[connectionData][type]) }</div> }
+            { showCount && <div className="count">{ CompactNumberFormat(user?.[connectionData]?.[type]) }</div> }
             <div className="user-type">{ USER_TYPES[type].phrase }</div>
           </div>
         ))}

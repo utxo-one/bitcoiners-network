@@ -156,6 +156,29 @@
       font-size: 13px;
       font-weight: 600;
     }
+
+    .follow-data {
+      position: relative;
+
+      .loading {
+        position: absolute;
+        top: 0;
+        left: 0;
+        background-color: white;
+        right: 0;
+        bottom: 0;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &.hidden {
+          transition: 0.3s opacity;
+          opacity: 0;
+          user-select: none;
+        }
+      }
+    }
   }
 }
 
