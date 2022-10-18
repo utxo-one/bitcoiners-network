@@ -49,12 +49,14 @@ class UserService
 
         $bioContainsShitcoinKeywords = $bioWords
             ->contains(function ($word) use ($shitcoinerKeywords) {
-                return $shitcoinerKeywords->contains($word);
+                return $shitcoinerKeywords->contains(
+                    str_replace(['.', ','], '', $word));
             });
 
         $bioContainsBitcoinKeywords = $bioWords
             ->contains(function ($word) use ($bitcoinerKeywords) {
-                return $bitcoinerKeywords->contains($word);
+                return $bitcoinerKeywords->contains(
+                    str_replace(['.', ','], '', $word));
             });
 
         $nameContainsShitcoins = collect(config('classifier.shitcoinerNames'))
