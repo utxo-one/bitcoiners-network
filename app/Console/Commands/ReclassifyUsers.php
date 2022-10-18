@@ -35,7 +35,7 @@ class ReclassifyUsers extends Command
     {
         $userService = new UserService();
 
-        User::chunk(10000, function ($users) use ($userService) {
+        User::chunk(2000, function ($users) use ($userService) {
             foreach ($users as $user) {
 
                 $newType = $userService->classifyUser(user: $user);
