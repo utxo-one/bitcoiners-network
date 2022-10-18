@@ -76,15 +76,5 @@ class ReclassifyUsers extends Command
                 $user->save();
             }
         }
-
-        $this->alert('total reclassifications: ' . (5000 - User::query()->whereIn('twitter_id', $userIds)->where('type', UserType::NOCOINER)->get()->count()));
-        //Log::alert('total reclassifications: ' . (5000 - User::query()->whereIn('twitter_id', $userIds)->where('type', UserType::NOCOINER)->get()->count()));
-
-        $this->alert('new bitcoiners ' . (User::query()->whereIn('twitter_id', $userIds)->where('type', UserType::BITCOINER)->get()->count()));
-        Log::alert('new bitcoiners ' . (User::query()->whereIn('twitter_id', $userIds)->where('type', UserType::BITCOINER)->get()->count()));
-
-        $this->alert('new shitcoiners ' . (User::query()->whereIn('twitter_id', $userIds)->where('type', UserType::SHITCOINER)->get()->count()));
-        Log::alert('new shitcoiners ' . (User::query()->whereIn('twitter_id', $userIds)->where('type', UserType::SHITCOINER)->get()->count()));
-
     }
 }
