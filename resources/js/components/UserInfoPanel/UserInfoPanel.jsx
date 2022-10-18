@@ -90,7 +90,7 @@ export default function UserInfoPanel({ show, onHide, user, onClickBadge, onClic
             </div>
   
             <div className='follow-data'>
-              <div className={classNames('loading', { hidden: userWithFollowData.following_data })}><Spinner /></div>
+              <div className={classNames('loading', { hidden: userWithFollowData?.following_data })}><Spinner /></div>
               <ConnectionsChart connectionType={connectionType} user={userWithFollowData} showCount={false} onClickDiagram={userType => redirectOnConnectionClick(userType)} />
             </div>
 
