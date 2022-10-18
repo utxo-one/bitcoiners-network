@@ -63,11 +63,12 @@
         <p>We’ve built a network of tens of thousands of bitcoiners and... the rest of users in order to let you quickly filter and purify your feed.</p>
       </div>
       <div class="image">
-        <picture>
+        <!-- somehow the asset (webp) might not be getting searched because of srcset, and defaults to http -->
+        <!-- <picture>
           <source srcset="{{ asset('images/screenshot_user_types.webp') }}" type="image/webp">
-          <source srcset="{{ asset('images/screenshot_user_types.png') }}" type="image/png"> 
+          <source srcset="{{ asset('images/screenshot_user_types.png') }}" type="image/png">  -->
           <img  src="{{ asset('images/screenshot_user_types.png') }}" alt="Following User Types">
-        </picture>
+        <!-- </picture> -->
       </div>
     </div>
   </section>
