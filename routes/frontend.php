@@ -20,6 +20,7 @@ use App\Http\Controllers\Frontend\User\EndorsementController;
 use App\Http\Controllers\Frontend\User\FollowDataController;
 use App\Http\Controllers\Frontend\User\RefreshUserController;
 use App\Http\Controllers\Frontend\User\UserController;
+use App\Http\Controllers\Web\Auth\TwitterAuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -46,6 +47,7 @@ Route::get('/metrics/total-shitcoiners', [MetricController::class, 'totalShitcoi
 Route::get('/metrics/total-nocoiners', [MetricController::class, 'totalNocoiners'])->name('metrics.total-nocoiners');
 Route::get('/user/{username}', [UserController::class, 'show'])->name('user.show');
 Route::get('/user/{username}/follow-data', [FollowDataController::class, 'show'])->name('user.follow-data.show');
+Route::get('/logout', [TwitterAuthController::class, 'logout'])->name('logout');
 
 Route::middleware('auth')->group(function () {
     Route::get('/follow/available/{userType}', [AvailableFollowsController::class, 'index'])->name('follow.available.type');
@@ -81,6 +83,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/classify/{username}/{type}', [ClassificationVoteController::class, 'store'])->name('user.classify.store');
     Route::delete('/classify/{username}', [ClassificationVoteController::class, 'destroy'])->name('user.classify.destroy');
     Route::get('/classification/{username}', [ClassificationVoteController::class, 'index'])->name('user.classify.index');
+    Route::post('/close-classification-tip', [ClassificationVoteController::class, 'closeVoteTooltip'])->name('user.classify.close-tip');
 
     Route::post('/action/{username}/follow', [FollowActionController::class, 'follow'])->name('user.action.follow');
     Route::delete('/action/{username}/unfollow', [FollowActionController::class, 'unfollow'])->name('user.action.unfollow');

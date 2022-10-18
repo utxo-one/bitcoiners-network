@@ -9,6 +9,9 @@ export default defineConfig({
                 'resources/css/app.css',
                 'resources/js/app.js',
                 'resources/js/app.jsx',
+                'resources/css/landing_page.scss',
+                'resources/css/palette.css',
+                'resources/js/landing_page.js'
             ],
             refresh: [
                 ...refreshPaths,
