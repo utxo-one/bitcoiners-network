@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend\Follow\Scopes;
 
 use App\Enums\UserType;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -21,7 +22,7 @@ class AvailableFollowsController extends Controller
      */
     public function index(UserType $userType): JsonResponse
     {
-        $availableFollows = auth()->user()->getAvailableFollows($userType);
+        $availableFollows = User::where('type', UserType::BITCOINER);
 
         return response()->json([
             'availableFollows' => $availableFollows->paginate(perPage: 20),
