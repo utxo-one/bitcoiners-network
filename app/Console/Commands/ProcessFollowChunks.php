@@ -38,7 +38,18 @@ class ProcessFollowChunks extends Command
 
         if ($followChunk) {
             $this->info("Processing follow chunk {$followChunk->id} for user {$followChunk->user->twitter_username}");
-
+            try {
+                $userService->processFollowChunk($followChunk);
+            } catch (\Exception $e) {
+                // If the error message contains Sorry, you are not authorized, then delete all follow chunks for this user
+                if (strpos($e->getMessage(), 'Sorry, you are not authorized') !== false) {
+                    $this->info('Deleting all follow chunks for this user');
+                    $deleted = FollowChunk::where('user_id', $followChunk->user_id)->delete();
+                    // display the count of deleted follow requests
+                    $this->info("Deleted {$deleted} follow chunks");
+                }
+                $this->error($e->getMessage());
+            }
             $follows = $userService->processFollowChunk($followChunk);
             $this->info("Processed {$follows->count()} follows");
             $this->info('Done');
