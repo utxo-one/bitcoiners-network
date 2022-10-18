@@ -4,7 +4,6 @@ import { enableMapSet } from "immer"
 import AppAuth from './AppAuth';
 
 import './app.css';
-import './palette.scss';
 import './layout/Modal/Modal.scss';
 import './layout/DropdownMenu/DropdownMenu.scss';
 

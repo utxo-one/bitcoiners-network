@@ -1,0 +1,83 @@
+.__not-bitcoiner-modal {
+
+  color: var(--gray-30);
+  line-height: 24px;
+
+  h3 {
+    font-size: 20px;
+    font-weight: 600;
+    text-align: center;
+    text-transform: uppercase;
+
+    &.shitcoiner {
+      color: var(--shitcoiner-color);
+    }
+  }
+
+  input.url {
+    display: block;
+    margin: 20px 0 0;
+    border: 1px solid var(--gray-80);
+    background-color: var(--gray-90);
+    border-radius: 4px;
+    font-size: 14px;
+    color: var(--gray-30);
+    flex: 1;
+    width: 100%;
+    padding: 12px;
+    outline: none;
+    font-family: inherit;
+    
+    &:active, &:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(28, 126, 217, 0.1);
+    } 
+  }
+
+  button.copy-link {
+    text-transform: uppercase;
+    color: var(--blue-twitter);
+    margin: 0 auto;
+    font-size: 19px;
+    display: block;
+  }
+
+  .or-hr {
+    overflow: hidden;
+    text-align: center;
+    color: var(--gray-40);
+    margin: 16px 0;
+
+    &:before, &:after {
+      background-color: var(--gray-80);
+      content: "";
+      display: inline-block;
+      height: 1px;
+      position: relative;
+      vertical-align: middle;
+      width: 50%;
+    }
+    
+    &:before {
+      right: 0.5em;
+      margin-left: -50%;
+    }
+    
+    &:after {
+      left: 0.5em;
+      margin-right: -50%;
+    }
+  }
+
+  .__button-with-lightning {
+    margin: 20px auto 0;
+    width: 100%;
+  }
+  
+  button.continue {
+    margin: 0 auto;
+    text-transform: uppercase;
+    font-size: 14px;
+    display: block;
+  }
+}

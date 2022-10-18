@@ -1,21 +1,18 @@
 ### LAST PR
-- Rate user design
-- Public user route / clicks will show Sign Up Screen
-- Public user Sign Up Modal
-- Change PHP routes -> when not logged in, redirect to landing page (/), rename all react flow
-- Add pointer to all actions on desktop
-- Rename Mass Follow -> "Follow Bitcoiners"
-- Slider allows min 1 user / 10 sats
-- Connection removed from 'following' when clicking follow/unfollow
-- Add extra follow_data call to profile page and user panel
-- "Vote" (rate user) tooltip
+- favicon
+- Spinner on connections
+- Shitcoiner / nocoiner status + alert modal
+- Top Up success modal shows verified bitcoiner
+- Twitter verify page
+- Asset pipeline from Vita for LP
+- Landing Page (vanilla JS) [WIP]
 
 ### TODO
 
+- description + og:image
 - View public profile + login page
 - Follow -> on mass connect page should update local instance
 - CONTEXT -> change current user following/followers on the state
-- Add "you're a shitcoiner"
 - Social icons links
 - logout route
 

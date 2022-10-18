@@ -29,6 +29,7 @@ export default function ConnectionsBox({ connectionType, user, isAuthUser, preve
 
   const navigate = useNavigate();
 
+  const analyzedCount = user?.[connectionType === 'followers' ? 'follower_data' : 'following_data'].total || 0;
   const connectionsCount = user?.[`twitter_count_${connectionType}`] || 0;
 
   const onClickDiagram = userType => {
@@ -41,7 +42,9 @@ export default function ConnectionsBox({ connectionType, user, isAuthUser, preve
     <Box className="__connections-box" {...props}>
       <div className="title">
         <div className="label">{ TYPES[connectionType].phrase }</div>
-        <div className="count">{ CompactNumberFormat(connectionsCount, {digits: 6 }) }</div>
+        <div className="count">
+          <span className="analyzed">{ CompactNumberFormat(analyzedCount, { digits: 5 }) }</span> / { CompactNumberFormat(connectionsCount, { digits: 5 }) }
+        </div>
       </div>
       <hr />
       <ConnectionsChart connectionType={connectionType} user={user} onClickDiagram={onClickDiagram} />

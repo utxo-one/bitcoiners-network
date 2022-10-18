@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('landing-page');
 })->name('landing_page');
 
 Route::get('/auth/twitter', [TwitterAuthController::class, 'login'])->name('twitter.login');

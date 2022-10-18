@@ -24,7 +24,7 @@ class StoreDepositRequest extends FormRequest
     public function rules()
     {
         return [
-            'amount' => 'required|integer|min:100|max:500000',
+            'amount' => 'required|integer|min:10|max:500000',
             'redirectUrl' => 'required|string',
         ];
     }

@@ -18,15 +18,16 @@
       border: 1px solid var(--gray-80);
       background-color: var(--gray-90);
       border-radius: 4px;
-      font-size: 20px;
+      font-size: 18px;
       font-weight: 600;
       text-align: right;
-      color: var(--gray-20);
+      color: var(--gray-30);
       flex: 1;
       width: 100%;
-      padding: 8px;
+      padding: 12px;
       outline: none;
       font-variant-numeric: tabular-nums;
+      font-family: inherit;
       
       &:active, &:focus {
         outline: none;

@@ -29,6 +29,7 @@ import BoltIcon from "../../assets/icons/BoltIcon";
 
 import './MainProfile.scss';
 import SignUpModal from "./SignUpModal";
+import NotBitcoinerModal from "./NotBitcoinerModal";
 
 export default function MainProfile({ asDashboard }) {
   const [state, dispatch] = useContext(AppContext);
@@ -43,6 +44,7 @@ export default function MainProfile({ asDashboard }) {
   const [showTopUp, setShowTopUp] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
   const [initialLoad, setInitialLoad] = useState(false);
+  const [showNotBitcoiner, setShowNotBitcoiner] = useState(false);
   
   const profilePicRef = useRef();
   const handleIntersector = useRef();
@@ -214,7 +216,7 @@ export default function MainProfile({ asDashboard }) {
 
   const renderNotBitcoiner = () => (
     <Box className={classNames('not-bitcoiner-warning', currentUser?.type)}>
-      OOOPS! We believe that you might be a {currentUser?.type === 'shitcoiner' ? 'Shitcoiner 💩' : 'Nocoiner 😭' } <span role="button">Learn how you can to fix this</span>
+      OOOPS! We believe that you might be a {currentUser?.type === 'shitcoiner' ? 'Shitcoiner 💩' : 'Nocoiner 🤡' } <span role="button" onClick={() => setShowNotBitcoiner(true)}>Learn how you can to fix this</span>
     </Box>
   )
 
@@ -295,6 +297,7 @@ export default function MainProfile({ asDashboard }) {
       <CommunityRateModal show={showRate} onHide={() => setShowRate(false)} user={userData} />
       <TopUpModal show={showTopUp} onHide={() => setShowTopUp(false)} />
       <SignUpModal show={showSignup} onHide={() => setShowSignup(false)} />
+      <NotBitcoinerModal user={userData} show={showNotBitcoiner} onHide={() => setShowNotBitcoiner(false)} />
     </div>
   );
 }
