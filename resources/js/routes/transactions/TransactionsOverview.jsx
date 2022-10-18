@@ -41,8 +41,6 @@ export default function TransactionsOverview(props) {
     return searchParams.get('verified_bitcoiner') === 'true';
   }, [searchParams]);
 
-  console.log('verifiedBitcoiner:', verifiedBitcoiner)
-
   const { availableSats } = state;
 
   useEffect(() => {
