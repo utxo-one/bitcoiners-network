@@ -6,7 +6,7 @@ import ButtonWithLightning from "./ButtonWithLightning";
 
 import './Button.scss';
 
-export default function ConnectButton({ connection, availableSats, onToggle, className, ...props }) {
+export default function ConnectButton({ connection, onToggle, className, ...props }) {
 
   const [state, dispatch] = useContext(AppContext);
 
@@ -15,7 +15,7 @@ export default function ConnectButton({ connection, availableSats, onToggle, cla
 
   const isFollowing = connection?.is_followed_by_authenticated_user;
 
-  const { rates } = state;
+  const { rates, availableSats } = state;
 
   const connectAction = isFollowing ? 'unfollow' : 'follow';
   const connectionPrice = rates?.pricing[connectAction];
@@ -40,7 +40,7 @@ export default function ConnectButton({ connection, availableSats, onToggle, cla
   
   return (
     <>
-      <ButtonWithLightning onClick={onClickButton} loading={loading} className={classes}>
+      <ButtonWithLightning onClick={onClickButton} loading={loading} className={classes} {...props}>
         { isFollowing ? 'Unfollow' : 'Follow' }
       </ButtonWithLightning>
       <TopUpModal show={showTopUp} onHide={() => setShowTopUp(false)} message='top-up-required' />

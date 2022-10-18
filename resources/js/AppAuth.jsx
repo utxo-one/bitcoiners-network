@@ -20,6 +20,7 @@ export default function AppAuth() {
         dispatch({ type: 'balance/set', payload: balance });
         dispatch({ type: 'currentUser/set', payload: currentUser });
         dispatch({ type: 'rates/set', payload: rates });
+        dispatch({ type: 'requestsLoaded/set', payload: true });
       }
       catch {
         dispatch({ type: 'publicUser/set', payload: true });

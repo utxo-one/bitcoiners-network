@@ -120,6 +120,11 @@ export default function Connections({ initialType }) {
     setConnections(draft => {
       const index = draft.findIndex(user => user.twitter_id === selectedConnection.twitter_id);
       draft[index].is_followed_by_authenticated_user = !draft[index].is_followed_by_authenticated_user;
+
+      // remove from the list of 'following' by setting is as deleted, so that if the user is toggled back to followed, it appears back:
+      if (type === 'following') {
+        draft[index]._deleted_follow = !draft[index].is_followed_by_authenticated_user;
+      }
     });
   }
 
@@ -163,8 +168,8 @@ export default function Connections({ initialType }) {
     return (
       <section className="users">
         {/* <ConnectionSkeleton /> */}
-        { connections?.map(connection => (
-          <div className="user" key={connection.twitter_id} onClick={e => onClickConnection(e, connection)}>
+        { connections?.filter(connection => !connection._deleted_follow).map(connection => (
+          <div className="user" role="button" key={connection.twitter_id} onClick={e => onClickConnection(e, connection)}>
             <ProfilePicture user={connection} />
             <div className="user-details">
               <div className="name-label">

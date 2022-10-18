@@ -179,7 +179,7 @@ export default function TransactionsOverview(props) {
       <header>
         <HamburgerMenu variant='inverted' />
         { Object.entries(TRANSACTION_TABS).map(([tab, phrase]) => (
-          <div key={tab} className={classNames("tab", { selected: selectedTab === tab})} onClick={() => setSelectedTab(tab)}>{ phrase }</div>
+          <div key={tab} role="button" className={classNames("tab", { selected: selectedTab === tab})} onClick={() => setSelectedTab(tab)}>{ phrase }</div>
         ))}
       </header>
       { renderContent() }
