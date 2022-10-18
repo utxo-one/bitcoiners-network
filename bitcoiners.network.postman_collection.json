@@ -397,6 +397,25 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "Close Tip",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "http://localhost/frontend/close-classification-tip",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"path": [
+										"frontend",
+										"close-classification-tip"
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				},

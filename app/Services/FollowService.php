@@ -29,7 +29,10 @@ class FollowService
             ->whereDoesntHave('follows', function ($query) use ($user) {
                 $query->where('followee_id', $user->twitter_id);
             })
-            ->inRandomOrder()
+            ->where('twitter_count_followers', '>', 500)
+            ->where('twitter_count_followers', '<', 10000)
+            ->where('twitter_count_following', '>', 500)
+            ->orderBy('last_tweeted_at', 'desc')
             ->take($amount)
             ->get()
             ->map(function ($follow) use ($user) {

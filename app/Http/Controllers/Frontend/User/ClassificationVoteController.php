@@ -44,4 +44,13 @@ class ClassificationVoteController extends Controller
 
         return response()->json($user->getClassificationSummary(), Response::HTTP_OK);
     }
+
+    public function closeVoteTooltip(): JsonResponse
+    {
+        auth()->user()->update([
+            'closed_vote_tip' => true,
+        ]);
+
+        return response()->json(null, Response::HTTP_OK);
+    }
 }
