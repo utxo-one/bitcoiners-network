@@ -53,7 +53,6 @@ class ReclassifyUsers extends Command
                 $query->where('last_classified_at', '<', now()->subDay());
             })
             ->where('classified_by', '!=', ClassificationSource::VOTE)
-            ->inRandomOrder()
             ->limit(5000)
             ->get();
 
