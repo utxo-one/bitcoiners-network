@@ -24,14 +24,14 @@ export default function CampaignUsers({ campaign, pendingUsers, loadedAllPending
       const user = entity.follow;
       
       return (
-        <tr key={user.twitter_id} onClick={() => onClickUser(user) }>
+        <tr key={user.twitter_id} onClick={() => onClickUser(user) } role='button'>
           { !campaign && <td><Checkbox checked={selected.has(user.twitter_id) || false} onChange={e => onToggleSelected(e, user)} onClick={e => e.stopPropagation()} /></td> }
           <td><ProfilePicture user={user} /></td>
           <td className='user-info'>
             <div className='username'>{ user.name }</div>
             <div className='handle'>@{ user.twitter_username }</div>
           </td>
-          <td className='followers'>{ CompactNumberFormat(user.twitter_count_followers, { digits: 3}) }</td>
+          <td className='followers'>{ CompactNumberFormat(user.twitter_count_followers, { digits: 3 }) }</td>
         </tr>
       );
     });

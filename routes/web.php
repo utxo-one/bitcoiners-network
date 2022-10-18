@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('landing_page');
 
 Route::get('/auth/twitter', [TwitterAuthController::class, 'login'])->name('twitter.login');
 Route::get('/auth/twitter/callback', [TwitterAuthController::class, 'callback'])->name('twitter.callback');
@@ -32,32 +32,29 @@ Route::middleware([
     'verified'
 ])->group(function () {
 
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
-
-
+    Route::get('/u', function () {
+        return view('react-app');
+    })->name('react-app');
 
     // Route::get('/transaction/deposit', [DepositController::class, 'index'])->name('transaction.deposit.index');
     // Route::post('/transaction/deposit', [DepositController::class, 'store'])->name('transaction.deposit.store');
     Route::get('/transaction/deposit/success', [DepositController::class, 'show'])->name('transaction.deposit.show');
-
 });
 
-// Allow non-auth users to fetch any user profile:
+// Allow non-auth users to see user profiles:
 Route::get('/u/profile/{username}', function () {
-    return view('user-dashboard');
+    return view('react-app');
 });
 
-// All other routes will require the user to be authenticated:
+// All other React routes will require the user to be authenticated:
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified'
 ])->group(function () {
-    Route::view('/u/{path?}', 'user-dashboard')
+    Route::view('/u/{path?}', 'react-app')
      ->where('path', '.*')
-     ->name('user-dashboard');
+     ->name('react-app');
 });
 
 Route::post('/transaction/btcpay/webhook', [BtcPayWebhookController::class, 'index'])->name('transaction.btcpay.webhook');
