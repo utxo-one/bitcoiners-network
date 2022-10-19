@@ -61,7 +61,7 @@ export default function CommunityRateModal({ show, user, onHide }) {
             <Dialog.Title className="title">Help us classify this user</Dialog.Title>
               <div className="user-types">
                 { USER_TYPES.map(type => (
-                  <UserTypeBadge key={type} userType={type} onClick={() => onCastVote(type)} variant={selectedType === type ? 'solid' : 'outline'}  />
+                  <UserTypeBadge key={type} userType={type} role="button" onClick={() => onCastVote(type)} variant={selectedType === type ? 'solid' : 'outline'}  />
                 ))}
               </div>
               
