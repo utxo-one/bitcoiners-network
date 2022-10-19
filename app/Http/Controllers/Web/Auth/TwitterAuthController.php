@@ -71,10 +71,8 @@ class TwitterAuthController extends Controller
      *
      * @return RedirectResponse
      */
-    public function logout(): RedirectResponse
+    public function logout()
     {
         auth()->logout();
-
-        return Redirect::to('/');
     }
 }
