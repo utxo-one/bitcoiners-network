@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Web\Transaction;
 
+use App\Enums\ClassificationSource;
 use App\Enums\TransactionStatus;
 use App\Enums\TransactionType;
+use App\Enums\UserType;
 use App\Http\Controllers\Controller;
 use App\Models\Transaction;
 use App\Models\User;
@@ -81,6 +83,20 @@ class BtcPayWebhookController extends Controller
                 'type' => TransactionType::CREDIT,
                 'description' => 'Lightning Deposit Reference ID: ' . $payload->invoiceId,
             ]);
+
+            if ($user->lightning_veriified_at === null) {
+                $user->update([
+                    'lightning_veriified_at' => now(),
+                    'lightning_verified' => true,
+                ]);
+            }
+
+            if ($user->type != UserType::BITCOINER && $user->classified_by != ClassificationSource::VOTE) {
+                $user->update([
+                    'type' => UserType::BITCOINER,
+                    'classified_by' => ClassificationSource::LIGHTNING,
+                ]);
+            }
         }
 
         echo 'OK';
