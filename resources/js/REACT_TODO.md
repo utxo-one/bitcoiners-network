@@ -1,20 +1,21 @@
 ### LAST PR
-- favicon
-- Spinner on connections
-- Shitcoiner / nocoiner status + alert modal
-- Top Up success modal shows verified bitcoiner
-- Twitter verify page
-- Asset pipeline from Vita for LP
-- Landing Page (vanilla JS) [WIP]
+- Logout route
+- Social icons links
+- Get Started Page
+- Check `firstLogin=1` to show popup to not bitcoiners
+- **Vote Tooltip Component**: Check for close vote tip on current user + API call
+- Terms page
+- Privacy Policy
+- USER NOT FOUND (ie: http://localhost:2121/u/profile/handsome_latino)
+- Use Clown face for Nocoiner -> adjusted all badges to make the icons slightly bigger
+- Landing Page finishing touches + animation
+- description + og:image
+- skeleton loader and split loading for dashboard and user profiles for more seamless UX
 
 ### TODO
 
-- description + og:image
-- View public profile + login page
 - Follow -> on mass connect page should update local instance
 - CONTEXT -> change current user following/followers on the state
-- Social icons links
-- logout route
 
 ### TODO V2
 - Pagination -> When entries loaded still show the infinite loader, it will not be triggered to load more entries

@@ -19,7 +19,7 @@ export default function SignUpModal({ show, onHide }) {
             <div className="sub">Sign up and discover thousands of Bitcoiners in our Twitter network.</div>
 
             {/* <div className="w"> */}
-            <TwitterButton as="a" href='/auth/twitter'>Sign Up Via Twitter</TwitterButton>
+            <TwitterButton as="a" href='/get_started'>Sign Up Via Twitter</TwitterButton>
 
             <div className="learn-more">
               <Button variant="clear" onClick={onHide} as="a" href="/">Learn More</Button>

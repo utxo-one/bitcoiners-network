@@ -48,7 +48,7 @@
       flex-direction: column;
       justify-content: space-between;
       min-height: 100vh;
-      min-height: -webkit-fill-available;   
+      min-height: -webkit-fill-available;
       margin-top: 20px; 
     }
 
@@ -69,7 +69,7 @@
     .link-group {
       margin: 32px 0;
 
-      a {
+      .link {
         color: white;
         font-size: 18px;
         text-decoration: none;

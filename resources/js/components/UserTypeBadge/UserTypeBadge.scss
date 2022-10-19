@@ -3,8 +3,8 @@
   align-items: center;
   border: 1px solid black;
   border-radius: 32px;
-  padding: 2px 8px 2px 2px;
-  gap: 4px;
+  padding: 1px 6px 1px 3px;
+  gap: 2px;
   font-size: 12px;
   text-transform: uppercase;
   font-weight: 600;
@@ -17,14 +17,16 @@
     padding: 2px;
 
     > svg {
-      width: 14px;
-      height: 14px;
+      width: 16px;
+      height: 16px;
     }
   }
 
   &-md {
     font-size: 16px;
-    padding-right: 16px;
+    // padding-right: 16px;
+    padding: 2px 16px 2px 2px;
+    gap: 6px;  
 
     .icon {
       padding: 6px;
@@ -34,6 +36,16 @@
         height: 18px;
       }
     }
+
+    &.__user-type-badge-nocoiner .icon {
+      padding: 4px;
+
+      > svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
+
   }
 
   &.__user-type-badge--var-outline-white {
@@ -57,6 +69,10 @@
 
     .icon > svg {
       fill: white;
+
+      > path {
+        fill: white
+      }
     }
   }
 
@@ -92,8 +108,8 @@
       background-color: var(--gray-70);
     }
 
-    .icon > svg {
-      fill: var(--gray-70);
+    .icon > svg > path {
+      fill: var(--gray-50);
     }
   }
 

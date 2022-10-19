@@ -23,6 +23,18 @@ Route::get('/', function () {
     return view('landing-page');
 })->name('landing_page');
 
+Route::get('/get_started', function () {
+    return view('get-started');
+})->name('get_started');
+
+Route::get('/terms', function () { 
+    return view('terms');
+});
+
+Route::get('/privacy', function () { 
+    return view('privacy');
+});
+
 Route::get('/auth/twitter', [TwitterAuthController::class, 'login'])->name('twitter.login');
 Route::get('/auth/twitter/callback', [TwitterAuthController::class, 'callback'])->name('twitter.callback');
 

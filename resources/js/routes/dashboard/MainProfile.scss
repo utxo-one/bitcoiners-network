@@ -99,36 +99,9 @@
       }
     }
 
-    .rate-user-tooltip {
-      display: flex;
-      gap: 12px;
-      justify-content: center;
-      margin: 12px auto;
-      
-      display: flex;
+    .__vote-tooltip {
       right: 22px;
       top: 34px;
-      position: absolute;
-      padding: 6px 8px;
-      color: var(--gray-90);
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 600;
-      gap: 12px;
-      align-items: center;
-      justify-content: center;
-      background-color: var(--gray-10);
-      z-index: 10;
-      animation: anim__main-profile-rate-tooltip-in 0.3s 0.3s forwards;
-      opacity: 0;
-
-      &::after {
-        content: '';
-        position: absolute;
-        border: 8px solid transparent;
-        border-bottom-color: var(--gray-10);
-        bottom: 100%;
-      }
 
       &.invisible {
         visibility: hidden;
@@ -169,6 +142,62 @@
       display: flex;
       gap: 48px;
       flex-direction: column;
+    }
+
+    .followers-loading {
+      height: 240px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .user-skeleton {
+      margin-bottom: 24px;
+
+      .bone {
+        margin: 12px auto;
+        border-radius: 8px;
+        background-color: var(--gray-80);
+        animation: anim__main-profile-user-skeleton 0.6s infinite alternate;
+      }
+      
+      .username {
+        width: 60%;
+        height: 24px;
+      }
+
+      .handle {
+        width: 40%;
+        height: 20px;
+        animation-delay: -0.2s;
+      }
+
+      .description {
+        width: 95%;
+        height: 92px;
+        animation-delay: -0.4s;
+      }
+    }
+
+    .user-not-found {
+      h2 {
+        color: var(--gray-40);
+        text-align: center;
+      }
+
+      p {
+        line-height: 24px;
+        color: var(--gray-40);
+      }
+
+      .back-to-dashboard {
+        margin-top: 32px;
+        text-align: center;
+      }
+
+      a {
+        color: var(--blue-twitter);
+      }
     }
 
     section.user-details {
@@ -387,15 +416,29 @@
       text-transform: uppercase;
     }
   }
+
+  ul.info-links {
+    list-style-type: none;
+    margin: 60px 0 0;
+    padding: 0;
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    font-size: 13px;
+
+    a {
+      color: var(--gray-40);
+      text-decoration: none;
+    }
+  }
 }
 
-@keyframes anim__main-profile-rate-tooltip-in {
+@keyframes anim__main-profile-user-skeleton {
   from {
-    transform: translateY(-8px);
-    opacity: 0;
+    background-color: var(--gray-90);
   }
-
+  
   to {
-    opacity: 1;
+    background-color: var(--gray-85);
   }
 }

@@ -17,36 +17,9 @@
       animation: 0.3s anim__user-info-content-in;
     }
 
-    .rate-user-tooltip {
-      display: flex;
-      gap: 12px;
-      justify-content: center;
-      margin: 12px auto;
-      
-      display: flex;
+    .__vote-tooltip {
       right: 40px;
       top: -36px;
-      position: absolute;
-      padding: 6px 8px;
-      color: var(--gray-90);
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 600;
-      gap: 12px;
-      align-items: center;
-      justify-content: center;
-      background-color: var(--gray-10);
-      z-index: 10;
-      animation: anim__user-info-rate-tooltip-in 0.3s 0.3s forwards;
-      opacity: 0;
-
-      &::after {
-        content: '';
-        position: absolute;
-        border: 8px solid transparent;
-        border-top-color: var(--gray-10);
-        top: 100%;
-      }
     }
 
     .__user-type-badge {
@@ -186,16 +159,5 @@
   from {
     transform: translateY(50%);
     opacity: 0.5;
-  }
-}
-
-@keyframes anim__user-info-rate-tooltip-in {
-  from {
-    transform: translateY(12px);
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
   }
 }

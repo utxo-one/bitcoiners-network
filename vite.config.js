@@ -10,6 +10,8 @@ export default defineConfig({
                 'resources/js/app.js',
                 'resources/js/app.jsx',
                 'resources/css/landing_page.scss',
+                'resources/css/get_started.scss',
+                'resources/css/terms_privacy.scss',
                 'resources/css/palette.css',
                 'resources/js/landing_page.js'
             ],
