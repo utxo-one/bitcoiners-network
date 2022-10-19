@@ -58,10 +58,7 @@ export default function CommunityRateModal({ show, user, onHide }) {
         <Dialog.Overlay className="__dialog-overlay">
           <Dialog.Content className="__community-rate-modal __modal __modal-center">
             <Dialog.Close asChild><div role="button" className='__modal-close-icon'>×</div></Dialog.Close>
-            <Dialog.Title className="title">Rate This User</Dialog.Title>
-
-              <p className="description">Help us correctly identify this user by selecting which category that he belongs to:</p>
-              
+            <Dialog.Title className="title">Help us classify this user</Dialog.Title>
               <div className="user-types">
                 { USER_TYPES.map(type => (
                   <UserTypeBadge key={type} userType={type} onClick={() => onCastVote(type)} variant={selectedType === type ? 'solid' : 'outline'}  />

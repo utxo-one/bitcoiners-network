@@ -1,9 +1,10 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { useImmer } from "use-immer";
 import axios from "axios";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import classNames from "classnames";
 import { CompactNumberFormat } from "../../utils/NumberFormatting";
+import Cookies from 'js-cookie';
 
 import AppContext from "../../store/AppContext";
 
@@ -15,26 +16,30 @@ import Button from "../../layout/Button/Button";
 import ConnectButton from "../../layout/Button/ConnectButton";
 import HamburgerMenu from "../../layout/HamburgerMenu/HamburgerMenu";
 
-import MassConnectModal from "../../components/MassConnectModal/MassConnectModal";
 import ProfilePicture from "../../components/ProfilePicture/ProfilePicture";
 import UserTypeBadge from "../../components/UserTypeBadge/UserTypeBadge";
 import ConnectionTypeBadge from "../../components/ConnectionTypeBadge/ConnectionTypeBadge";
-import CommunityRateModal from "../connections/CommunityRateModal";
 import CampaignStats from "../../components/CampaignStats/CampaignStats";
+
+import MassConnectModal from "../../components/MassConnectModal/MassConnectModal";
+import CommunityRateModal from "../connections/CommunityRateModal";
 import TopUpModal from "../../components/MassConnectModal/TopUpModal";
+import SignUpModal from "./SignUpModal";
+import NotBitcoinerModal from "./NotBitcoinerModal";
 
 import SocialNetworkIcon from "../../assets/icons/SocialNetworkIcon";
 import SatsIcon from "../../assets/icons/SatsIcon";
 import BoltIcon from "../../assets/icons/BoltIcon";
 
 import './MainProfile.scss';
-import SignUpModal from "./SignUpModal";
-import NotBitcoinerModal from "./NotBitcoinerModal";
+import VoteTooltip from "../../layout/VoteTooltip/VoteTooltip";
+import Spinner from "../../layout/Spinner/Spinner";
 
 export default function MainProfile({ asDashboard }) {
   const [state, dispatch] = useContext(AppContext);
 
   const { username } = useParams();
+  const [searchParams] = useSearchParams();
 
   const [loadedUser, setLoadedUser] = useImmer(null);
   const [campaignData, setCampaignData] = useState(null);
@@ -45,19 +50,44 @@ export default function MainProfile({ asDashboard }) {
   const [showSignup, setShowSignup] = useState(false);
   const [initialLoad, setInitialLoad] = useState(false);
   const [showNotBitcoiner, setShowNotBitcoiner] = useState(false);
+  const [firstTimeLogin, setFirstTimeLogin] = useState(false);
+  const [userNotFound, setUserNotFound] = useState(false);
   
   const profilePicRef = useRef();
   const handleIntersector = useRef();
   
-  const { currentUser, metrics, availableSats, publicUser, requestsLoaded } = state;
+  const { currentUser, metrics, publicUser, availableSats, requestsLoaded } = state;
 
   const userData = asDashboard ? currentUser : loadedUser;
+
+  useEffect(() => {
+    if (asDashboard && userData) {
+      // Keep in session storage (IE: while browser is open) to prevent the user from pressing back and seeing the modal:
+      const firstLogin = searchParams.get('firstLogin') === '1';
+      const cookie = Cookies.get("__bn__first_login_shown");
+  
+      if (firstLogin && !cookie) {
+        Cookies.set("__bn__first_login_shown", true);
+        
+        if (['shitcoiner', 'nocoiner'].includes(userData.type)) {
+          setFirstTimeLogin(true);
+          setShowNotBitcoiner(true);
+        }
+      }
+    }
+  }, [searchParams, userData]);
+
   
   useEffect(() => {
     const loadUserData = async () => {
       if (!asDashboard) {
-        const { data } = await axios.get(`/frontend/user/${username}`);
-        setLoadedUser(data);
+        try {
+          const { data } = await axios.get(`/frontend/user/${username}`);
+          setLoadedUser(data);
+        }
+        catch {
+          setUserNotFound(true);
+        }
       }
       
       else {
@@ -74,12 +104,16 @@ export default function MainProfile({ asDashboard }) {
       setInitialLoad(true);
     }
 
+    setInitialLoad(false);
     loadUserData();
-  }, []);
+
+    console.log('asDashboard:', asDashboard)
+    console.log('username:', username)
+  }, [asDashboard, username]);
 
   useEffect(() => {
     const loadFollowData = async () => {
-      if (!userData.following_data) {
+      if (userData && !userData.following_data) {
         const { data } = await axios.get(`/frontend/user/${userData.twitter_username}/follow-data`);
         
         if (asDashboard) {
@@ -95,8 +129,8 @@ export default function MainProfile({ asDashboard }) {
     }
     
     if (requestsLoaded && initialLoad) {
-    loadFollowData();
-  }
+      loadFollowData();
+    }
 
   }, [requestsLoaded, initialLoad])
 
@@ -136,7 +170,7 @@ export default function MainProfile({ asDashboard }) {
   }
 
   const onClickSignup = () => {
-    window.location.href = "/auth/twitter";
+    setShowSignup(true);
   }
 
   // TODO -> change conditional
@@ -145,6 +179,11 @@ export default function MainProfile({ asDashboard }) {
       e.stopPropagation();
       setShowSignup(true);
     }
+  }
+
+  const onHideNotBitcoiner = () => {
+    setShowNotBitcoiner(false);
+    setFirstTimeLogin(false);
   }
 
   const campaignRunning = campaignData?.status === 'running';
@@ -220,6 +259,14 @@ export default function MainProfile({ asDashboard }) {
     </Box>
   )
 
+  const renderUserSkeleton = () => (
+    <div className="user-skeleton">
+      <div className="bone username" />
+      <div className="bone handle" />
+      <div className="bone description" />
+    </div>
+  )
+
   const viewingOwnProfile = !asDashboard && currentUser && currentUser?.twitter_id === userData?.twitter_id;
 
   return (
@@ -231,20 +278,34 @@ export default function MainProfile({ asDashboard }) {
         ? renderSatsCounter()
         : <UserTypeBadge userType={userData?.type} variant='outline-white' onClick={viewingOwnProfile ? null : onClickBadge} />
         }
-        { !publicUser && !viewingOwnProfile && !asDashboard && handleVisible && (
-          <div className="rate-user-tooltip" role="button" onClick={onClickBadge}>
-            <div>Vote</div>
-            <div className="close">×</div>
-          </div>
+        { !publicUser && !viewingOwnProfile && !asDashboard && handleVisible && userData && (
+          <VoteTooltip arrowDirection="up" />
         )}
       </header>
       <main>
         <div className={classNames("usertype-bg", `${userData?.type}`)} />
         <div className="content">
           <section className="user-details">
-            <div ref={profilePicRef}><ProfilePicture user={userData} className='profile-pic' /></div>
+            <div ref={profilePicRef}><ProfilePicture user={userData} className='profile-pic' userNotFound={userNotFound} /></div>
+            
+            { !userData && renderUserSkeleton() }
+
             <div className="username">{ userData?.name }</div >
-            <div className="handle">@{ userData?.twitter_username }</div>
+            { userData && <div className="handle">@{ userData?.twitter_username }</div> }
+            { userNotFound && (
+              <Box className="user-not-found">
+                <h2>User Not Found</h2>
+                <hr />
+                <p>Ooops! We don't have a public profile for user @<strong>{username}</strong> yet (or the user doesn't exist).</p>
+
+                { !asDashboard && (
+                  <>
+                    <p>We are relentessly scanning for users. If this is your handle, <a href='/get-started'>sign in via Twitter</a> to get your user profile into our network.</p>
+                    <p className="back-to-dashboard"><Link to='dashboard'>Back to dashboard</Link></p>
+                  </>
+                )}
+              </Box>
+            )}
             { !asDashboard && (
             <>
               <div className="badges">
@@ -270,13 +331,21 @@ export default function MainProfile({ asDashboard }) {
             { asDashboard && campaignRunning && renderCampaignStats() }
             { asDashboard && userData.follower_data && renderNetworkStats() }
 
-            { userData.follower_data && (
-              <>
+            { userData.follower_data 
+            ? <>
                 <ConnectionsBox connectionType='following' user={userData} isAuthUser={asDashboard} onClickCapture={checkSignedUp} preventActions={publicUser} />
                 <ConnectionsBox connectionType='followers' user={userData} isAuthUser={asDashboard} onClickCapture={checkSignedUp} preventActions={publicUser} />
               </>
-            )}
+            : <div className="followers-loading"><Spinner /></div>
+            }
           </div>
+          )}
+
+          { userData?.follower_data && (
+            <ul className="info-links">
+              <li><a href="/terms" target="_blank">Terms of Service</a></li>
+              <li><a href="/privacy" target="_blank">Privacy Policy</a></li>
+            </ul>
           )}
         </div>
       </main>
@@ -297,7 +366,7 @@ export default function MainProfile({ asDashboard }) {
       <CommunityRateModal show={showRate} onHide={() => setShowRate(false)} user={userData} />
       <TopUpModal show={showTopUp} onHide={() => setShowTopUp(false)} />
       <SignUpModal show={showSignup} onHide={() => setShowSignup(false)} />
-      <NotBitcoinerModal user={userData} show={showNotBitcoiner} onHide={() => setShowNotBitcoiner(false)} />
+      <NotBitcoinerModal user={userData} show={showNotBitcoiner} onHide={onHideNotBitcoiner} firstTimeLogin={firstTimeLogin} />
     </div>
   );
 }

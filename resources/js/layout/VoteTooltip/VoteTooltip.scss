@@ -1,0 +1,75 @@
+.__vote-tooltip {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin: 12px auto;
+  
+  display: flex;
+  right: 22px;
+  top: 34px;
+  position: absolute;
+  padding: 6px 8px;
+  color: var(--gray-90);
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--gray-10);
+  z-index: 10;
+  opacity: 0;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    border: 8px solid transparent;
+  }
+  
+  &-arrow-up {
+    animation: anim__vote-tooltip-up-in 0.3s 0.3s forwards;
+
+    &::after {
+      border-bottom-color: var(--gray-10);
+      bottom: 100%;
+    }
+  }
+
+  &-arrow-down {
+    animation: anim__vote-tooltip-down-in 0.3s 0.3s forwards;
+
+    &::after {
+      border-top-color: var(--gray-10);
+      top: 100%;
+    }
+  }
+
+  &.invisible {
+    visibility: hidden;
+    opacity: 0;
+    transition: 0.3s;
+  }
+}
+
+
+@keyframes anim__vote-tooltip-up-in {
+  from {
+    transform: translateY(-8px);
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes anim__vote-tooltip-down-in {
+  from {
+    transform: translateY(12px);
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}

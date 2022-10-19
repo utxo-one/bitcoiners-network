@@ -12,7 +12,7 @@ const USER_TYPE_PHRASE = {
   nocoiner   : "Nocoiner",
 }
 
-export default function NotBitcoinerModal({ show, onHide, user }) {
+export default function NotBitcoinerModal({ show, onHide, user, firstTimeLogin }) {
 
   const [linkCopied, setLinkCopied] = useState();
   const [processingTopUp, setProcessingTopUp] = useState(false);
@@ -38,11 +38,11 @@ export default function NotBitcoinerModal({ show, onHide, user }) {
   }
 
   return (
-    <Dialog.Root open={show} onOpenChange={onHide}>
+    <Dialog.Root open={show} onOpenChange={firstTimeLogin || processingTopUp ? null : onHide}>
       <Dialog.Portal>
         <Dialog.Overlay className="__dialog-overlay">
           <Dialog.Content className="__not-bitcoiner-modal __modal __modal-center">
-            <Dialog.Close asChild><div role="button" className='__modal-close-icon'>×</div></Dialog.Close>
+            { !firstTimeLogin && !processingTopUp && <Dialog.Close asChild><div role="button" className='__modal-close-icon'>×</div></Dialog.Close> }
 
             <h3 className={user?.type}>{user?.type === 'shitcoiner' ? '💩 Shitcoiner Alert 💩' : '🤡 Nocoiner Alert 🤡' }</h3>
 
@@ -56,7 +56,6 @@ export default function NotBitcoinerModal({ show, onHide, user }) {
             <div className="or-hr">Or</div>
             <ButtonWithLightning loading={processingTopUp} onClick={onClickVerify}>Verify with 10 sats</ButtonWithLightning>
             <Button disabled={processingTopUp} variant='clear' className="continue" onClick={onHide}>Continue as a { USER_TYPE_PHRASE[user?.type] }</Button>
-
           </Dialog.Content>
         </Dialog.Overlay>
       </Dialog.Portal>

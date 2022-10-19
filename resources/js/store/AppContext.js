@@ -30,6 +30,10 @@ export const appReducer = (draft, action) => {
       draft.currentUser.following_data = action.payload.following_data;
       break;
 
+    case 'currentUser/close-vote-tip':
+      draft.currentUser.closed_vote_tip = true;
+      break;
+
     case 'rates/set':
       draft.rates = action.payload;
       break;

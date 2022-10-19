@@ -13,6 +13,7 @@ import UserTypeBadge from "../UserTypeBadge/UserTypeBadge";
 import Spinner from "../../layout/Spinner/Spinner";
 
 import './UserInfoPanel.scss';
+import VoteTooltip from "../../layout/VoteTooltip/VoteTooltip";
 
 const CONNECTION_TYPES = {
   followers: 'Followers',
@@ -68,10 +69,7 @@ export default function UserInfoPanel({ show, onHide, user, onClickBadge, onClic
           <Dialog.Content className='__user-info-panel-content'>
 
             {!viewingOwnProfile && (
-              <div className="rate-user-tooltip" role="button" onClick={onClickBadge}>
-                <div>Vote</div>
-                <div className="close">×</div>
-              </div>
+              <VoteTooltip arrowDirection="down" />
             )}
 
             <UserTypeBadge userType={user?.type} variant='solid' size='md' onClick={viewingOwnProfile ? null : onClickBadge} />

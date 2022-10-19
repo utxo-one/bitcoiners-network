@@ -1,0 +1,18 @@
+html {  
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+body {
+  margin: 0 auto;
+  font-family: 'Inter', sans-serif;
+  width: 720px;
+  max-width: 95%;
+}
+
+h1, h2 {
+  text-align: center;
+}

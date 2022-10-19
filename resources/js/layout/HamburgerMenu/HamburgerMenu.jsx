@@ -26,9 +26,18 @@ export default function HamburgerMenu({ variant }) {
     setShowTopup(true);
   }
 
+  const logout = async () => {
+    await axios.get('/frontend/logout');
+    window.location.href = '/';
+  }
+
   const { currentUser, availableSats } = state;
 
   const classes = classNames("__hamburger-menu", `__hamburger-menu-variant-${variant}`)
+
+  const closeMenu = () => {
+    setShowMenu(false);
+  }
 
   return (   
     <> 
@@ -48,20 +57,25 @@ export default function HamburgerMenu({ variant }) {
 
               <div>
                 <div className='link-group'>
-                  <div><NavLink to='/dashboard'>Dashboard</NavLink></div>
-                  <div><NavLink to={`/profile/${currentUser?.twitter_username}`}>View Public Profile</NavLink></div>
+                  <div><NavLink className="link" to='/dashboard'>Dashboard</NavLink></div>
+                  <div><NavLink className="link" to={`/profile/${currentUser?.twitter_username}`} onClick={closeMenu}>View Public Profile</NavLink></div>
                 </div>
                 
                 <div className='link-group'>
-                  <div><NavLink to='/followers'>Your Followers</NavLink></div>
-                  <div><NavLink to='/following'>Following</NavLink></div>
-                  <div><NavLink to='/available'>Bitcoiners Network</NavLink></div>
+                  <div><NavLink className="link" to='/followers'>Your Followers</NavLink></div>
+                  <div><NavLink className="link" to='/following'>Following</NavLink></div>
+                  <div><NavLink className="link" to='/available'>Bitcoiners Network</NavLink></div>
                 </div>
     
                 <div className='link-group'>
-                  <div><NavLink to='/campaign'>Follow Campaign</NavLink></div>
-                  <div><NavLink to='/transactions'>Transaction History</NavLink></div>
+                  <div><NavLink className="link" to='/campaign'>Follow Campaign</NavLink></div>
+                  <div><NavLink className="link" to='/transactions'>Transaction History</NavLink></div>
                 </div>
+
+                <div className='link-group'>
+                  <div className="link" role="button" onClick={logout}>Logout</div>
+                </div>
+
               </div>
 
               <div>
@@ -76,9 +90,9 @@ export default function HamburgerMenu({ variant }) {
 
               <div className='connect'>
                 <div className='logo'><BitcoinersNetworkLogoPlain /></div>
-                <TwitterIcon className='social-icon' />
-                <MatterMostIcon className='social-icon' />
-                <GithubIcon className='social-icon' />
+                <a href="https://twitter.com/utxo_one" target="_blank" rel="noreferrer"><TwitterIcon className='social-icon' /></a>
+                <a href="https://chat.utxo.one/" target="_blank" rel="noreferrer"><MatterMostIcon className='social-icon' /></a>
+                <a href="https://github.com/utxo-one/bitcoiners-network/" target="_blank" rel="noreferrer"><GithubIcon className='social-icon' /></a>
               </div>
             </div>
           </Dialog.Content>

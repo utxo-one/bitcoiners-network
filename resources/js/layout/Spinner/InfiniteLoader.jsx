@@ -24,8 +24,6 @@ export default function InfiniteLoader({ onLoadMore, className, ...props }) {
     }
   }, []);
 
-
-
   return (
     <div className={classes} ref={infiniteLoaderRef} {...props}>
       <Spinner />

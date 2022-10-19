@@ -1,11 +1,12 @@
 import axios from "axios";
 import classNames from "classnames";
 import { useEffect, useState } from "react"
+import SadFaceIcon from "../../assets/icons/SadFaceIcon";
 import UserProfileImg from "../../assets/images/UserProfile.png";
 
 import './ProfilePicture.scss';
 
-export default function ProfilePicture({ user, className, ...props }) {
+export default function ProfilePicture({ user, className, userNotFound, ...props }) {
 
   const imageSrc = user?.twitter_profile_image_url_high_res;
 
@@ -13,7 +14,6 @@ export default function ProfilePicture({ user, className, ...props }) {
   const [imageError, setImageError] = useState(false);
 
   useEffect(() => {
-
     const loadImage = async () => {
       try {
         setImageLoaded(false);
@@ -37,6 +37,7 @@ export default function ProfilePicture({ user, className, ...props }) {
 
   return (
     <div className={classNames("__profile-picture", className)}>
+      { userNotFound && <div className="not-found"><SadFaceIcon /></div> }
       { imageLoaded && <img src={imageSrc} /> }
       { imageError && <img src={UserProfileImg} /> }
     </div>

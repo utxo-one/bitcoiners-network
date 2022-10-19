@@ -1,9 +1,9 @@
 import classNames from "classnames";
 import PoopIcon from "../../assets/icons/PoopIcon";
-import SadFaceIcon from "../../assets/icons/SadFaceIcon";
 import BitcoinSymbolIcon from "../../assets/icons/BitcoinSymbolIcon";
 
 import './UserTypeBadge.scss';
+import ClownOutlineIcon from "../../assets/icons/ClownOutlineIcon";
 
 const USER_TYPES = {
   bitcoiner: {
@@ -18,7 +18,7 @@ const USER_TYPES = {
 
   nocoiner: {
     phrase: "Nocoiner",
-    icon: SadFaceIcon,
+    icon: ClownOutlineIcon,
   },
 }
 
