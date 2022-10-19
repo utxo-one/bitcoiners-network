@@ -84,14 +84,14 @@ class BtcPayWebhookController extends Controller
                 'description' => 'Lightning Deposit Reference ID: ' . $payload->invoiceId,
             ]);
 
-            if ($user->lightning_veriified_at === null) {
+            if ($user->lightning_verified_at == null) {
                 $user->update([
-                    'lightning_veriified_at' => now(),
+                    'lightning_verified_at' => now(),
                     'lightning_verified' => true,
                 ]);
             }
 
-            if ($user->type != UserType::BITCOINER && $user->classified_by != ClassificationSource::VOTE) {
+            if ($user->type != UserType::BITCOINER->value && $user->classified_by != ClassificationSource::VOTE->value) {
                 $user->update([
                     'type' => UserType::BITCOINER,
                     'classified_by' => ClassificationSource::LIGHTNING,
