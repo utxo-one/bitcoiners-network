@@ -34,30 +34,33 @@ async function handleBitcoinersFaces() {
       catch {}
     }
 
-    Promise.allSettled(bitcoiners.map(imageSrc => loadImage(imageSrc))).then(() => {
-      const CELL_WIDTH = 72;
-      const columnCount = Math.ceil(Math.round(window.innerWidth / CELL_WIDTH));
-
-      for (let i = 0; i < columnCount; ++i) {
-        const column = document.createElement("div");
-        column.className = 'column';
+    // if image loading doesn't work (IE: on the twitter side of the network), do not create images:
+    if (availableImages.length === 0) {
+      Promise.allSettled(bitcoiners.map(imageSrc => loadImage(imageSrc))).then(() => {
+        const CELL_WIDTH = 72;
+        const columnCount = Math.ceil(Math.round(window.innerWidth / CELL_WIDTH));
   
-        // select 10 random images for each colunmn:
-        const imageIndex = [];
-        for (let j = 0; j < 8; ++j) {
-          imageIndex.push(Math.floor(Math.random() * availableImages.length));
+        for (let i = 0; i < columnCount; ++i) {
+          const column = document.createElement("div");
+          column.className = 'column';
+    
+          // select 10 random images for each colunmn:
+          const imageIndex = [];
+          for (let j = 0; j < 8; ++j) {
+            imageIndex.push(Math.floor(Math.random() * availableImages.length));
+          }
+    
+          for (let j = 0; j < imageIndex.length * 3; ++j) {
+            const img = document.createElement("img");
+            img.src = availableImages[imageIndex[j % imageIndex.length]];
+            img.style.animationDelay = `${1000 + Math.round(Math.random() * 6000)}ms`;
+            column.appendChild(img);
+          }
+    
+          container.appendChild(column);
         }
-  
-        for (let j = 0; j < imageIndex.length * 3; ++j) {
-          const img = document.createElement("img");
-          img.src = availableImages[imageIndex[j % imageIndex.length]];
-          img.style.animationDelay = `${Math.round(Math.random() * 3000)}ms`;
-          column.appendChild(img);
-        }
-  
-        container.appendChild(column);
-      }
-    });
+      });
+    }
 
   // }
   // catch {

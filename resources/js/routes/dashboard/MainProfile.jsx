@@ -106,9 +106,6 @@ export default function MainProfile({ asDashboard }) {
 
     setInitialLoad(false);
     loadUserData();
-
-    console.log('asDashboard:', asDashboard)
-    console.log('username:', username)
   }, [asDashboard, username]);
 
   useEffect(() => {
@@ -276,7 +273,7 @@ export default function MainProfile({ asDashboard }) {
         { userData && <div className={classNames("username", { visible: !handleVisible })}>@{ userData?.twitter_username }</div> }
         { asDashboard
         ? renderSatsCounter()
-        : <UserTypeBadge userType={userData?.type} variant='outline-white' onClick={viewingOwnProfile ? null : onClickBadge} />
+        : <UserTypeBadge userType={userData?.type} variant='outline-white' role={ viewingOwnProfile ? null : "button"} onClick={viewingOwnProfile ? null : onClickBadge} />
         }
         { !publicUser && !viewingOwnProfile && !asDashboard && handleVisible && userData && (
           <VoteTooltip arrowDirection="up" />

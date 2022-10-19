@@ -17,14 +17,14 @@ body {
     width: 100%;
     justify-content: space-between;
     align-items: center;
-    padding: 16px;
+    padding: 12px;
     box-shadow: 0px 3px 16px rgba(0, 74, 142, 0.25), 0px 3px 10px rgba(0, 0, 0, 0.2);
     background-color: white;
     z-index: 100;
 
     img.logo {
       display: block;
-      width: 112px;
+      width: 100px;
       height: auto;
     }
 
@@ -64,7 +64,6 @@ body {
       bottom: 0;
       left: 0;
       right: 0;
-      // background: linear-gradient(0deg, white 0%, white 40%, transparent);
       background: linear-gradient(0deg, white 0%, white 45%, transparent 80%, transparent);
       z-index: -1;
     }
@@ -85,11 +84,11 @@ body {
         display: flex;
         flex-direction: column;
         gap: 8px;
-        animation: anim__landing_page-column-down 32s linear infinite; // direction fill-mode;
+        animation: anim__landing_page-column-down 40s linear infinite; // direction fill-mode;
 
         &:nth-of-type(odd) {
           animation-name: anim__landing_page-column-up;
-          animation-duration: 28s;
+          animation-duration: 32s;
         }
   
         > img {
@@ -110,8 +109,15 @@ body {
       line-height: 54px;
       text-align: center;
       color: var(--gray-10);
-      margin-top: 30vh;
+      margin: 16vh auto 0;
       text-shadow: 0px 0px 10px white;
+      max-width: 400px;
+      background: radial-gradient(white, transparent 85%);
+      padding: 9vh 0 6vh;
+
+      @media (min-width: 1024px) {
+        padding: 16vh 0 6vh;
+      }
 
       strong {
         display: block;
@@ -119,12 +125,8 @@ body {
     }
 
     .get-started {
-      position: absolute;
-      bottom: 10vh;
-      left: 0;
-      right: 0;
       text-align: center;
-      padding: 0 32px;
+      padding: 0 12px;
       
       a {
         display: inline-flex;
@@ -152,6 +154,7 @@ body {
 
       text-align: center;
       color: var(--gray-40);
+      margin-bottom: 10vh;
 
       p {
         margin: 12px 0;

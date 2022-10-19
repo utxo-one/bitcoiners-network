@@ -31,8 +31,6 @@
 
   <p>Our App is Open Source: To verify and run it without trust, feel free to <a href="https://github.com/utxo-one/bitcoiners-network" target="_blank" rel="noreferrer">download and verify the code.</a></p>
 
-  <p>We do not use any kind of first or third party cookies to track you. We use cookies to keep you authenticated to our website, also known as your "current session".</p>
-
   <h3>Data Deletion</h3>
   <p>If you would like to have your data deleted (or your profile page removed), contact us and we will do our best effort to do so swiftly. We do not guarantee that we will contact you afterwards.</p>
   
