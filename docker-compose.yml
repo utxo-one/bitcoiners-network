@@ -21,7 +21,8 @@ services:
         volumes:
             - '.:/var/www/html'
         networks:
-            - sail
+            - public
+            - private
         depends_on:
             - mysql
             - redis
@@ -43,7 +44,7 @@ services:
             - 'sail-mysql:/var/lib/mysql'
             - './vendor/laravel/sail/database/mysql/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh'
         networks:
-            - sail
+            - private
         healthcheck:
             test: ["CMD", "mysqladmin", "ping", "-p${DB_PASSWORD}"]
             retries: 3
@@ -53,7 +54,7 @@ services:
         volumes:
             - 'sail-redis:/data'
         networks:
-            - sail
+            - private
         healthcheck:
             test: ["CMD", "redis-cli", "ping"]
             retries: 3
@@ -65,7 +66,7 @@ services:
         volumes:
             - 'sail-meilisearch:/meili_data'
         networks:
-            - sail
+            - public
         healthcheck:
             test: ["CMD", "wget", "--no-verbose", "--spider",  "http://localhost:7700/health"]
             retries: 3
@@ -76,15 +77,17 @@ services:
             - '${FORWARD_MAILHOG_PORT:-1025}:1025'
             - '${FORWARD_MAILHOG_DASHBOARD_PORT:-8025}:8025'
         networks:
-            - sail
+            - public
     selenium:
         image: 'selenium/standalone-chrome'
         volumes:
             - '/dev/shm:/dev/shm'
         networks:
-            - sail
+            - public
 networks:
-    sail:
+    private:
+        driver: bridge
+    public:
         driver: bridge
 volumes:
     sail-mysql:
