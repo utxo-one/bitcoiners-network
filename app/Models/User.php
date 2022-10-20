@@ -5,11 +5,12 @@ namespace App\Models;
 use App\Enums\TransactionStatus;
 use App\Enums\TransactionType;
 use App\Enums\UserType;
-use Attribute;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Crypt;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
@@ -204,5 +205,19 @@ class User extends Authenticatable
             'nocoiners' => $this->followers()->where('type', UserType::NOCOINER)->count(),
             'total' => $this->followers()->count(),
         ];
+    }
+
+    protected function oauthToken(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => Crypt::decryptString($value),
+        );
+    }
+
+    protected function oauthTokenSecret(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => Crypt::decryptString($value),
+        );
     }
 }

@@ -7,6 +7,7 @@ use Socialite;
 use App\Models\User;
 use App\Services\UserService;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use UtxoOne\TwitterUltimatePhp\Clients\UserClient;
 
 class TwitterAuthService
@@ -21,8 +22,8 @@ class TwitterAuthService
             if ($userExists->oauth_token !== $user->token) {
 
                 $userExists->update([
-                    'oauth_token' => $user->token,
-                    'oauth_token_secret' => $user->tokenSecret,
+                    'oauth_token' => Crypt::encryptString($user->token),
+                    'oauth_token_secret' => Crypt::encryptString($user->tokenSecret),
                 ]);
             }
 
@@ -43,8 +44,8 @@ class TwitterAuthService
 
         $newUser = User::find($twitterUser->getId());
         $newUser->update([
-            'oauth_token' => $user->token,
-            'oauth_token_secret' => $user->tokenSecret,
+            'oauth_token' => Crypt::encryptString($user->token),
+            'oauth_token_secret' => Crypt::encryptString($user->tokenSecret),
             'first_login_at' => now(),
             'last_login_at' => now(),
         ]);
