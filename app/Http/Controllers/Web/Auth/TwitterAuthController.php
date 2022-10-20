@@ -51,9 +51,7 @@ class TwitterAuthController extends Controller
         $firstLogin = Carbon::create(auth()->user()->first_login_at);
         $thirtySecondsAgo = Carbon::now()->subSeconds(30);
 
-        $query = http_build_query([
-            'firstLogin' => false,
-        ]);
+        $query = null;
 
         if ($firstLogin->greaterThan($thirtySecondsAgo)) {
             $query = http_build_query([

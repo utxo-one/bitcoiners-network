@@ -19,15 +19,10 @@ class TwitterAuthService
         $userExists = User::where('twitter_id', $user->id)->whereNotNull('first_login_at')->first();
 
         if ($userExists) {
-            if ($userExists->oauth_token !== $user->token) {
-
-                $userExists->update([
-                    'oauth_token' => Crypt::encryptString($user->token),
-                    'oauth_token_secret' => Crypt::encryptString($user->tokenSecret),
-                ]);
-            }
 
             $userExists->update([
+                'oauth_token' => Crypt::encryptString($user->token),
+                'oauth_token_secret' => Crypt::encryptString($user->tokenSecret),
                 'last_login_at' => now(),
             ]);
 

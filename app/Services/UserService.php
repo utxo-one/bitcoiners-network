@@ -30,7 +30,7 @@ class UserService
         }
 
         // if the classification source is vote, do not reclassify and return the current type
-        if ($user && $user->classification_source == ClassificationSource::VOTE->value || $user && $user->classification_source == ClassificationSource::LIGHTNING->value ) {
+        if ($user && $user->classified_by == ClassificationSource::VOTE || $user && $user->classified_by == ClassificationSource::LIGHTNING) {
             return $user->type;
         }
 
