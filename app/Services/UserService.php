@@ -474,7 +474,7 @@ class UserService
             'classification_type' => $type,
         ]);
 
-        if ($user->classificationVotesReceived()->count() >= 10) {
+        if ($user->classificationVotesReceived()->count() >= 3) {
             $this->classifyUserByVotes($user);
         }
 
