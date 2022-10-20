@@ -23,7 +23,7 @@ export default function CampaignSuccessModal({ show, onHide, redirectToCampaign,
             <h2>Campaign Started</h2>
 
             <Box variant='info'>
-              Your Mass Unfollow Campaign will start immediately. Get ready to unleash the power of Bitcoin Twitter.
+              Your Mass follow Campaign will start immediately. Get ready to unleash the power of Bitcoin Twitter.
             </Box>
 
             <div className="item">
