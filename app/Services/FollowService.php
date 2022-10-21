@@ -10,6 +10,7 @@ use App\Models\Follow;
 use App\Models\FollowRequest;
 use App\Models\Transaction;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Log;
 use UtxoOne\TwitterUltimatePhp\Clients\UserClient;
@@ -44,7 +45,7 @@ class FollowService
             });
     }
 
-    public function processFollowRequest(FollowRequest $followRequest):? FollowRequest
+    public function processFollowRequest(FollowRequest $followRequest): ?FollowRequest
     {
         // if the follow request is for this user, delete it and return null
         if ($followRequest->follow_id == $followRequest->user_id) {
@@ -95,14 +96,25 @@ class FollowService
 
     public function processFollowRequests()
     {
-        // Process one follow request per user where the user has a pending follow request
+        // Process one follow request per user where the user has a pending follow request and no more than 100 completed follow requests in last 24 hours
         return User::whereHas('followRequests', function ($query) {
             $query->where('status', FollowRequestStatus::PENDING);
         })
             ->get()
             ->map(function ($user) {
                 try {
+                    // Check if the user already has more than 30-50 completed follow requests in the last 24 hours
+                    $completedFollowRequests = $user->followRequests()
+                        ->where('status', FollowRequestStatus::COMPLETED)
+                        ->where('completed_at', '>', Carbon::now()->subDay())
+                        ->count();
+
+                    if ($completedFollowRequests >= rand(30, 50)) {
+                        return null;
+                    }
+
                     $this->processFollowRequest($user->followRequests()->where('status', FollowRequestStatus::PENDING)->first());
+
                 } catch (\Exception $e) {
                     Log::error('Failed to process follow request', [
                         'user_id' => $user->twitter_id,
@@ -131,10 +143,10 @@ class FollowService
 
             return $output;
         }
-        
+
         // If the user has pending follow requests
         if (auth()->user()->followRequests()->where('status', FollowRequestStatus::PENDING)->exists()) {
-            
+
             $completedCount = auth()->user()->followRequests()->where('status', FollowRequestStatus::COMPLETED)->count();
             $pendingCount = auth()->user()->followRequests()->where('status', FollowRequestStatus::PENDING)->count();
 
@@ -148,8 +160,10 @@ class FollowService
         }
 
         // If the user doesn't have pending follow requests, but has completed follow requests
-        if (!auth()->user()->followRequests()->where('status', FollowRequestStatus::PENDING)->exists() && 
-            auth()->user()->followRequests()->where('status', FollowRequestStatus::COMPLETED)->exists()) {
+        if (
+            !auth()->user()->followRequests()->where('status', FollowRequestStatus::PENDING)->exists() &&
+            auth()->user()->followRequests()->where('status', FollowRequestStatus::COMPLETED)->exists()
+        ) {
 
             $output['totalCompletedFollowRequests'] = auth()->user()->followRequests()->where('status', FollowRequestStatus::COMPLETED)->count();
             $output['totalSpentSats'] = auth()->user()->followRequests()->where('status', FollowRequestStatus::COMPLETED)->count() * config('pricing.follow');
@@ -178,7 +192,7 @@ class FollowService
             accessToken: auth()->user()->oauth_token,
             accessSecret: auth()->user()->oauth_token_secret,
         );
-        
+
         $response = $userClient->follow(auth()->user()->twitter_id, $user->twitter_id);
 
         if (!isset($response->getData()['following'])) {
@@ -219,14 +233,14 @@ class FollowService
         if (!auth()->user()->follows()->where('followee_id', $user->twitter_id)->exists()) {
             throw new \Exception('You are not following this user.');
         }
-        
+
         $userClient = new UserClient(
             apiKey: config('services.twitter.client_id'),
             apiSecret: config('services.twitter.client_secret'),
             accessToken: auth()->user()->oauth_token,
             accessSecret: auth()->user()->oauth_token_secret,
         );
-        
+
         $response = $userClient->unfollow(auth()->user()->twitter_id, $user->twitter_id);
 
         if (!isset($response->getData()['following'])) {
