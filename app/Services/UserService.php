@@ -29,14 +29,25 @@ class UserService
             throw new Exception('Either twitterId, user or twitterUser must be provided');
         }
 
-        // if the classification source is vote, do not reclassify and return the current type
-        if ($user && $user->classified_by == ClassificationSource::VOTE || $user && $user->classified_by == ClassificationSource::LIGHTNING) {
-            return $user->type;
-        }
-
         if (!$twitterUser && !$user) {
             $twitterUserClient = new UserClient(bearerToken: config('services.twitter.bearer_token'));
             $twitterUser = $twitterUserClient->getUserById($twitterId);
+        }
+
+        // if we are passed a twitterUser, check if a user model already exists, if so, use that model for the method.
+        if ($twitterUser) {
+            $tryUser = User::where('twitter_id', $twitterUser->getId())->first();
+            if ($tryUser) {
+                $user = $tryUser;
+            }
+        }
+
+        // if the classification source is vote, do not reclassify and return the current type
+        if ($user)
+        {
+            if ($user->lightning_verified == true || $user->classified_by === ClassificationSource::VOTE) {
+                return $user->type;
+            }
         }
 
         $bio = ($user) ? $user->twitter_description : $twitterUser->getDescription();
