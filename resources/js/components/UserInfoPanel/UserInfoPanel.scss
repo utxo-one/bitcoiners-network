@@ -148,7 +148,7 @@
         &.hidden {
           transition: 0.3s opacity;
           opacity: 0;
-          user-select: none;
+          pointer-events: none;
         }
       }
     }
