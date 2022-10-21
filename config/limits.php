@@ -1,8 +1,8 @@
 <?php
 
 return [
-    'dailyFollows' => 200,
-    'dailyUnfollows' => 200,
+    'dailyFollows' => 50,
+    'dailyUnfollows' => 50,
     'dailyBlocks' => 200,
     'dailyUnblocks' => 200,
     'dailyMutes' => 200,
