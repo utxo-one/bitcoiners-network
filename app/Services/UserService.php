@@ -43,10 +43,21 @@ class UserService
         }
 
         // if the classification source is vote, do not reclassify and return the current type
-        if ($user)
-        {
-            if ($user->lightning_verified == true || $user->classified_by === ClassificationSource::VOTE) {
-                return $user->type;
+        if ($user) {
+            
+            if ($user->classified_by === ClassificationSource::VOTE) {
+                switch ($user->type) {
+                    case UserType::BITCOINER:
+                        return UserType::BITCOINER;
+                    case UserType::SHITCOINER:
+                        return UserType::SHITCOINER;
+                    case UserType::NOCOINER:
+                        return UserType::NOCOINER;
+                }
+            }
+
+            if ($user->lightning_verified == true) {
+                return UserType::BITCOINER;
             }
         }
 
@@ -61,13 +72,15 @@ class UserService
         $bioContainsShitcoinKeywords = $bioWords
             ->contains(function ($word) use ($shitcoinerKeywords) {
                 return $shitcoinerKeywords->contains(
-                    str_replace(['.', ','], '', $word));
+                    str_replace(['.', ','], '', $word)
+                );
             });
 
         $bioContainsBitcoinKeywords = $bioWords
             ->contains(function ($word) use ($bitcoinerKeywords) {
                 return $bitcoinerKeywords->contains(
-                    str_replace(['.', ','], '', $word));
+                    str_replace(['.', ','], '', $word)
+                );
             });
 
         $nameContainsShitcoins = collect(config('classifier.shitcoinerNames'))
@@ -158,7 +171,7 @@ class UserService
                 'twitter_count_listed' => $twitterUser->getPublicMetrics()?->getListedCount(),
                 'oauth_type' => 'twitter',
                 'password' => encrypt(str()->random(10)),
-                'classified_by' => ClassificationSource::CRAWLER,
+                'classified_by' => ($user->classified_by != ClassificationSource::CRAWLER) ? $user->classified_by : ClassificationSource::CRAWLER,
                 'last_classified_at' => Carbon::now(),
                 'last_refreshed_at' => Carbon::now(),
             ]);
