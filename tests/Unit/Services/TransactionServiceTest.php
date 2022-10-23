@@ -20,6 +20,7 @@ class TransactionServiceTest extends TestCase
     /** @group createInvoice */
     public function testCreateInvoice(): void
     {
+        $this->markTestSkipped('Not implemented yet.');
         dd($this->transactionService->createInvoice(1000));
     }
 }

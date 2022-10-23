@@ -10,6 +10,7 @@ use App\Http\Controllers\Frontend\Follow\Scopes\FollowingByUsernameController;
 use App\Http\Controllers\Frontend\Follow\Scopes\FollowingController;
 use App\Http\Controllers\Frontend\Follow\Scopes\FollowRequestScopeController;
 use App\Http\Controllers\Frontend\HomeController;
+use App\Http\Controllers\Frontend\LeaderboardController;
 use App\Http\Controllers\Frontend\MetricController;
 use App\Http\Controllers\Frontend\RatesController;
 use App\Http\Controllers\Frontend\Transaction\DebitController;
@@ -49,6 +50,13 @@ Route::get('/user/{username}', [UserController::class, 'show'])->name('user.show
 Route::get('/user/{username}/follow-data', [FollowDataController::class, 'show'])->name('user.follow-data.show');
 Route::get('/logout', [TwitterAuthController::class, 'logout'])->name('logout');
 
+Route::get('/leaderboards/bitcoiners/followers/bitcoiners', [LeaderboardController::class, 'bitcoinersByBitcoinerFollowers'])->name('leaderboards.bitcoiners.followed-by.bitcoiners');
+Route::get('/leaderboards/bitcoiners/following/bitcoiners', [LeaderboardController::class, 'bitcoinersByBitcoinersFollowing'])->name('leaderboards.bitcoiners.following.bitcoiners');
+Route::get('/leaderboards/bitcoiners/followers/shitcoiners', [LeaderboardController::class, 'bitcoinersByShitcoinerFollowers'])->name('leaderboards.bitcoiners.followed-by.shitcoiners');
+Route::get('/leaderboards/bitcoiners/following/shitcoiners', [LeaderboardController::class, 'bitcoinersByShitcoinersFollowing'])->name('leaderboards.bitcoiners.following.shitcoiners');
+Route::get('/leaderboards/bitcoiners/followers/nocoiners', [LeaderboardController::class, 'bitcoinersByNocoinerFollowers'])->name('leaderboards.bitcoiners.followed-by.nocoiners');
+Route::get('/leaderboards/bitcoiners/following/nocoiners', [LeaderboardController::class, 'bitcoinersByNocoinersFollowing'])->name('leaderboards.bitcoiners.following.nocoiners');
+
 Route::middleware('auth')->group(function () {
     Route::get('/follow/available/{userType}', [AvailableFollowsController::class, 'index'])->name('follow.available.type');
     Route::get('/follow/followers/{userType}', [FollowerController::class, 'index'])->name('follow.followers.type');
@@ -87,7 +95,6 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/action/{username}/follow', [FollowActionController::class, 'follow'])->name('user.action.follow');
     Route::delete('/action/{username}/unfollow', [FollowActionController::class, 'unfollow'])->name('user.action.unfollow');
-
 });
 
 
