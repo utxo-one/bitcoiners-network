@@ -10,18 +10,18 @@ class UserRepository
 {
     public function getFollowData(User $user): array
     {
-        $cacheTime = 60;
+        $cacheTime = 1000;
 
         if ($user->twitter_count_followers > 1000) {
-            $cacheTime = 600;
+            $cacheTime = 6000;
         }
 
         if ($user->twitter_count_followers > 5000) {
-            $cacheTime = 1800;
+            $cacheTime = 18000;
         }
 
         if ($user->twitter_count_followers > 10000) {
-            $cacheTime = 86400;
+            $cacheTime = 286400;
         }
 
         if ($user->twitter_count_followers > 50000) {
