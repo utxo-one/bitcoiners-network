@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "b4ae1bdd-b798-461f-b90c-66daae49c852",
-		"name": "bitcoiners.network",
+		"name": "Bitcoiners.Network (Frontend)",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "22808795"
 	},
@@ -1034,6 +1034,165 @@
 								"frontend",
 								"metrics",
 								"total-nocoiners"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Leaderboards",
+			"item": [
+				{
+					"name": "Bitcoiners Followed By Most Bitcoiners",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost/frontend/leaderboards/bitcoiners/followers/bitcoiners",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"frontend",
+								"leaderboards",
+								"bitcoiners",
+								"followers",
+								"bitcoiners"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Bitcoiners Following Most Bitcoiners",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost/frontend/leaderboards/bitcoiners/following/bitcoiners",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"frontend",
+								"leaderboards",
+								"bitcoiners",
+								"following",
+								"bitcoiners"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Bitcoiners Followed By Most Shitcoiners",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/frontend/leaderboards/bitcoiners/followers/shitcoiners",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"frontend",
+								"leaderboards",
+								"bitcoiners",
+								"followers",
+								"shitcoiners"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Bitcoiners Following Most Shitcoiners",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/frontend/leaderboards/bitcoiners/following/shitcoiners",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"frontend",
+								"leaderboards",
+								"bitcoiners",
+								"following",
+								"shitcoiners"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Bitcoiners Followed By Most Nocoiners",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/frontend/leaderboards/bitcoiners/followers/nocoiners",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"frontend",
+								"leaderboards",
+								"bitcoiners",
+								"followers",
+								"nocoiners"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Bitcoiners Following Most Nocoiners",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/frontend/leaderboards/bitcoiners/following/nocoiners",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"frontend",
+								"leaderboards",
+								"bitcoiners",
+								"following",
+								"nocoiners"
 							]
 						}
 					},
