@@ -12,7 +12,7 @@ class HomeTest extends TestCase
     public function testProfilesPictures()
     {
         $response = $this->get(route('home.profile-pictures'));
-        dd($response);
+        //dd($response);
         $response->assertStatus(200);
     }
 }
