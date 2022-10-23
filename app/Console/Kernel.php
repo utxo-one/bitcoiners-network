@@ -18,7 +18,7 @@ class Kernel extends ConsoleKernel
         if (env('APP_SCHEDULER') === true) {
             //$schedule->command('save:bitcoiner-tweets')->everyMinute();
             $schedule->command('process:follow-requests')->everyMinute();
-            $schedule->command('process:follow-chunks')->everyMinute();
+            $schedule->command('process:follow-chunks')->everyTwoMinutes();
         }
     }
 

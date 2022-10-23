@@ -25,7 +25,7 @@ class LeaderboardRepository
     public function getBitcoinersByBitcoinerFollowers(): Collection
     {
         return $this->getLeaderboard(
-            minFollowers: 500,
+            minFollowers: 1000,
             maxFollowers: 5000000,
             userType: UserType::BITCOINER,
             followType: FollowType::FOLLOWER,
@@ -41,7 +41,7 @@ class LeaderboardRepository
     public function getBitcoinersByBitcoinersFollowing(): Collection
     {
         return $this->getLeaderboard(
-            minFollowers: 500,
+            minFollowers: 1000,
             maxFollowers: 5000000,
             userType: UserType::BITCOINER,
             followType: FollowType::FOLLOWING,
@@ -57,7 +57,7 @@ class LeaderboardRepository
     public function getBitcoinersByShitcoinerFollowers(): Collection
     {
         return $this->getLeaderboard(
-            minFollowers: 500,
+            minFollowers: 1000,
             maxFollowers: 5000000,
             userType: UserType::BITCOINER,
             followType: FollowType::FOLLOWER,
@@ -73,7 +73,7 @@ class LeaderboardRepository
     public function getBitcoinersByShitcoinersFollowing(): Collection
     {
         return $this->getLeaderboard(
-            minFollowers: 500,
+            minFollowers: 1000,
             maxFollowers: 5000000,
             userType: UserType::BITCOINER,
             followType: FollowType::FOLLOWING,
@@ -89,7 +89,7 @@ class LeaderboardRepository
     public function getBitcoinersByNocoinerFollowers(): Collection
     {
         return $this->getLeaderboard(
-            minFollowers: 500,
+            minFollowers: 1000,
             maxFollowers: 5000000,
             userType: UserType::BITCOINER,
             followType: FollowType::FOLLOWER,
@@ -105,7 +105,7 @@ class LeaderboardRepository
     public function getBitcoinersByNocoinersFollowing(): Collection
     {
         return $this->getLeaderboard(
-            minFollowers: 500,
+            minFollowers: 1000,
             maxFollowers: 5000000,
             userType: UserType::BITCOINER,
             followType: FollowType::FOLLOWING,
@@ -160,6 +160,7 @@ class LeaderboardRepository
                 
                 return $results->push([
                     'user' => $user,
+                    'followData' => $followData,
                     $followUserType->value . '_' . $followTypeKey => $followData[$followType->value . '_data'][str()->plural($followUserType->value)],
                 ]);
             });
@@ -177,6 +178,7 @@ class LeaderboardRepository
                 return [
                     'rank' => $rank,
                     'user' => $result['user'],
+                    'followData' => $result['followData'],
                     $followUserType->value . 's_' . $followTypeKey => $result[$followUserType->value .'_'. $followTypeKey],
                 ];
             });
