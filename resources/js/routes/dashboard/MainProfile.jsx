@@ -104,7 +104,10 @@ export default function MainProfile({ asDashboard }) {
       setInitialLoad(true);
     }
 
+    setLoadedUser(null);
+    setUserNotFound(false);
     setInitialLoad(false);
+
     loadUserData();
   }, [asDashboard, username]);
 
@@ -285,7 +288,7 @@ export default function MainProfile({ asDashboard }) {
           <section className="user-details">
             <div ref={profilePicRef}><ProfilePicture user={userData} className='profile-pic' userNotFound={userNotFound} /></div>
             
-            { !userData && renderUserSkeleton() }
+            { !userData && !userNotFound && renderUserSkeleton() }
 
             <div className="username">{ userData?.name }</div >
             { userData && <div className="handle">@{ userData?.twitter_username }</div> }

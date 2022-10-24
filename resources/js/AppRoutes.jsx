@@ -16,20 +16,19 @@ export default function AppRoutes() {
       <BrowserRouter basename="/u">
         <ScrollToTop />
         <Routes>
-          <Route path='/dashboard' element={<MainProfile key='dashboard' asDashboard />} />
           <Route path='/profile/:username' element={<MainProfile key='profile' />} />
 
-          <Route path='/auth-test' element={<AuthRoute element={<Connections initialType='followers' />} />} />
+          <Route path='/dashboard' element={<AuthRoute element={<MainProfile key='dashboard' asDashboard />} />} />
 
-          <Route path='/followers/:username' element={<Connections initialType='followers' />} />
-          <Route path='/following/:username' element={<Connections initialType='following' />} />
+          <Route path='/followers/:username' element={<AuthRoute element={<Connections initialType='followers' />} />} />
+          <Route path='/following/:username' element={<AuthRoute element={<Connections initialType='following' />} />} />
 
-          <Route path='/followers' element={<Connections initialType='followers' key='followers' />} />
-          <Route path='/following' element={<Connections initialType='following' key='following' />} />
-          <Route path='/available' element={<Connections initialType='available' key='available' />} />
+          <Route path='/followers' element={<AuthRoute element={<Connections initialType='followers' key='followers' />} />} />
+          <Route path='/following' element={<AuthRoute element={<Connections initialType='following' key='following' />} />} />
+          <Route path='/available' element={<AuthRoute element={<Connections initialType='available' key='available' />} />} />
 
-          <Route path='/campaign' element={<CampaignOverview />} />
-          <Route path='/transactions' element={<TransactionsOverview />} />
+          <Route path='/campaign' element={<AuthRoute element={<CampaignOverview />} />} />
+          <Route path='/transactions' element={<AuthRoute element={<TransactionsOverview />} />} />
           
           <Route path='*' element={<Navigate replace to="/dashboard" />} />
         </Routes>
