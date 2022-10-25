@@ -53,6 +53,9 @@ class ProcessFollowChunks extends Command
             $twitterUser = $twitterUserClient->getUserByUsername($user->twitter_username);
             $userService = new UserService();
             $user = $userService->processTwitterUser($twitterUser);
+
+            $user->last_crawled_at = now();
+            $user->save();
         }
 
         if ($followChunk) {
