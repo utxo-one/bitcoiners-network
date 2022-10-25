@@ -24,7 +24,6 @@ export default function AppAuth() {
       }
       catch {
         dispatch({ type: 'publicUser/set', payload: true });
-        console.log('state:', state)
       }
     }
 
