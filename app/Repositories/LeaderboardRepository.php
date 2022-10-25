@@ -58,7 +58,6 @@ class LeaderboardRepository
     {
         return $this->getLeaderboard(
             minFollowers: 1000,
-            minFollowers: 500,
             maxFollowers: 5000000,
             userType: UserType::BITCOINER,
             followType: FollowType::FOLLOWER,
