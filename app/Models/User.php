@@ -121,6 +121,26 @@ class User extends Authenticatable
         return $this->hasMany(FollowChunk::class, 'user_id', 'twitter_id');
     }
 
+    public function blocks()
+    {
+        return $this->hasMany(Block::class, 'user_id', 'twitter_id');
+    }
+
+    public function likes()
+    {
+        return $this->hasMany(Like::class, 'user_id', 'twitter_id');
+    }
+
+    public function retweets()
+    {
+        return $this->hasMany(Retweet::class, 'user_id', 'twitter_id');
+    }
+    
+    public function mutes()
+    {
+        return $this->hasMany(Mute::class, 'user_id', 'twitter_id');
+    }
+
     public function getClassificationSummary()
     {
         $votes = $this->classificationVotesReceived()->get();

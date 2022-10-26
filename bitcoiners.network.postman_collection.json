@@ -420,6 +420,179 @@
 					]
 				},
 				{
+					"name": "Twitter Actions",
+					"item": [
+						{
+							"name": "Block User",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "http://localhost/frontend/action/jack/block",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"path": [
+										"frontend",
+										"action",
+										"jack",
+										"block"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Like Tweet",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "http://localhost/frontend/action/50578783077548032/like",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"path": [
+										"frontend",
+										"action",
+										"50578783077548032",
+										"like"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Retweet",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "http://localhost/frontend/action/50578783077548032/retweet",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"path": [
+										"frontend",
+										"action",
+										"50578783077548032",
+										"retweet"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "UnRetweet",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost/frontend/action/50578783077548032/unretweet",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"path": [
+										"frontend",
+										"action",
+										"50578783077548032",
+										"unretweet"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Unlike Tweet",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost/frontend/action/50578783077548032/unlike",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"path": [
+										"frontend",
+										"action",
+										"50578783077548032",
+										"unlike"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Mute User",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "http://localhost/frontend/action/jack/mute",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"path": [
+										"frontend",
+										"action",
+										"jack",
+										"mute"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Unblock User",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost/frontend/action/jack/unblock",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"path": [
+										"frontend",
+										"action",
+										"jack",
+										"unblock"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Unmute User",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost/frontend/action/jack/unmute",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"path": [
+										"frontend",
+										"action",
+										"jack",
+										"unmute"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
 					"name": "Get Available Balance (Sats)",
 					"request": {
 						"method": "GET",

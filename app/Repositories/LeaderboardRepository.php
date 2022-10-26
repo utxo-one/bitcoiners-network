@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Cache;
 class LeaderboardRepository 
 {
     private UserRepository $userRepository;
+    private int $minFollowers = 1000;
+    private int $maxFollowers = 5000000;
 
     public function __construct()
     {
@@ -25,8 +27,8 @@ class LeaderboardRepository
     public function getBitcoinersByBitcoinerFollowers(): Collection
     {
         return $this->getLeaderboard(
-            minFollowers: 1000,
-            maxFollowers: 5000000,
+            minFollowers: $this->minFollowers,
+            maxFollowers: $this->maxFollowers,
             userType: UserType::BITCOINER,
             followType: FollowType::FOLLOWER,
             followUserType: UserType::BITCOINER,
@@ -41,8 +43,8 @@ class LeaderboardRepository
     public function getBitcoinersByBitcoinersFollowing(): Collection
     {
         return $this->getLeaderboard(
-            minFollowers: 1000,
-            maxFollowers: 5000000,
+            minFollowers: $this->minFollowers,
+            maxFollowers: $this->maxFollowers,
             userType: UserType::BITCOINER,
             followType: FollowType::FOLLOWING,
             followUserType: UserType::BITCOINER,
@@ -57,8 +59,8 @@ class LeaderboardRepository
     public function getBitcoinersByShitcoinerFollowers(): Collection
     {
         return $this->getLeaderboard(
-            minFollowers: 1000,
-            maxFollowers: 5000000,
+            minFollowers: $this->minFollowers,
+            maxFollowers: $this->maxFollowers,
             userType: UserType::BITCOINER,
             followType: FollowType::FOLLOWER,
             followUserType: UserType::SHITCOINER,
@@ -73,8 +75,8 @@ class LeaderboardRepository
     public function getBitcoinersByShitcoinersFollowing(): Collection
     {
         return $this->getLeaderboard(
-            minFollowers: 1000,
-            maxFollowers: 5000000,
+            minFollowers: $this->minFollowers,
+            maxFollowers: $this->maxFollowers,
             userType: UserType::BITCOINER,
             followType: FollowType::FOLLOWING,
             followUserType: UserType::SHITCOINER,
@@ -89,8 +91,8 @@ class LeaderboardRepository
     public function getBitcoinersByNocoinerFollowers(): Collection
     {
         return $this->getLeaderboard(
-            minFollowers: 1000,
-            maxFollowers: 5000000,
+            minFollowers: $this->minFollowers,
+            maxFollowers: $this->maxFollowers,
             userType: UserType::BITCOINER,
             followType: FollowType::FOLLOWER,
             followUserType: UserType::NOCOINER,
@@ -105,8 +107,8 @@ class LeaderboardRepository
     public function getBitcoinersByNocoinersFollowing(): Collection
     {
         return $this->getLeaderboard(
-            minFollowers: 1000,
-            maxFollowers: 5000000,
+            minFollowers: $this->minFollowers,
+            maxFollowers: $this->maxFollowers,
             userType: UserType::BITCOINER,
             followType: FollowType::FOLLOWING,
             followUserType: UserType::NOCOINER,
