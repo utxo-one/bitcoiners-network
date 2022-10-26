@@ -21,6 +21,7 @@ use App\Http\Controllers\Frontend\User\EndorsementController;
 use App\Http\Controllers\Frontend\User\FollowDataController;
 use App\Http\Controllers\Frontend\User\RefreshUserController;
 use App\Http\Controllers\Frontend\User\UserController;
+use App\Http\Controllers\Frontend\UserActionController;
 use App\Http\Controllers\Web\Auth\TwitterAuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -36,6 +37,11 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+#If environment is local, Authenticate user with twitter_id 1558929312547577858
+if (app()->environment('local')) {
+    Auth::loginUsingId('1558929312547577858');
+}
 
 Route::get('/profile-pictures', [HomeController::class, 'profilesPictures'])->name('home.profile-pictures');
 Route::get('/random-bitcoiners', [HomeController::class, 'randomBitcoiners'])->name('home.random-bitcoiners');
@@ -95,6 +101,19 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/action/{username}/follow', [FollowActionController::class, 'follow'])->name('user.action.follow');
     Route::delete('/action/{username}/unfollow', [FollowActionController::class, 'unfollow'])->name('user.action.unfollow');
+
+    Route::post('/action/{username}/block', [UserActionController::class, 'block'])->name('user.action.block');
+    Route::delete('/action/{username}/unblock', [UserActionController::class, 'unblock'])->name('user.action.unblock');
+
+    Route::post('/action/{username}/mute', [UserActionController::class, 'mute'])->name('user.action.mute');
+    Route::delete('/action/{username}/unmute', [UserActionController::class, 'unmute'])->name('user.action.unmute');
+
+    Route::post('/action/{tweetId}/like', [UserActionController::class, 'like'])->name('user.action.like');
+    Route::delete('/action/{tweetId}/unlike', [UserActionController::class, 'unlike'])->name('user.action.unlike');
+
+    Route::post('/action/{tweetId}/retweet', [UserActionController::class, 'retweet'])->name('user.action.retweet');
+    Route::delete('/action/{tweetId}/unretweet', [UserActionController::class, 'unretweet'])->name('user.action.unretweet');
+
 });
 
 

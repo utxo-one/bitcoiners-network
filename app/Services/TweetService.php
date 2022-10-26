@@ -2,9 +2,13 @@
 
 namespace App\Services;
 
+use App\Enums\TransactionStatus;
+use App\Enums\TransactionType;
+use App\Models\Transaction;
 use App\Models\Tweet;
 use App\Models\User;
 use Illuminate\Support\Collection;
+use UtxoOne\TwitterUltimatePhp\Clients\TweetClient;
 use UtxoOne\TwitterUltimatePhp\Models\Tweets;
 
 class TweetService
@@ -54,5 +58,145 @@ class TweetService
         $user->save();
 
         return collect($tweetCollection);
+    }
+
+    public function like(Tweet $tweet): array
+    {
+        $tweetClient = new TweetClient(
+            apiKey: config('services.twitter.client_id'),
+            apiSecret: config('services.twitter.client_secret'),
+            accessToken: auth()->user()->oauth_token,
+            accessSecret: auth()->user()->oauth_token_secret,
+        );
+
+        $like = $tweetClient->likeTweet(
+            authUserId: auth()->user()->twitter_id,
+            tweetId: $tweet->id
+        );
+
+        if (!$like) {
+            throw new \Exception('Could not like tweet');
+        }
+
+        $like = auth()->user()->likes()->create([
+            'target_id' => $tweet->id,
+        ]);
+
+        $transaction = Transaction::create([
+            'user_id' => auth()->user()->twitter_id,
+            'type' => TransactionType::DEBIT,
+            'amount' => config('pricing.like'),
+            'description' => 'Liked Tweet ' . $tweet->id,
+            'status' => TransactionStatus::FINAL,
+        ]);
+
+        return [
+            'like' => $like,
+            'transaction' => $transaction,
+        ];
+    }
+
+    public function unlike(Tweet $tweet): array
+    {
+        $tweetClient = new TweetClient(
+            apiKey: config('services.twitter.client_id'),
+            apiSecret: config('services.twitter.client_secret'),
+            accessToken: auth()->user()->oauth_token,
+            accessSecret: auth()->user()->oauth_token_secret,
+        );
+
+        $unlike = $tweetClient->unlikeTweet(
+            authUserId: auth()->user()->twitter_id,
+            tweetId: $tweet->id
+        );
+
+        if (!$unlike) {
+            throw new \Exception('Could not unlike tweet');
+        }
+
+        $unlike = auth()->user()->likes()->where('target_id', $tweet->id)->delete();
+
+        $transaction = Transaction::create([
+            'user_id' => auth()->user()->twitter_id,
+            'type' => TransactionType::DEBIT,
+            'amount' => config('pricing.like'),
+            'description' => 'Unliked Tweet ' . $tweet->id,
+            'status' => TransactionStatus::FINAL,
+        ]);
+
+        return [
+            'unlike' => $unlike,
+            'transaction' => $transaction,
+        ];
+    }
+
+    public function retweet(Tweet $tweet): array
+    {
+        $tweetClient = new TweetClient(
+            apiKey: config('services.twitter.client_id'),
+            apiSecret: config('services.twitter.client_secret'),
+            accessToken: auth()->user()->oauth_token,
+            accessSecret: auth()->user()->oauth_token_secret,
+        );
+
+        $retweet = $tweetClient->retweet(
+            authUserId: auth()->user()->twitter_id,
+            tweetId: $tweet->id
+        );
+
+        if (!$retweet) {
+            throw new \Exception('Could not retweet tweet');
+        }
+
+        $retweet = auth()->user()->retweets()->create([
+            'target_id' => $tweet->id,
+        ]);
+
+        $transaction = Transaction::create([
+            'user_id' => auth()->user()->twitter_id,
+            'type' => TransactionType::DEBIT,
+            'amount' => config('pricing.retweet'),
+            'description' => 'Retweeted Tweet ' . $tweet->id,
+            'status' => TransactionStatus::FINAL,
+        ]);
+
+        return [
+            'retweet' => $retweet,
+            'transaction' => $transaction,
+        ];
+    }
+
+    public function unretweet(Tweet $tweet): array
+    {
+        $tweetClient = new TweetClient(
+            apiKey: config('services.twitter.client_id'),
+            apiSecret: config('services.twitter.client_secret'),
+            accessToken: auth()->user()->oauth_token,
+            accessSecret: auth()->user()->oauth_token_secret,
+        );
+
+        $unretweet = $tweetClient->unretweet(
+            authUserId: auth()->user()->twitter_id,
+            tweetId: $tweet->id
+        );
+
+        if (!$unretweet) {
+            throw new \Exception('Could not unretweet tweet');
+        }
+
+        $unretweet = auth()->user()->retweets()->where('target_id', $tweet->id)->delete();
+
+        $transaction = Transaction::create([
+            'user_id' => auth()->user()->twitter_id,
+            'type' => TransactionType::DEBIT,
+            'amount' => config('pricing.retweet'),
+            'description' => 'Unretweeted Tweet ' . $tweet->id,
+            'status' => TransactionStatus::FINAL,
+        ]);
+
+        return [
+            'unretweet' => $unretweet,
+            'transaction' => $transaction,
+        ];
     }
 }

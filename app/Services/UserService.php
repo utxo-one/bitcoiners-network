@@ -4,11 +4,15 @@ namespace App\Services;
 
 use App\Enums\ClassificationSource;
 use App\Enums\FollowChunkType;
+use App\Enums\TransactionStatus;
+use App\Enums\TransactionType;
 use App\Enums\UserType;
+use App\Models\Block;
 use App\Models\ClassificationVote;
 use App\Models\Endorsement;
 use App\Models\Follow;
 use App\Models\FollowChunk;
+use App\Models\Transaction;
 use App\Models\User;
 use Carbon\Carbon;
 use Exception;
@@ -391,26 +395,6 @@ class UserService
         return $user;
     }
 
-    public function processTwitterUserOld(TwitterUser $twitterUser): User
-    {
-        $user = $this->saveTwitterUser($twitterUser);
-
-        $following = $this->saveFollowing($twitterUser);
-        $followers = $this->saveFollowers($twitterUser);
-
-        $newFollowing = $this->saveTwitterUsers($following);
-        $newFollowers = $this->saveTwitterUsers($followers);
-
-
-        $newUsers = array_merge($newFollowers, $newFollowing);
-        Log::notice('New users found', ['count' => count($newUsers)]);
-
-        $user->last_processed_at = Carbon::now();
-        $user->save();
-
-        return $user;
-    }
-
     public function followUser(User $user): array
     {
         $userClient = new UserClient(
@@ -540,5 +524,157 @@ class UserService
         $user->last_classified_at = Carbon::now();
         $user->classified_by = ClassificationSource::VOTE;
         $user->save();
+    }
+
+    public function blockUser(User $user): array
+    {
+        $userClient = new UserClient(
+            apiKey: config('services.twitter.client_id'),
+            apiSecret: config('services.twitter.client_secret'),
+            accessToken: auth()->user()->oauth_token,
+            accessSecret: auth()->user()->oauth_token_secret,
+        );
+
+        $block = $userClient->block(
+            authUserId: auth()->user()->twitter_id,
+            userId: $user->twitter_id,
+        )->getData();
+
+        if ($block['blocking'] !== true) {
+            throw new \Exception('Failed to block user');
+        }
+
+        $block = auth()->user()->blocks()->create([
+            'target_id' => $user->twitter_id,
+        ]);
+
+        $transaction = Transaction::create([
+            'user_id' => auth()->user()->twitter_id,
+            'type' => TransactionType::DEBIT,
+            'amount' => config('pricing.block'),
+            'description' => 'Blocked @' . $user->twitter_username,
+            'status' => TransactionStatus::FINAL,
+        ]);
+
+        return [
+            'block' => $block,
+            'transaction' => $transaction,
+        ];
+    }
+
+    public function unblockUser(User $user): array
+    {
+        $userClient = new UserClient(
+            apiKey: config('services.twitter.client_id'),
+            apiSecret: config('services.twitter.client_secret'),
+            accessToken: auth()->user()->oauth_token,
+            accessSecret: auth()->user()->oauth_token_secret,
+        );
+
+        $block = $userClient->unblock(
+            authUserId: auth()->user()->twitter_id,
+            userId: $user->twitter_id,
+        )->getData();
+
+        if ($block['blocking'] !== false) {
+            throw new \Exception('Failed to unblock user');
+        }
+
+        $block = auth()->user()->blocks()->where('target_id', $user->twitter_id)->first();
+
+        if (!$block) {
+            throw new \Exception('Failed to find block');
+        }
+
+        $block->delete();
+
+        $transaction = Transaction::create([
+            'user_id' => auth()->user()->twitter_id,
+            'type' => TransactionType::DEBIT,
+            'amount' => config('pricing.block'),
+            'description' => 'Unblocked @' . $user->twitter_username,
+            'status' => TransactionStatus::FINAL,
+        ]);
+
+        return [
+            'block' => $block,
+            'transaction' => $transaction,
+        ];
+    }
+
+    public function muteUser(User $user): array
+    {
+        $userClient = new UserClient(
+            apiKey: config('services.twitter.client_id'),
+            apiSecret: config('services.twitter.client_secret'),
+            accessToken: auth()->user()->oauth_token,
+            accessSecret: auth()->user()->oauth_token_secret,
+        );
+
+        $mute = $userClient->mute(
+            authUserId: auth()->user()->twitter_id,
+            userId: $user->twitter_id,
+        )->getData();
+
+        if ($mute['muting'] !== true) {
+            throw new \Exception('Failed to mute user');
+        }
+
+        $mute = auth()->user()->mutes()->create([
+            'target_id' => $user->twitter_id,
+        ]);
+
+        $transaction = Transaction::create([
+            'user_id' => auth()->user()->twitter_id,
+            'type' => TransactionType::DEBIT,
+            'amount' => config('pricing.mute'),
+            'description' => 'Muted @' . $user->twitter_username,
+            'status' => TransactionStatus::FINAL,
+        ]);
+
+        return [
+            'mute' => $mute,
+            'transaction' => $transaction,
+        ];
+    }
+
+    public function unmuteUser(User $user): array
+    {
+        $userClient = new UserClient(
+            apiKey: config('services.twitter.client_id'),
+            apiSecret: config('services.twitter.client_secret'),
+            accessToken: auth()->user()->oauth_token,
+            accessSecret: auth()->user()->oauth_token_secret,
+        );
+
+        $mute = $userClient->unmute(
+            authUserId: auth()->user()->twitter_id,
+            userId: $user->twitter_id,
+        )->getData();
+
+        if ($mute['muting'] !== false) {
+            throw new \Exception('Failed to unmute user');
+        }
+
+        $mute = auth()->user()->mutes()->where('target_id', $user->twitter_id)->first();
+
+        if (!$mute) {
+            throw new \Exception('Failed to find mute');
+        }
+
+        $mute->delete();
+
+        $transaction = Transaction::create([
+            'user_id' => auth()->user()->twitter_id,
+            'type' => TransactionType::DEBIT,
+            'amount' => config('pricing.mute'),
+            'description' => 'Unmuted @' . $user->twitter_username,
+            'status' => TransactionStatus::FINAL,
+        ]);
+
+        return [
+            'mute' => $mute,
+            'transaction' => $transaction,
+        ];
     }
 }
