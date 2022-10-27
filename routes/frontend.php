@@ -15,6 +15,7 @@ use App\Http\Controllers\Frontend\MetricController;
 use App\Http\Controllers\Frontend\RatesController;
 use App\Http\Controllers\Frontend\Transaction\DebitController;
 use App\Http\Controllers\Frontend\Transaction\DepositController;
+use App\Http\Controllers\Frontend\TweetController;
 use App\Http\Controllers\Frontend\User\AvailableBalanceController;
 use App\Http\Controllers\Frontend\User\ClassificationVoteController;
 use App\Http\Controllers\Frontend\User\EndorsementController;
@@ -26,17 +27,6 @@ use App\Http\Controllers\Web\Auth\TwitterAuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
 
 Route::get('/profile-pictures', [HomeController::class, 'profilesPictures'])->name('home.profile-pictures');
 Route::get('/random-bitcoiners', [HomeController::class, 'randomBitcoiners'])->name('home.random-bitcoiners');
@@ -57,6 +47,25 @@ Route::get('/leaderboards/bitcoiners/followers/shitcoiners', [LeaderboardControl
 Route::get('/leaderboards/bitcoiners/following/shitcoiners', [LeaderboardController::class, 'bitcoinersByShitcoinersFollowing'])->name('leaderboards.bitcoiners.following.shitcoiners');
 Route::get('/leaderboards/bitcoiners/followers/nocoiners', [LeaderboardController::class, 'bitcoinersByNocoinerFollowers'])->name('leaderboards.bitcoiners.followed-by.nocoiners');
 Route::get('/leaderboards/bitcoiners/following/nocoiners', [LeaderboardController::class, 'bitcoinersByNocoinersFollowing'])->name('leaderboards.bitcoiners.following.nocoiners');
+
+Route::get('/leaderboards/bitcoiners/tweets/retweets/today', [LeaderboardController::class, 'bitcoinerMostRetweetedToday'])->name('leaderboards.bitcoiners.tweets.retweets.today');
+Route::get('/leaderboards/bitcoiners/tweets/retweets/week', [LeaderboardController::class, 'bitcoinerMostRetweetedThisWeek'])->name('leaderboards.bitcoiners.tweets.retweets.week');
+Route::get('/leaderboards/bitcoiners/tweets/retweets/month', [LeaderboardController::class, 'bitcoinerMostRetweetedThisMonth'])->name('leaderboards.bitcoiners.tweets.retweets.month');
+Route::get('/leaderboards/bitcoiners/tweets/retweets/year', [LeaderboardController::class, 'bitcoinerMostRetweetedThisYear'])->name('leaderboards.bitcoiners.tweets.retweets.year');
+Route::get('/leaderboards/bitcoiners/tweets/retweets/all-time', [LeaderboardController::class, 'bitcoinerMostRetweetedAllTime'])->name('leaderboards.bitcoiners.tweets.retweets.all-time');
+
+Route::get('leaderboards/bitcoiners/tweets/likes/today', [LeaderboardController::class, 'bitcoinerMostLikedToday'])->name('leaderboards.bitcoiners.tweets.likes.today');
+Route::get('leaderboards/bitcoiners/tweets/likes/week', [LeaderboardController::class, 'bitcoinerMostLikedThisWeek'])->name('leaderboards.bitcoiners.tweets.likes.week');
+Route::get('leaderboards/bitcoiners/tweets/likes/month', [LeaderboardController::class, 'bitcoinerMostLikedThisMonth'])->name('leaderboards.bitcoiners.tweets.likes.month');
+Route::get('leaderboards/bitcoiners/tweets/likes/year', [LeaderboardController::class, 'bitcoinerMostLikedThisYear'])->name('leaderboards.bitcoiners.tweets.likes.year');
+Route::get('leaderboards/bitcoiners/tweets/likes/all-time', [LeaderboardController::class, 'bitcoinerMostLikedAllTime'])->name('leaderboards.bitcoiners.tweets.likes.all-time');
+
+Route::get('/leaderboards/bitcoiners/tweets/replies/today', [LeaderboardController::class, 'bitcoinerMostRepliesToday'])->name('leaderboards.bitcoiners.tweets.replies.today');
+Route::get('/leaderboards/bitcoiners/tweets/replies/week', [LeaderboardController::class, 'bitcoinerMostRepliesThisWeek'])->name('leaderboards.bitcoiners.tweets.replies.week');
+Route::get('/leaderboards/bitcoiners/tweets/replies/month', [LeaderboardController::class, 'bitcoinerMostRepliesThisMonth'])->name('leaderboards.bitcoiners.tweets.replies.month');
+Route::get('/leaderboards/bitcoiners/tweets/replies/year', [LeaderboardController::class, 'bitcoinerMostRepliesThisYear'])->name('leaderboards.bitcoiners.tweets.replies.year');
+Route::get('/leaderboards/bitcoiners/tweets/replies/all-time', [LeaderboardController::class, 'bitcoinerMostRepliesAllTime'])->name('leaderboards.bitcoiners.tweets.replies.all-time');
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/follow/available/{userType}', [AvailableFollowsController::class, 'index'])->name('follow.available.type');
