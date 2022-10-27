@@ -48,13 +48,18 @@ class UserService
             
             if ($user->classified_by === ClassificationSource::VOTE->value) {
                 switch ($user->type) {
-                    case UserType::BITCOINER:
-                        return UserType::BITCOINER;
-                    case UserType::SHITCOINER:
-                        return UserType::SHITCOINER;
-                    case UserType::NOCOINER:
-                        return UserType::NOCOINER;
+                    case UserType::BITCOINER->value:
+                        $type = UserType::BITCOINER;
+                        break;
+                    case UserType::SHITCOINER->value:
+                        $type = UserType::SHITCOINER;
+                        break;
+                    case UserType::NOCOINER->value:
+                        $type = UserType::NOCOINER;
+                        break;
                 }
+
+                return $type;
             }
 
             if ($user->lightning_verified == true) {
