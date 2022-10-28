@@ -41,12 +41,15 @@ Route::get('/user/{username}', [UserController::class, 'show'])->name('user.show
 Route::get('/user/{username}/follow-data', [FollowDataController::class, 'show'])->name('user.follow-data.show');
 Route::get('/logout', [TwitterAuthController::class, 'logout'])->name('logout');
 
-Route::get('/leaderboards/bitcoiners/followers/bitcoiners', [LeaderboardController::class, 'bitcoinersByBitcoinerFollowers'])->name('leaderboards.bitcoiners.followed-by.bitcoiners');
-Route::get('/leaderboards/bitcoiners/following/bitcoiners', [LeaderboardController::class, 'bitcoinersByBitcoinersFollowing'])->name('leaderboards.bitcoiners.following.bitcoiners');
-Route::get('/leaderboards/bitcoiners/followers/shitcoiners', [LeaderboardController::class, 'bitcoinersByShitcoinerFollowers'])->name('leaderboards.bitcoiners.followed-by.shitcoiners');
-Route::get('/leaderboards/bitcoiners/following/shitcoiners', [LeaderboardController::class, 'bitcoinersByShitcoinersFollowing'])->name('leaderboards.bitcoiners.following.shitcoiners');
-Route::get('/leaderboards/bitcoiners/followers/nocoiners', [LeaderboardController::class, 'bitcoinersByNocoinerFollowers'])->name('leaderboards.bitcoiners.followed-by.nocoiners');
-Route::get('/leaderboards/bitcoiners/following/nocoiners', [LeaderboardController::class, 'bitcoinersByNocoinersFollowing'])->name('leaderboards.bitcoiners.following.nocoiners');
+// Route::get('/leaderboards/bitcoiners/followers/bitcoiners/between/{minFollowers}/{maxFollowers}', [LeaderboardController::class, 'bitcoinersByBitcoinerFollowers'])->name('leaderboards.bitcoiners.followed-by.bitcoiners');
+// Route::get('/leaderboards/bitcoiners/following/bitcoiners/between/{minFollowers}/{maxFollowers}', [LeaderboardController::class, 'bitcoinersByBitcoinersFollowing'])->name('leaderboards.bitcoiners.following.bitcoiners');
+// Route::get('/leaderboards/bitcoiners/followers/shitcoiners/between/{minFollowers}/{maxFollowers}', [LeaderboardController::class, 'bitcoinersByShitcoinerFollowers'])->name('leaderboards.bitcoiners.followed-by.shitcoiners');
+// Route::get('/leaderboards/bitcoiners/following/shitcoiners/between/{minFollowers}/{maxFollowers}', [LeaderboardController::class, 'bitcoinersByShitcoinersFollowing'])->name('leaderboards.bitcoiners.following.shitcoiners');
+// Route::get('/leaderboards/bitcoiners/followers/nocoiners/between/{minFollowers}/{maxFollowers}', [LeaderboardController::class, 'bitcoinersByNocoinerFollowers'])->name('leaderboards.bitcoiners.followed-by.nocoiners');
+// Route::get('/leaderboards/bitcoiners/following/nocoiners/between/{minFollowers}/{maxFollowers}', [LeaderboardController::class, 'bitcoinersByNocoinersFollowing'])->name('leaderboards.bitcoiners.following.nocoiners');
+
+Route::get('/leaderboard/users/{userType}/{followType}/{followedByType}/between/{minFollowers}/{maxFollowers}', [LeaderboardController::class, 'users'])->name('leaderboards.users');
+Route::get('/leaderboard/tweets/{userType}/{orderBy}/days/{timeframe}', [LeaderboardController::class, 'tweets'])->name('leaderboards.tweets');
 
 Route::get('/leaderboards/bitcoiners/tweets/retweets/today', [LeaderboardController::class, 'bitcoinerMostRetweetedToday'])->name('leaderboards.bitcoiners.tweets.retweets.today');
 Route::get('/leaderboards/bitcoiners/tweets/retweets/week', [LeaderboardController::class, 'bitcoinerMostRetweetedThisWeek'])->name('leaderboards.bitcoiners.tweets.retweets.week');
@@ -65,7 +68,6 @@ Route::get('/leaderboards/bitcoiners/tweets/replies/week', [LeaderboardControlle
 Route::get('/leaderboards/bitcoiners/tweets/replies/month', [LeaderboardController::class, 'bitcoinerMostRepliesThisMonth'])->name('leaderboards.bitcoiners.tweets.replies.month');
 Route::get('/leaderboards/bitcoiners/tweets/replies/year', [LeaderboardController::class, 'bitcoinerMostRepliesThisYear'])->name('leaderboards.bitcoiners.tweets.replies.year');
 Route::get('/leaderboards/bitcoiners/tweets/replies/all-time', [LeaderboardController::class, 'bitcoinerMostRepliesAllTime'])->name('leaderboards.bitcoiners.tweets.replies.all-time');
-
 
 Route::middleware('auth')->group(function () {
     Route::get('/follow/available/{userType}', [AvailableFollowsController::class, 'index'])->name('follow.available.type');
