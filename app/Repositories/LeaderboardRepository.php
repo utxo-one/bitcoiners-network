@@ -11,108 +11,10 @@ use Illuminate\Support\Facades\Cache;
 class LeaderboardRepository 
 {
     private UserRepository $userRepository;
-    private int $minFollowers = 1000;
-    private int $maxFollowers = 5000000;
 
     public function __construct()
     {
         $this->userRepository = new UserRepository();
-    }
-
-    /**
-     * Get Bitcoiners by Bitcoiner Followers
-     *
-     * @return Collection
-     */    
-    public function getBitcoinersByBitcoinerFollowers(): Collection
-    {
-        return $this->getLeaderboard(
-            minFollowers: $this->minFollowers,
-            maxFollowers: $this->maxFollowers,
-            userType: UserType::BITCOINER,
-            followType: FollowType::FOLLOWER,
-            followUserType: UserType::BITCOINER,
-        );
-    }
-
-    /**
-     * Get Bitcoiners by Bitcoiners Following
-     * 
-     * @return Collection
-     */
-    public function getBitcoinersByBitcoinersFollowing(): Collection
-    {
-        return $this->getLeaderboard(
-            minFollowers: $this->minFollowers,
-            maxFollowers: $this->maxFollowers,
-            userType: UserType::BITCOINER,
-            followType: FollowType::FOLLOWING,
-            followUserType: UserType::BITCOINER,
-        );
-    }
-
-    /**
-     * Get Bitcoiners by Shitcoiner Followers
-     * 
-     * @return Collection
-     */
-    public function getBitcoinersByShitcoinerFollowers(): Collection
-    {
-        return $this->getLeaderboard(
-            minFollowers: $this->minFollowers,
-            maxFollowers: $this->maxFollowers,
-            userType: UserType::BITCOINER,
-            followType: FollowType::FOLLOWER,
-            followUserType: UserType::SHITCOINER,
-        );
-    }
-
-    /**
-     * Get Bitcoiners by Shitcoiners Following
-     * 
-     * @return Collection
-     */
-    public function getBitcoinersByShitcoinersFollowing(): Collection
-    {
-        return $this->getLeaderboard(
-            minFollowers: $this->minFollowers,
-            maxFollowers: $this->maxFollowers,
-            userType: UserType::BITCOINER,
-            followType: FollowType::FOLLOWING,
-            followUserType: UserType::SHITCOINER,
-        );
-    }
-
-    /**
-     * Get Bitcoiners by Nocoiner Followers
-     * 
-     * @return Collection
-     */
-    public function getBitcoinersByNocoinerFollowers(): Collection
-    {
-        return $this->getLeaderboard(
-            minFollowers: $this->minFollowers,
-            maxFollowers: $this->maxFollowers,
-            userType: UserType::BITCOINER,
-            followType: FollowType::FOLLOWER,
-            followUserType: UserType::NOCOINER,
-        );
-    }
-
-    /**
-     * Get Bitcoiners by Nocoiners Following
-     * 
-     * @return Collection
-     */
-    public function getBitcoinersByNocoinersFollowing(): Collection
-    {
-        return $this->getLeaderboard(
-            minFollowers: $this->minFollowers,
-            maxFollowers: $this->maxFollowers,
-            userType: UserType::BITCOINER,
-            followType: FollowType::FOLLOWING,
-            followUserType: UserType::NOCOINER,
-        );
     }
 
     /**
@@ -123,18 +25,17 @@ class LeaderboardRepository
      *
      * @return Collection
      */
-    private function getLeaderboard(
+    public function getLeaderboard(
         int $minFollowers,
         int $maxFollowers,
         UserType $userType,
         FollowType $followType,
         UserType $followUserType,
     ): Collection {
-        // Initialize a collection to store the results.
+
         $results = collect();
 
-        // Create a cache key for the leaderboard.
-        $cacheKey = 'leaderboard:' . $userType->value . '-by-' . $followUserType->value . '-' . $followType->value;
+        $cacheKey = 'leaderboard:' . $userType->value . '-by-' . $followUserType->value . '-' . $followType->value . '-between-' . $minFollowers . '-and-' . $maxFollowers;
 
         return Cache::remember($cacheKey, 86400, function () use (
             $results,
@@ -148,7 +49,6 @@ class LeaderboardRepository
 
             $followTypeKey = ($followType === FollowType::FOLLOWING) ? $followType->value : $followType->value . 's';
 
-            // Select all users with over 1,000 followers.
             $users = User::query()
                 ->where('twitter_count_followers', '>', $minFollowers)
                 ->where('twitter_count_followers', '<', $maxFollowers)
@@ -156,7 +56,7 @@ class LeaderboardRepository
                 ->orderBy('twitter_count_' . $followTypeKey, 'desc')
                 ->get();
 
-            // For each user, get the follow data, user model and rank and add it to the collection.
+            // For each user add the follow data.
             $users->each(function ($user) use ($results, $followType, $followUserType, $followTypeKey) {
                 $followData = $this->userRepository->getFollowData($user);
                 

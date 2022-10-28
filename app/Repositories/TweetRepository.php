@@ -57,244 +57,49 @@ class TweetRepository
         });
     }
 
-    public function getBitcoinerMostRetweetedToday(): Collection
-    {
-        return Cache::remember(
-            'most_retweeted_this_week',
-            $this->cacheTime - ($this->cacheTime / 4),
-            fn () => Tweet::where('created_at', '>=', Carbon::now()->subDay())
-                ->where('likes', '>', 0)
-                ->where('replies', '>', 0)
-                ->whereHas('user', fn ($query) => $query->where('type', '=', UserType::BITCOINER))
-                ->with('user')
-                ->orderBy('retweets', 'desc')
-                ->limit($this->limit)
-                ->get()
-        );
-    }
+    public function getTweets(
+        int $minLikes = 10,
+        int $minReplies = 0,
+        int $minRetweets = 0,
+        int $timeframe = 0,
+        UserType $userType = UserType::BITCOINER,
+        string $orderBy = 'likes',
+        string $order = 'desc',
+        int $limit = 100,
+    ): Collection {
 
-    public function getBitcoinerMostRetweetedThisWeek(): Collection
-    {
-        return Cache::remember(
-            'most_retweeted_this_week',
-            $this->cacheTime,
-            fn () => Tweet::where('created_at', '>=', Carbon::now()->subWeek())
-                ->where('likes', '>', 0)
-                ->where('replies', '>', 0)
-                ->whereHas('user', fn ($query) => $query->where('type', '=', UserType::BITCOINER))
-                ->with('user')
-                ->orderBy('retweets', 'desc')
-                ->limit($this->limit)
-                ->get()
-        );
-    }
+        // If the userType is not one of the UserType Enums, throw exception
+        if (!in_array($userType, UserType::cases())) {
+            throw new \Exception('Invalid user type');
+        }
 
-    public function getBitcoinerMostRetweetedThisMonth(): Collection
-    {
-        return Cache::remember(
-            'most_retweeted_this_month',
-            $this->cacheTime,
-            fn () => Tweet::where('created_at', '>=', Carbon::now()->subMonth())
-                ->where('likes', '>', 0)
-                ->where('replies', '>', 0)
-                ->whereHas('user', fn ($query) => $query->where('type', '=', UserType::BITCOINER))
-                ->with('user')
-                ->orderBy('retweets', 'desc')
-                ->limit($this->limit)
-                ->get()
-        );
-    }
+        return Cache::remember("tweets:{$userType->value}:{$orderBy}:{$order}:{$limit}:{$minLikes}:{$minReplies}:{$minRetweets}:{$timeframe}", 
+        $this->cacheTime,
+        function () use (
+            $minLikes,
+            $minReplies,
+            $minRetweets,
+            $timeframe,
+            $userType,
+            $orderBy,
+            $order,
+            $limit,
+        ) {
 
-    public function getBitcoinerMostRetweetedThisYear(): Collection
-    {
-        return Cache::remember(
-            'most_retweeted_this_year',
-            $this->cacheTime,
-            fn () => Tweet::where('created_at', '>=', Carbon::now()->subYear())
-                ->where('likes', '>', 0)
-                ->where('replies', '>', 0)
-                ->whereHas('user', fn ($query) => $query->where('type', '=', UserType::BITCOINER))
+            $tweets = Tweet::query()
+                ->whereHas('user', fn ($query) => $query->where('type', '=', $userType))
                 ->with('user')
-                ->orderBy('retweets', 'desc')
-                ->limit($this->limit)
-                ->get()
-        );
-    }
+                ->where('likes', '>=', $minLikes)
+                ->where('replies', '>=', $minReplies)
+                ->where('retweets', '>=', $minRetweets)
+                ->orderBy($orderBy, $order)
+                ->limit($limit);
 
-    public function getBitcoinerMostRetweetedAllTime(): Collection
-    {
-        return Cache::remember(
-            'most_retweeted_all_time',
-            $this->cacheTime,
-            fn () => Tweet::orderBy('retweets', 'desc')
-                ->where('likes', '>', 0)
-                ->where('replies', '>', 0)
-                ->whereHas('user', fn ($query) => $query->where('type', '=', UserType::BITCOINER))
-                ->with('user')
-                ->orderBy('retweets', 'desc')
-                ->limit($this->limit)
-                ->get()
-        );
-    }
+            if ($timeframe !== 0) {
+                $tweets->where('created_at', '>=', Carbon::now()->subDays($timeframe));
+            }
 
-    public function getBitcoinerMostLikedToday(): Collection
-    {
-        return Cache::remember(
-            'most_liked_today',
-            $this->cacheTime - ($this->cacheTime / 4),
-            fn () => Tweet::where('created_at', '>=', Carbon::now()->subDay())
-                ->where('likes', '>', 0)
-                ->where('replies', '>', 0)
-                ->whereHas('user', fn ($query) => $query->where('type', '=', UserType::BITCOINER))
-                ->with('user')
-                ->orderBy('likes', 'desc')
-                ->limit($this->limit)
-                ->get()
-        );
+            return $tweets->get();
+        });
     }
-
-    public function getBitcoinerMostLikedThisWeek(): Collection
-    {
-        return Cache::remember(
-            'most_liked_this_week',
-            $this->cacheTime,
-            fn () => Tweet::where('created_at', '>=', Carbon::now()->subWeek())
-                ->where('likes', '>', 0)
-                ->where('replies', '>', 0)
-                ->whereHas('user', fn ($query) => $query->where('type', '=', UserType::BITCOINER))
-                ->with('user')
-                ->orderBy('likes', 'desc')
-                ->limit($this->limit)
-                ->get()
-        );
-    }
-
-    public function getBitcoinerMostLikedThisMonth(): Collection
-    {
-        return Cache::remember(
-            'most_liked_this_month',
-            $this->cacheTime,
-            fn () => Tweet::where('created_at', '>=', Carbon::now()->subMonth())
-                ->where('likes', '>', 0)
-                ->where('replies', '>', 0)
-                ->whereHas('user', fn ($query) => $query->where('type', '=', UserType::BITCOINER))
-                ->with('user')
-                ->orderBy('likes', 'desc')
-                ->limit($this->limit)
-                ->get()
-        );
-    }
-
-    public function getBitcoinerMostLikedThisYear(): Collection
-    {
-        return Cache::remember(
-            'most_liked_this_year',
-            $this->cacheTime,
-            fn () => Tweet::where('created_at', '>=', Carbon::now()->subYear())
-                ->where('likes', '>', 0)
-                ->where('replies', '>', 0)
-                ->whereHas('user', fn ($query) => $query->where('type', '=', UserType::BITCOINER))
-                ->with('user')
-                ->orderBy('likes', 'desc')
-                ->limit($this->limit)
-                ->get()
-        );
-    }
-
-    public function getBitcoinerMostLikedAllTime(): Collection
-    {
-        return Cache::remember(
-            'most_liked_all_time',
-            $this->cacheTime,
-            fn () => Tweet::orderBy('likes', 'desc')
-                ->where('likes', '>', 0)
-                ->where('replies', '>', 0)
-                ->whereHas('user', fn ($query) => $query->where('type', '=', UserType::BITCOINER))
-                ->with('user')
-                ->orderBy('likes', 'desc')
-                ->limit($this->limit)
-                ->get()
-        );
-    }
-
-    public function getBitcoinerMostRepliesToday(): Collection
-    {
-        return Cache::remember(
-            'most_replied_today',
-            $this->cacheTime - ($this->cacheTime / 4),
-            fn () => Tweet::where('created_at', '>=', Carbon::now()->subDay())
-                ->where('likes', '>', 0)
-                ->where('replies', '>', 0)
-                ->whereHas('user', fn ($query) => $query->where('type', '=', UserType::BITCOINER))
-                ->with('user')
-                ->orderBy('replies', 'desc')
-                ->limit($this->limit)
-                ->get()
-        );
-    }
-
-    public function getBitcoinerMostRepliesThisWeek(): Collection
-    {
-        return Cache::remember(
-            'most_replied_this_week',
-            $this->cacheTime,
-            fn () => Tweet::where('created_at', '>=', Carbon::now()->subWeek())
-                ->where('likes', '>', 0)
-                ->where('replies', '>', 0)
-                ->whereHas('user', fn ($query) => $query->where('type', '=', UserType::BITCOINER))
-                ->with('user')
-                ->orderBy('replies', 'desc')
-                ->limit($this->limit)
-                ->get()
-        );
-    }
-
-    public function getBitcoinerMostRepliesThisMonth(): Collection
-    {
-        return Cache::remember(
-            'most_replied_this_month',
-            $this->cacheTime,
-            fn () => Tweet::where('created_at', '>=', Carbon::now()->subMonth())
-                ->where('likes', '>', 0)
-                ->where('replies', '>', 0)
-                ->whereHas('user', fn ($query) => $query->where('type', '=', UserType::BITCOINER))
-                ->with('user')
-                ->orderBy('replies', 'desc')
-                ->limit($this->limit)
-                ->get()
-        );
-    }
-
-    public function getBitcoinerMostRepliesThisYear(): Collection
-    {
-        return Cache::remember(
-            'most_replied_this_year',
-            $this->cacheTime,
-            fn () => Tweet::where('created_at', '>=', Carbon::now()->subYear())
-                ->where('likes', '>', 0)
-                ->where('replies', '>', 0)
-                ->whereHas('user', fn ($query) => $query->where('type', '=', UserType::BITCOINER))
-                ->with('user')
-                ->orderBy('replies', 'desc')
-                ->limit($this->limit)
-                ->get()
-        );
-    }
-
-    public function getBitcoinerMostRepliesAllTime(): Collection
-    {
-        return Cache::remember(
-            'most_replied_all_time',
-            $this->cacheTime,
-            fn () => Tweet::orderBy('replies', 'desc')
-                ->where('likes', '>', 0)
-                ->where('replies', '>', 0)
-                ->whereHas('user', fn ($query) => $query->where('type', '=', UserType::BITCOINER))
-                ->with('user')
-                ->orderBy('replies', 'desc')
-                ->limit($this->limit)
-                ->get()
-        );
-    }
-
 }
