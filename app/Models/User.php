@@ -46,7 +46,6 @@ class User extends Authenticatable
         'two_factor_secret',
         'oauth_token',
         'oauth_token_secret',
-        'last_crawled_at',
         'last_processed_at',
         'profile_photo_url',
         'current_team_id',
