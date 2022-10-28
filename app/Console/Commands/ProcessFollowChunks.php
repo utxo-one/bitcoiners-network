@@ -99,7 +99,7 @@ class ProcessFollowChunks extends Command
                 // If the error message contains "User has been suspended: [username]", then find that user by username and mark them as is_suspended = true
                 if (strpos($e->getMessage(), 'User has been suspended') !== false) {
                     $username = explode(':', $e->getMessage())[1];
-                    $username = trim($username, '[]');
+                    $username = trim($username);
                     $this->info("Marking user {$username} as suspended");
                     $user = User::where('twitter_username', $username)->first();
                     $user->is_suspended = true;
