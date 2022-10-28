@@ -7,6 +7,7 @@ use App\Models\FollowChunk;
 use App\Models\User;
 use App\Services\UserService;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 use UtxoOne\TwitterUltimatePhp\Clients\UserClient;
 
 class ProcessFollowChunks extends Command
@@ -47,6 +48,7 @@ class ProcessFollowChunks extends Command
                 ->where('twitter_count_followers', '>', 1000)
                 ->where('twitter_count_followers', '<', 20000)
                 ->where('twitter_count_following', '>', 500)
+                ->where('is_suspended', false)
                 ->first();
 
             $twitterUserClient = new UserClient(bearerToken: config('services.twitter.bearer_token'));
@@ -70,8 +72,27 @@ class ProcessFollowChunks extends Command
                     // display the count of deleted follow requests
                     $this->info("Deleted {$deleted} follow chunks");
                 }
+
+                // If the error message contains "User has been suspended: [username]", then find that user by username and mark them as is_suspended = true
+                if (strpos($e->getMessage(), 'User has been suspended') !== false) {
+                    $username = explode(':', $e->getMessage())[1];
+                    $username = trim($username);
+                    $this->info("Marking user {$username} as suspended");
+                    $user = User::where('twitter_username', $username)->first();
+                    $user->is_suspended = true;
+                    $user->save();
+
+                    // Log the marking
+                    Log::info("Marking user {$username} as suspended");
+
+                    // Try to process the same followChunk again
+                    $this->info("Trying to process the same follow chunk again");
+                    $userService->processFollowChunk($followChunk);
+                }
+
                 $this->error($e->getMessage());
             }
+            
             $follows = $userService->processFollowChunk($followChunk);
             $this->info("Processed {$follows->count()} follows");
             $this->info('Done');
