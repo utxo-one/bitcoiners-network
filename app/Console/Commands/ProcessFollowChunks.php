@@ -52,12 +52,35 @@ class ProcessFollowChunks extends Command
                 ->first();
 
             $twitterUserClient = new UserClient(bearerToken: config('services.twitter.bearer_token'));
-            $twitterUser = $twitterUserClient->getUserByUsername($user->twitter_username);
-            $userService = new UserService();
-            $user = $userService->processTwitterUser($twitterUser);
+            try {
+                $twitterUser = $twitterUserClient->getUserByUsername($user->twitter_username);
+                $userService = new UserService();
+                $user = $userService->processTwitterUser($twitterUser);
+    
+                $user->last_crawled_at = now();
+                $user->save();
+            } catch (\Exception $e) {
+                // If the error message contains "User has been suspended: [username]", then find that user by username and mark them as is_suspended = true
+                if (strpos($e->getMessage(), 'User has been suspended') !== false) {
+                    $username = explode(':', $e->getMessage())[1];
+                    $username = trim($username);
+                    $username = str_replace([']', '[', '.'], '', $username);
+                    $this->info("Marking user {$username} as suspended");
+                    $user = User::where('twitter_username', $username)->first();
+                    $user->is_suspended = true;
+                    $user->save();
 
-            $user->last_crawled_at = now();
-            $user->save();
+                    // Log the marking
+                    Log::info("Marking user {$username} as suspended");
+
+                    // Try to process the same followChunk again
+                    $this->info("Trying to process the same follow chunk again");
+                    
+                    // Run this artisan command again
+                    $this->call('process:follow-chunks');
+                }
+            }
+
         }
 
         if ($followChunk) {
@@ -76,7 +99,7 @@ class ProcessFollowChunks extends Command
                 // If the error message contains "User has been suspended: [username]", then find that user by username and mark them as is_suspended = true
                 if (strpos($e->getMessage(), 'User has been suspended') !== false) {
                     $username = explode(':', $e->getMessage())[1];
-                    $username = trim($username);
+                    $username = trim($username, '[]');
                     $this->info("Marking user {$username} as suspended");
                     $user = User::where('twitter_username', $username)->first();
                     $user->is_suspended = true;
@@ -87,7 +110,9 @@ class ProcessFollowChunks extends Command
 
                     // Try to process the same followChunk again
                     $this->info("Trying to process the same follow chunk again");
-                    $userService->processFollowChunk($followChunk);
+                   
+                    // Run this artisan command again
+                    $this->call('process:follow-chunks');
                 }
 
                 $this->error($e->getMessage());
