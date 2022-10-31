@@ -42,6 +42,9 @@ class ProcessFollowChunks extends Command
 
         // If there is no FollowChunk to process, select a user with type bitcoiner who hasn't been crawled yet
         if (!$followChunk) {
+
+            $this->info('No follow chunks to process, selecting a user to crawl');
+
             $user = User::query()
                 ->where('last_crawled_at', null)
                 ->where('type', UserType::BITCOINER)
@@ -59,6 +62,9 @@ class ProcessFollowChunks extends Command
     
                 $user->last_crawled_at = now();
                 $user->save();
+
+                Log::info('Crawled user ' . $user->twitter_username);
+
             } catch (\Exception $e) {
                 // If the error message contains "User has been suspended: [username]", then find that user by username and mark them as is_suspended = true
                 if (strpos($e->getMessage(), 'User has been suspended') !== false) {
@@ -78,6 +84,30 @@ class ProcessFollowChunks extends Command
                     
                     // Run this artisan command again
                     $this->call('process:follow-chunks');
+                }
+                
+                // If error message contains "Could not find user with id: [103711757]", then find that user by username and mark them as is_suspended = true
+                if (strpos($e->getMessage(), 'Could not find user with username') !== false) {
+                    $username = explode(':', $e->getMessage())[1];
+                    $username = trim($username);
+                    $username = str_replace([']', '[', '.'], '', $username);
+                    $this->info("Marking user {$username} as suspended");
+                    $user = User::where('twitter_username', $username)->first();
+                    $user->is_suspended = true;
+                    $user->save();
+
+                    // Log the marking
+                    Log::info("Marking user {$username} as suspended");
+
+                    // Try to process the same followChunk again
+                    $this->info("Trying to process the same follow chunk again");
+                    
+                    // Run this artisan command again
+                    $this->call('process:follow-chunks');
+                }
+                else {
+                    // Log the error
+                    Log::error($e->getMessage());
                 }
             }
 
@@ -122,9 +152,7 @@ class ProcessFollowChunks extends Command
             $this->info("Processed {$follows->count()} follows");
             $this->info('Done');
 
-        } else {
-            $this->info('No follow chunks to process');
-        }
+        } 
 
         return 0;
     }
