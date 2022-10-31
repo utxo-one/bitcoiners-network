@@ -41,7 +41,7 @@ export default function CommunityRateModal({ show, user, onHide }) {
             <div className="chart">
               <RadialBar className={type} percent={votes.total === 0 ? 0 : votes[type] / votes.total * 100} />
               <div className="chart-percent">
-                { percentages[type] }%
+                { percentages?.[type] || 0 }%
               </div>
             </div>
             <div className="count">{ CompactNumberFormat(votes[type]) } votes</div>
