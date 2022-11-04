@@ -9,7 +9,6 @@ use App\Http\Requests\StoreEndorsementRequest;
 use App\Models\User;
 use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class EndorsementController extends Controller
@@ -18,9 +17,14 @@ class EndorsementController extends Controller
     {
     }
 
-    public function index(User $twitterId): JsonResponse
+    public function index(string $twitterId): JsonResponse
     {
-        return response()->json($twitterId->endorsementsReceived(), Response::HTTP_OK);
+        $user = User::where('twitter_id', $twitterId)->firstOrFail();
+        try {
+            return response()->json($user->endorsementsReceived(), Response::HTTP_OK);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }   
     }
 
     public function store(StoreEndorsementRequest $request): JsonResponse
