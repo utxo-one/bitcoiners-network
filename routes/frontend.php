@@ -40,6 +40,7 @@ Route::get('/metrics/total-nocoiners', [MetricController::class, 'totalNocoiners
 Route::get('/user/{username}', [UserController::class, 'show'])->name('user.show');
 Route::get('/user/{username}/follow-data', [FollowDataController::class, 'show'])->name('user.follow-data.show');
 Route::get('/logout', [TwitterAuthController::class, 'logout'])->name('logout');
+Route::get('/endorsements/{twitterId}', [EndorsementController::class, 'index'])->name('user.endorse.index');
 
 // Route::get('/leaderboards/bitcoiners/followers/bitcoiners/between/{minFollowers}/{maxFollowers}', [LeaderboardController::class, 'bitcoinersByBitcoinerFollowers'])->name('leaderboards.bitcoiners.followed-by.bitcoiners');
 // Route::get('/leaderboards/bitcoiners/following/bitcoiners/between/{minFollowers}/{maxFollowers}', [LeaderboardController::class, 'bitcoinersByBitcoinersFollowing'])->name('leaderboards.bitcoiners.following.bitcoiners');
@@ -50,24 +51,6 @@ Route::get('/logout', [TwitterAuthController::class, 'logout'])->name('logout');
 
 Route::get('/leaderboard/users/{userType}/{followType}/{followedByType}/between/{minFollowers}/{maxFollowers}', [LeaderboardController::class, 'users'])->name('leaderboards.users');
 Route::get('/leaderboard/tweets/{userType}/{orderBy}/days/{timeframe}', [LeaderboardController::class, 'tweets'])->name('leaderboards.tweets');
-
-Route::get('/leaderboards/bitcoiners/tweets/retweets/today', [LeaderboardController::class, 'bitcoinerMostRetweetedToday'])->name('leaderboards.bitcoiners.tweets.retweets.today');
-Route::get('/leaderboards/bitcoiners/tweets/retweets/week', [LeaderboardController::class, 'bitcoinerMostRetweetedThisWeek'])->name('leaderboards.bitcoiners.tweets.retweets.week');
-Route::get('/leaderboards/bitcoiners/tweets/retweets/month', [LeaderboardController::class, 'bitcoinerMostRetweetedThisMonth'])->name('leaderboards.bitcoiners.tweets.retweets.month');
-Route::get('/leaderboards/bitcoiners/tweets/retweets/year', [LeaderboardController::class, 'bitcoinerMostRetweetedThisYear'])->name('leaderboards.bitcoiners.tweets.retweets.year');
-Route::get('/leaderboards/bitcoiners/tweets/retweets/all-time', [LeaderboardController::class, 'bitcoinerMostRetweetedAllTime'])->name('leaderboards.bitcoiners.tweets.retweets.all-time');
-
-Route::get('leaderboards/bitcoiners/tweets/likes/today', [LeaderboardController::class, 'bitcoinerMostLikedToday'])->name('leaderboards.bitcoiners.tweets.likes.today');
-Route::get('leaderboards/bitcoiners/tweets/likes/week', [LeaderboardController::class, 'bitcoinerMostLikedThisWeek'])->name('leaderboards.bitcoiners.tweets.likes.week');
-Route::get('leaderboards/bitcoiners/tweets/likes/month', [LeaderboardController::class, 'bitcoinerMostLikedThisMonth'])->name('leaderboards.bitcoiners.tweets.likes.month');
-Route::get('leaderboards/bitcoiners/tweets/likes/year', [LeaderboardController::class, 'bitcoinerMostLikedThisYear'])->name('leaderboards.bitcoiners.tweets.likes.year');
-Route::get('leaderboards/bitcoiners/tweets/likes/all-time', [LeaderboardController::class, 'bitcoinerMostLikedAllTime'])->name('leaderboards.bitcoiners.tweets.likes.all-time');
-
-Route::get('/leaderboards/bitcoiners/tweets/replies/today', [LeaderboardController::class, 'bitcoinerMostRepliesToday'])->name('leaderboards.bitcoiners.tweets.replies.today');
-Route::get('/leaderboards/bitcoiners/tweets/replies/week', [LeaderboardController::class, 'bitcoinerMostRepliesThisWeek'])->name('leaderboards.bitcoiners.tweets.replies.week');
-Route::get('/leaderboards/bitcoiners/tweets/replies/month', [LeaderboardController::class, 'bitcoinerMostRepliesThisMonth'])->name('leaderboards.bitcoiners.tweets.replies.month');
-Route::get('/leaderboards/bitcoiners/tweets/replies/year', [LeaderboardController::class, 'bitcoinerMostRepliesThisYear'])->name('leaderboards.bitcoiners.tweets.replies.year');
-Route::get('/leaderboards/bitcoiners/tweets/replies/all-time', [LeaderboardController::class, 'bitcoinerMostRepliesAllTime'])->name('leaderboards.bitcoiners.tweets.replies.all-time');
 
 Route::middleware('auth')->group(function () {
     Route::get('/follow/available/{userType}', [AvailableFollowsController::class, 'index'])->name('follow.available.type');
@@ -98,7 +81,7 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/endorse', [EndorsementController::class, 'store'])->name('user.endorse.store');
     Route::delete('/endorse', [EndorsementController::class, 'destroy'])->name('user.endorse.destroy');
-    Route::get('/endorsements/{twitterId}', [EndorsementController::class, 'index'])->name('user.endorse.index');
+ 
 
     Route::post('/classify/{username}/{type}', [ClassificationVoteController::class, 'store'])->name('user.classify.store');
     Route::delete('/classify/{username}', [ClassificationVoteController::class, 'destroy'])->name('user.classify.destroy');
