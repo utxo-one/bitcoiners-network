@@ -40,19 +40,14 @@ Route::get('/metrics/total-nocoiners', [MetricController::class, 'totalNocoiners
 Route::get('/user/{username}', [UserController::class, 'show'])->name('user.show');
 Route::get('/user/{username}/follow-data', [FollowDataController::class, 'show'])->name('user.follow-data.show');
 Route::get('/logout', [TwitterAuthController::class, 'logout'])->name('logout');
-Route::get('/endorsements/{twitterId}', [EndorsementController::class, 'index'])->name('user.endorse.index');
-
-// Route::get('/leaderboards/bitcoiners/followers/bitcoiners/between/{minFollowers}/{maxFollowers}', [LeaderboardController::class, 'bitcoinersByBitcoinerFollowers'])->name('leaderboards.bitcoiners.followed-by.bitcoiners');
-// Route::get('/leaderboards/bitcoiners/following/bitcoiners/between/{minFollowers}/{maxFollowers}', [LeaderboardController::class, 'bitcoinersByBitcoinersFollowing'])->name('leaderboards.bitcoiners.following.bitcoiners');
-// Route::get('/leaderboards/bitcoiners/followers/shitcoiners/between/{minFollowers}/{maxFollowers}', [LeaderboardController::class, 'bitcoinersByShitcoinerFollowers'])->name('leaderboards.bitcoiners.followed-by.shitcoiners');
-// Route::get('/leaderboards/bitcoiners/following/shitcoiners/between/{minFollowers}/{maxFollowers}', [LeaderboardController::class, 'bitcoinersByShitcoinersFollowing'])->name('leaderboards.bitcoiners.following.shitcoiners');
-// Route::get('/leaderboards/bitcoiners/followers/nocoiners/between/{minFollowers}/{maxFollowers}', [LeaderboardController::class, 'bitcoinersByNocoinerFollowers'])->name('leaderboards.bitcoiners.followed-by.nocoiners');
-// Route::get('/leaderboards/bitcoiners/following/nocoiners/between/{minFollowers}/{maxFollowers}', [LeaderboardController::class, 'bitcoinersByNocoinersFollowing'])->name('leaderboards.bitcoiners.following.nocoiners');
+Route::get('/endorsements/user/{username}', [EndorsementController::class, 'index'])->name('user.endorse.index');
+Route::get('/endorsements/type/{type}', [EndorsementController::class, 'typeIndex'])->name('type-index.type.index');
 
 Route::get('/leaderboard/users/{userType}/{followType}/{followedByType}/between/{minFollowers}/{maxFollowers}', [LeaderboardController::class, 'users'])->name('leaderboards.users');
 Route::get('/leaderboard/tweets/{userType}/{orderBy}/days/{timeframe}', [LeaderboardController::class, 'tweets'])->name('leaderboards.tweets');
 
 Route::middleware('auth')->group(function () {
+
     Route::get('/follow/available/{userType}', [AvailableFollowsController::class, 'index'])->name('follow.available.type');
     Route::get('/follow/followers/{userType}', [FollowerController::class, 'index'])->name('follow.followers.type');
     Route::get('/follow/following/{userType}', [FollowingController::class, 'index'])->name('follow.following.type');
@@ -81,6 +76,7 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/endorse', [EndorsementController::class, 'store'])->name('user.endorse.store');
     Route::delete('/endorse', [EndorsementController::class, 'destroy'])->name('user.endorse.destroy');
+    Route::get('/endorsements/user/{username}/auth', [EndorsementController::class, 'index'])->name('auth-user.user.endorse.index');
  
 
     Route::post('/classify/{username}/{type}', [ClassificationVoteController::class, 'store'])->name('user.classify.store');

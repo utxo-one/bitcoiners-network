@@ -7,21 +7,24 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\DestroyEndorsementRequest;
 use App\Http\Requests\StoreEndorsementRequest;
 use App\Models\User;
+use App\Repositories\UserRepository;
 use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
 class EndorsementController extends Controller
 {
-    public function __construct(private UserService $userService)
+    public function __construct(
+        private UserService $userService,
+        private UserRepository $userRepository,)
     {
     }
 
     public function index(string $twitterId): JsonResponse
     {
-        $user = User::where('twitter_id', $twitterId)->firstOrFail();
+        $user = User::where('twitter_username', $twitterId)->firstOrFail();
         try {
-            return response()->json($user->endorsementsReceived(), Response::HTTP_OK);
+            return response()->json($this->userRepository->getEndorsementData($user), Response::HTTP_OK);
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }   
@@ -60,5 +63,24 @@ class EndorsementController extends Controller
     public function types(): JsonResponse
     {
         return response()->json(EndorsementType::array(), Response::HTTP_OK);
+    }
+
+    public function typeIndex(string $type): JsonResponse
+    {
+        try {
+            return response()->json($this->userRepository->getUsersByEndorsementType(EndorsementType::fromValue($type)), Response::HTTP_OK);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }   
+    }
+
+    public function authUserEndorsementsByUser(string $username): JsonResponse
+    {
+        $user = User::where('twitter_username', $username)->firstOrFail();
+        try {
+            return response()->json($this->userRepository->getEndorsementsByAuthUserForUser($user), Response::HTTP_OK);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }   
     }
 }
