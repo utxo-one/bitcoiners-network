@@ -300,7 +300,92 @@
 							"response": []
 						},
 						{
-							"name": "Get Endorsements",
+							"name": "Get User Endorsements",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true,
+								"disabledSystemHeaders": {
+									"accept": true
+								}
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost/frontend/endorsements/user/kenobi_d",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"path": [
+										"frontend",
+										"endorsements",
+										"user",
+										"kenobi_d"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Auth User Endorsements for User",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true,
+								"disabledSystemHeaders": {
+									"accept": true
+								}
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost/frontend/endorsements/user/kenobi_d/auth",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"path": [
+										"frontend",
+										"endorsements",
+										"user",
+										"kenobi_d",
+										"auth"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Users by Endorsement Type",
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
 							},
@@ -317,16 +402,16 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost/frontend/user/endorsements/1558844336187523074",
+									"raw": "http://localhost/frontend/endorsements/type/developer",
 									"protocol": "http",
 									"host": [
 										"localhost"
 									],
 									"path": [
 										"frontend",
-										"user",
 										"endorsements",
-										"1558844336187523074"
+										"type",
+										"developer"
 									]
 								}
 							},
