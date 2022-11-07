@@ -54,6 +54,7 @@ class CrawlerService
             ->where('type', UserType::BITCOINER)
             ->where('last_timeline_saved_at', NULL)
             ->where('is_private', false)
+            ->where('is_suspended', false)
             ->limit($limit)
             ->get();
 
@@ -64,8 +65,11 @@ class CrawlerService
                 ->where('last_timeline_saved_at', '<', Carbon::now()->subDay())
                 ->where('last_tweeted_at', '>', Carbon::now()->subDays(90))
                 ->where('is_private', false)
+                ->where('is_suspended', false)
                 ->limit($limit)
                 ->get();
+
+            Log::notice('No bitcoiners to crawl, selecting bitcoiners who have tweeted in the last 90 days');
         }
 
         // Foreach bitcoiner, get their timeline, and save each tweet
@@ -88,11 +92,16 @@ class CrawlerService
                 if (strpos($e->getMessage(), 'Sorry, you are not authorized to see the user with id: [' . $bitcoiner->twitter_id . '].') !== false) {
                     $bitcoiner->is_private = true;
                     $bitcoiner->save();
+
+                    Log::notice('User ' . $bitcoiner->twitter_username . ' is private, setting isPrivate to true');
+
+                } else {
+                    $bitcoiner->is_suspended = true;
+                    $bitcoiner->save();
+
+                    Log::notice('User ' . $bitcoiner->twitter_username . ' is suspended, setting isSuspended to true');
                 }
-                Log::error('Error saving tweets for ' . $bitcoiner->twitter_username . ': ' . $e->getMessage());
             }
         }
-        
-        Log::info('Saved ' . $tweetCount . ' tweets from ' . $bitcoiners->count() . ' bitcoiners');
     }
 }
