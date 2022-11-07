@@ -50,30 +50,49 @@ class CrawlerService
     {
         $tweetClient = new TweetClient(bearerToken: config('services.twitter.bearer_token'));
 
-        // Select 5 Users with type bitcoiner and last_timeline_saved_at older than 1 day and last_tweeted_at this year
         $bitcoiners = User::query()
             ->where('type', UserType::BITCOINER)
-            ->where('last_timeline_saved_at', '<', Carbon::now()->subDay())
-            ->where('last_tweeted_at', '>', Carbon::now()->subYear())
-            ->inRandomOrder()
+            ->where('last_timeline_saved_at', NULL)
+            ->where('is_private', false)
             ->limit($limit)
             ->get();
+
+        // If there are no bitcoiners, select users who's timeline hasn't been saved in 24 hours, and who have tweeted at least once in the last 90 days, and where is private is false
+        if ($bitcoiners->count() === 0) {
+            $bitcoiners = User::query()
+                ->where('type', UserType::BITCOINER)
+                ->where('last_timeline_saved_at', '<', Carbon::now()->subDay())
+                ->where('last_tweeted_at', '>', Carbon::now()->subDays(90))
+                ->where('is_private', false)
+                ->limit($limit)
+                ->get();
+        }
 
         // Foreach bitcoiner, get their timeline, and save each tweet
         $tweetCount = 0;
         foreach ($bitcoiners as $bitcoiner) {
             $tweetCount++;
-            $tweets = $tweetClient->getTimeline(
-                userId: $bitcoiner->twitter_id,
-                maxResults: 5
-            );
+            try {
+                $tweets = $tweetClient->getTimeline(
+                    userId: $bitcoiner->twitter_id,
+                    maxResults: 5
+                );
+    
+                $tweetService = new TweetService();
+                $tweets = $tweetService->saveTweets($tweets, $bitcoiner);
+                $bitcoiner->last_timeline_saved_at = Carbon::now();
+                $bitcoiner->save();
+            } catch (\Exception $e) {
 
-            $tweetService = new TweetService();
-            $tweets = $tweetService->saveTweets($tweets, $bitcoiner);
-            $bitcoiner->last_timeline_saved_at = Carbon::now();
-            $bitcoiner->save();
-            
+                // If error contains "Sorry, you are not authorized to see the user with id: [<id>].", set isPrivate to true for this user
+                if (strpos($e->getMessage(), 'Sorry, you are not authorized to see the user with id: [' . $bitcoiner->twitter_id . '].') !== false) {
+                    $bitcoiner->is_private = true;
+                    $bitcoiner->save();
+                }
+                Log::error('Error saving tweets for ' . $bitcoiner->twitter_username . ': ' . $e->getMessage());
+            }
         }
+        
         Log::info('Saved ' . $tweetCount . ' tweets from ' . $bitcoiners->count() . ' bitcoiners');
     }
 }

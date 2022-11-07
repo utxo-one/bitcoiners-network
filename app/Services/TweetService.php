@@ -8,6 +8,7 @@ use App\Models\Transaction;
 use App\Models\Tweet;
 use App\Models\User;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use UtxoOne\TwitterUltimatePhp\Clients\TweetClient;
 use UtxoOne\TwitterUltimatePhp\Models\Tweets;
 
@@ -27,6 +28,12 @@ class TweetService
             // if the tweet already exists, skip it
             if (Tweet::query()->where('id', $tweet->getId())->exists()) {
                 continue;
+            }
+
+            // if the attachements are not empty, get the tweet from the api
+            if (!empty($tweet->getAttachments())) {
+                $tweetClient = new TweetClient(bearerToken: config('services.twitter.bearer_token'));
+                $tweet = $tweetClient->getTweet($tweet->getId());
             }
 
             $tweetCollection[] = Tweet::create([
@@ -50,6 +57,8 @@ class TweetService
                 'retweets' => $tweet->getPublicMetrics()['retweet_count'],
                 'likes' => $tweet->getPublicMetrics()['like_count'],
                 'quotes' => $tweet->getPublicMetrics()['quote_count'],
+                'context_annotations' => json_encode($tweet->getContextAnnotations()),
+                'includes' => json_encode($tweet->getIncludes()),
             ]);
         }
 
