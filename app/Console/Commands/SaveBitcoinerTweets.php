@@ -29,7 +29,7 @@ class SaveBitcoinerTweets extends Command
     public function handle()
     {
         $crawlerService = new CrawlerService();
-        $crawlerService->saveBitcoinerTweets();
+        $crawlerService->saveBitcoinerTweets(30);
         return 0;
     }
 }
