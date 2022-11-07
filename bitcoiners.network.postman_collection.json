@@ -773,6 +773,26 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "User Timeline",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/frontend/timeline/Coinkite",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"frontend",
+								"timeline",
+								"Coinkite"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -1382,6 +1402,65 @@
 								{
 									"key": "timeframe",
 									"value": "70"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Tweets",
+			"item": []
+		},
+		{
+			"name": "Search",
+			"item": [
+				{
+					"name": "Search AutoFill",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/frontend/search?q=utxo",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"frontend",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "utxo"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Results",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/frontend/search?q=utxo",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"frontend",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "utxo"
 								}
 							]
 						}

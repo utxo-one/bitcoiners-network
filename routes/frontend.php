@@ -13,6 +13,7 @@ use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\LeaderboardController;
 use App\Http\Controllers\Frontend\MetricController;
 use App\Http\Controllers\Frontend\RatesController;
+use App\Http\Controllers\Frontend\SearchController;
 use App\Http\Controllers\Frontend\Transaction\DebitController;
 use App\Http\Controllers\Frontend\Transaction\DepositController;
 use App\Http\Controllers\Frontend\TweetController;
@@ -24,8 +25,6 @@ use App\Http\Controllers\Frontend\User\RefreshUserController;
 use App\Http\Controllers\Frontend\User\UserController;
 use App\Http\Controllers\Frontend\UserActionController;
 use App\Http\Controllers\Web\Auth\TwitterAuthController;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/profile-pictures', [HomeController::class, 'profilesPictures'])->name('home.profile-pictures');
@@ -42,6 +41,9 @@ Route::get('/user/{username}/follow-data', [FollowDataController::class, 'show']
 Route::get('/logout', [TwitterAuthController::class, 'logout'])->name('logout');
 Route::get('/endorsements/user/{username}', [EndorsementController::class, 'index'])->name('user.endorse.index');
 Route::get('/endorsements/type/{type}', [EndorsementController::class, 'typeIndex'])->name('type-index.type.index');
+Route::get('/search', [SearchController::class, 'autoFill'])->name('search.auto-fill');
+Route::post('/search', [SearchController::class, 'search'])->name('search.search');
+Route::get('/timeline/{username}', [TweetController::class, 'show'])->name('timeline.show');
 
 Route::get('/leaderboard/users/{userType}/{followType}/{followedByType}/between/{minFollowers}/{maxFollowers}', [LeaderboardController::class, 'users'])->name('leaderboards.users');
 Route::get('/leaderboard/tweets/{userType}/{orderBy}/days/{timeframe}', [LeaderboardController::class, 'tweets'])->name('leaderboards.tweets');
