@@ -64,6 +64,7 @@ class CrawlerService
                 ->where('type', UserType::BITCOINER)
                 ->where('last_timeline_saved_at', '<', Carbon::now()->subDay())
                 ->where('last_tweeted_at', '>', Carbon::now()->subDays(90))
+                ->where('twitter_count_followers', '>', 500)
                 ->where('is_private', false)
                 ->where('is_suspended', false)
                 ->limit($limit)
