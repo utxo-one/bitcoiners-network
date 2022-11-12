@@ -5,6 +5,7 @@ import { Link, useParams, useSearchParams } from "react-router-dom";
 import classNames from "classnames";
 import { CompactNumberFormat } from "../../utils/NumberFormatting";
 import Cookies from 'js-cookie';
+import useEndorsements from "../../hooks/useEndorsements";
 
 import AppContext from "../../store/AppContext";
 
@@ -26,6 +27,8 @@ import CommunityRateModal from "../connections/CommunityRateModal";
 import TopUpModal from "../../components/MassConnectModal/TopUpModal";
 import SignUpModal from "./SignUpModal";
 import NotBitcoinerModal from "./NotBitcoinerModal";
+import EndorsementBadges from "../../components/EndorsementBadges/EndorsementBadges";
+import EndorsementModal from "../connections/EndorsementModal";
 
 import SocialNetworkIcon from "../../assets/icons/SocialNetworkIcon";
 import SatsIcon from "../../assets/icons/SatsIcon";
@@ -41,6 +44,8 @@ export default function MainProfile({ asDashboard }) {
   const { username } = useParams();
   const [searchParams] = useSearchParams();
 
+  const { loadEndorsements } = useEndorsements();
+
   const [loadedUser, setLoadedUser] = useImmer(null);
   const [campaignData, setCampaignData] = useState(null);
   const [showMassConnect, setShowMassConnect] = useState(false);
@@ -52,6 +57,7 @@ export default function MainProfile({ asDashboard }) {
   const [showNotBitcoiner, setShowNotBitcoiner] = useState(false);
   const [firstTimeLogin, setFirstTimeLogin] = useState(false);
   const [userNotFound, setUserNotFound] = useState(false);
+  const [showEndorsements, setShowEndorsements] = useState(false);
   
   const profilePicRef = useRef();
   const handleIntersector = useRef();
@@ -77,13 +83,19 @@ export default function MainProfile({ asDashboard }) {
     }
   }, [searchParams, userData]);
 
-  
   useEffect(() => {
     const loadUserData = async () => {
       if (!asDashboard) {
         try {
           const { data } = await axios.get(`/frontend/user/${username}`);
           setLoadedUser(data);
+
+          const { endorsements, endorsements_auth } = await loadEndorsements(username);
+
+          endorsements && setLoadedUser(draft => {
+            draft._endorsements = endorsements;
+            draft._endorsements_auth = endorsements_auth;
+          });    
         }
         catch {
           setUserNotFound(true);
@@ -184,6 +196,15 @@ export default function MainProfile({ asDashboard }) {
   const onHideNotBitcoiner = () => {
     setShowNotBitcoiner(false);
     setFirstTimeLogin(false);
+  }
+
+  const updateEndorsement = type => {
+    setLoadedUser(draft => {
+      const prevEndorsed = draft._endorsements_auth[type] !== 0;
+
+      draft._endorsements_auth[type] = prevEndorsed ? 0 : 1;
+      draft._endorsements[type] += prevEndorsed ? -1 : 1;
+    })
   }
 
   const campaignRunning = campaignData?.status === 'running';
@@ -313,13 +334,14 @@ export default function MainProfile({ asDashboard }) {
                 <ConnectionTypeBadge type='following' connection={userData} />
               </div>
               
+              <div className='endorsements'><EndorsementBadges user={userData} onClick={() => setShowEndorsements(true)} viewingOwnProfile={viewingOwnProfile} /></div>
               <div className="description">{ userData?.twitter_description }</div>
             </>
             )}
 
             { asDashboard && (
               <>
-                <div className='badge'><UserTypeBadge userType={userData?.type} /></div>
+                <div className='type-badge'><UserTypeBadge userType={userData?.type} /></div>
                 { userData && userData.type !== 'bitcoiner' && renderNotBitcoiner() }
               </>
             )}
@@ -367,6 +389,7 @@ export default function MainProfile({ asDashboard }) {
       <TopUpModal show={showTopUp} onHide={() => setShowTopUp(false)} />
       <SignUpModal show={showSignup} onHide={() => setShowSignup(false)} />
       <NotBitcoinerModal user={userData} show={showNotBitcoiner} onHide={onHideNotBitcoiner} firstTimeLogin={firstTimeLogin} />
+      <EndorsementModal show={showEndorsements} onHide={() => setShowEndorsements(false)} user={userData} onToggleEndorsement={updateEndorsement} />
     </div>
   );
 }

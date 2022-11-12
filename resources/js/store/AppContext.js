@@ -3,12 +3,13 @@ import { createContext } from "react";
 const AppContext = createContext();
 
 export const APP_INITIAL_STATE = {
-  availableSats   : null,
-  currentUser     : null,
-  rates           : null,
-  metrics         : {},
-  publicUser      : false,
-  requestsLoaded  : false,
+  availableSats    : null,
+  currentUser      : null,
+  rates            : null,
+  metrics          : {},
+  publicUser       : false,
+  requestsLoaded   : false,
+  endorsementTypes : {},
 }
 
 export const appReducer = (draft, action) => {
@@ -47,6 +48,9 @@ export const appReducer = (draft, action) => {
 
     case 'requestsLoaded/set':
       draft.requestsLoaded = action.payload;
+
+    case 'endorsementTypes/set':
+      draft.endorsementTypes = action.payload;
   }
 }
 

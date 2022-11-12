@@ -1,32 +1,54 @@
-import * as Dialog from "@radix-ui/react-dialog";
-import classNames from "classnames";
-import { useImmer } from "use-immer";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useImmer } from "use-immer";
+import classNames from "classnames";
+import AppContext from "../../store/AppContext";
+import runes from "runes";
+import axios from "axios";
+import * as Dialog from "@radix-ui/react-dialog";
+import { CompactNumberFormat } from "../../utils/NumberFormatting";
+
 import Box from "../../layout/Box/Box";
 import ConnectButton from "../../layout/Button/ConnectButton";
 import ConnectionsChart from "../../layout/Connections/ConnectionsChart";
-import AppContext from "../../store/AppContext";
-import { CompactNumberFormat } from "../../utils/NumberFormatting";
 import ProfilePicture from "../ProfilePicture/ProfilePicture";
 import UserTypeBadge from "../UserTypeBadge/UserTypeBadge";
 import Spinner from "../../layout/Spinner/Spinner";
+import VoteTooltip from "../../layout/VoteTooltip/VoteTooltip";
+import EndorsementBadges from "../EndorsementBadges/EndorsementBadges";
 
 import './UserInfoPanel.scss';
-import VoteTooltip from "../../layout/VoteTooltip/VoteTooltip";
 
 const CONNECTION_TYPES = {
   followers: 'Followers',
   following: 'Following',
 }
 
-export default function UserInfoPanel({ show, onHide, user, onClickBadge, onClickConnection, onToggleFollow }) {
+export default function UserInfoPanel({ show, onHide, user, onClickBadge, onClickConnection, onToggleFollow, onClickEndorse }) {
 
   const [state] = useContext(AppContext);
 
   const [connectionType, setConnectionType] = useState('followers');
   const [userWithFollowData, setUserWithFollowData] = useImmer(null);
   const navigate = useNavigate();
+
+  const description = user?.twitter_description;
+
+  const trimmedDescription = useMemo(() => {
+    const MAX_LENGTH = 80;
+
+    if (!description) {
+      return null;
+    }
+
+    const descRunes = runes(description);
+
+    if (descRunes.length > MAX_LENGTH + 3) {
+      return runes.substr(description, 0, MAX_LENGTH) + '...';
+    }
+
+    return description;
+  }, [description]);
 
   const { currentUser } = state;
 
@@ -44,7 +66,7 @@ export default function UserInfoPanel({ show, onHide, user, onClickBadge, onClic
     }
     
     setUserWithFollowData(user);
-
+    
     show && loadFollowData();
   }, [show]);
 
@@ -62,6 +84,10 @@ export default function UserInfoPanel({ show, onHide, user, onClickBadge, onClic
     }
   }
 
+  const renderEndorsements = () => {
+    return <EndorsementBadges user={user} onClick={onClickEndorse} viewingOwnProfile={viewingOwnProfile} />
+  }
+
   return (
     <Dialog.Root open={show} onOpenChange={onHide}>
       <Dialog.Portal>
@@ -77,7 +103,9 @@ export default function UserInfoPanel({ show, onHide, user, onClickBadge, onClic
 
             <div className="username">{ user?.name }</div >
             <Link to={`/profile/${user?.twitter_username}`} className="handle">@{ user?.twitter_username }</Link>
-            <div className="description">{ user?.twitter_description }</div>
+
+            { renderEndorsements() }
+            <div className="description">{ trimmedDescription }</div>
 
             <div className='connections-tab'>
               { Object.entries(CONNECTION_TYPES).map(([type, phrase]) => (

@@ -130,7 +130,7 @@
     .content {
       padding: 0 8px 80px;
       margin: 0 auto;
-      max-width: 400px;
+      max-width: 480px;
 
       .__button-connect {
         margin: 32px auto;
@@ -235,7 +235,7 @@
         text-align: left;
       }
 
-      .badge {
+      .type-badge {
         text-align: center;
         margin: 12px auto;
       }
@@ -409,7 +409,7 @@
     
     button {
       min-width: unset;
-      width: 400px;
+      width: 480px;
       max-width: 100%;
       margin: 0 auto;
       display: block;
