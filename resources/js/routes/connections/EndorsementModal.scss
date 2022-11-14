@@ -1,0 +1,105 @@
+.__endorsement-modal {
+  &.__modal-center {
+    top: 45%;
+  }
+
+  h2.title {
+    text-align: center;
+    color: var(--gray-30);
+  }
+
+  .endorsement-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 8px 0;
+
+    .badge {
+      display: inline-block;
+      border-radius: 32px;
+      border: 1px solid var(--gray-40);
+      padding: 4px 8px;
+      font-weight: 500;
+      text-transform: uppercase;
+      font-size: 14px;
+      color: var(--gray-40);
+
+      .votes-count {
+        display: inline-block;
+        margin-left: 8px;
+      }
+
+      &-orange {
+        // border-color: var(--orange-btc);
+        border-color: rgba(#F56B06, 33%);
+        color: var(--orange);
+      }
+
+      &-green {
+        // border-color: var(--green);
+        border-color: rgba(#20BF55, 33%);
+        color: var(--green);
+      }
+
+      &-blue {
+        // border-color: var(--blue-twitter);
+        border-color: rgba(#1c7ed9, 33%);
+        color: var(--blue-twitter);
+      }
+
+      &-poop {
+        // border-color: var(--shitcoiner-color);
+        border-color: rgba(#9F4D00, 33%);
+        color: var(--shitcoiner-color);
+      }
+    }
+    
+    .add {
+      all: unset;
+      border-radius: 100%;
+      width: 24px;
+      height: 24px;
+      font-size: 20px;
+      line-height: 18px;
+      color: var(--gray-75);
+      border: 2px solid var(--gray-75);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      > span {
+        display: inline-block;
+        margin-bottom: 2px;
+      }
+    }
+
+    .checked {
+      width: 28px;
+      height: auto;
+
+      [data-fill="circle"] {
+        fill: var(--blue-light);
+      }
+    }
+  }
+
+  .add-new-endorsement {
+    text-align: center;
+    margin: 12px auto;
+
+    button {
+      all: unset;
+      color: var(--blue-twitter);
+      font-weight: bold;
+      padding: 8px;
+    }
+  }
+
+  .close-button {
+    text-align: center;
+
+    > button {
+      padding: 8px;
+    }
+  }
+}

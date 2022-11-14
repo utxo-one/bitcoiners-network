@@ -3,6 +3,7 @@ import { useState, useEffect, useMemo } from "react";
 import { useImmer } from "use-immer";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import useEventCallback from "../../hooks/useEventCallback";
+import useEndorsements from "../../hooks/useEndorsements";
 
 import UserInfoPanel from "../../components/UserInfoPanel/UserInfoPanel";
 import UserTypeBadge from "../../components/UserTypeBadge/UserTypeBadge";
@@ -10,13 +11,14 @@ import ConnectionsFilter from "./ConnectionsFilter";
 import ConnectionTypeDropdown from "./ConnectionTypeDropdown";
 import ProfilePicture from "../../components/ProfilePicture/ProfilePicture";
 import CommunityRateModal from "./CommunityRateModal";
+import EndorsementModal from "./EndorsementModal";
+import HamburgerMenu from "../../layout/HamburgerMenu/HamburgerMenu";
 
 import ConnectionTypeBadge from "../../components/ConnectionTypeBadge/ConnectionTypeBadge";
 import CenteredSpinner from "../../layout/Spinner/CenteredSpinner";
 import InfiniteLoader from "../../layout/Spinner/InfiniteLoader";
 
 import './Connections.scss';
-import HamburgerMenu from "../../layout/HamburgerMenu/HamburgerMenu";
 
 export default function Connections({ initialType }) {
 
@@ -24,11 +26,11 @@ export default function Connections({ initialType }) {
   const { initialUserType } = location.state || {};
 
   const { username = null } = useParams();
+  const { loadEndorsements } = useEndorsements();
+
   const [type, setType] = useState(initialType);
   const [headerType, setHeaderType] = useState(type);
 
-  // const [username, setUsername] = useState(null);
-  // const [username, setUsername] = useState('bluewalletio');
 
   const [initialLoad, setInitialLoad] = useState(false);
   const [loadMore, setLoadMore] = useState(false);
@@ -39,6 +41,7 @@ export default function Connections({ initialType }) {
   const [count, setCount] = useState(null);
   const [showInfo, setShowInfo] = useState(false);
   const [showRate, setShowRate] = useState(false);
+  const [showEndorsements, setShowEndorsements] = useState(false);
   const [selectedConnectionId, setSelectedConnectionId] = useState(null);
   const [filterUserType, setFilterUserType] = useState(() => initialUserType || (type === 'available' ? 'bitcoiner' : 'all'));
 
@@ -107,13 +110,30 @@ export default function Connections({ initialType }) {
     loadItems();
   });
 
-  const goBack = () => {
-    navigate(-1);
+  const updateEndorsement = type => {
+    setConnections(draft => {
+      const index = draft.findIndex(user => user.twitter_id === selectedConnection.twitter_id);
+
+      const prevEndorsed = draft[index]._endorsements_auth[type] !== 0;
+      
+      draft[index]._endorsements_auth[type] = prevEndorsed ? 0 : 1;
+      draft[index]._endorsements[type] += prevEndorsed ? -1 : 1;
+    })
   }
 
-  const onClickConnection = (e, connection) => {
+  const onClickConnection = async (e, connection) => {
     setShowInfo(true);
     setSelectedConnectionId(connection.twitter_id);
+
+    if (!connection._endorsements) {
+      const { endorsements, endorsements_auth } = await loadEndorsements(connection.twitter_username);
+
+      endorsements && setConnections(draft => {
+        const index = draft.findIndex(user => user.twitter_id === connection.twitter_id);
+        draft[index]._endorsements = endorsements;
+        draft[index]._endorsements_auth = endorsements_auth
+      });
+    }
   }
 
   const onToggleFollow = () => {
@@ -210,8 +230,9 @@ export default function Connections({ initialType }) {
 
       { renderUsers() }
 
-      <UserInfoPanel show={showInfo} onClickBadge={() => setShowRate(true)} user={selectedConnection} onHide={() => setShowInfo(false)} onClickConnection={onClickPanelConnections} onToggleFollow={onToggleFollow} />
+      <UserInfoPanel show={showInfo} onClickBadge={() => setShowRate(true)} user={selectedConnection} onHide={() => setShowInfo(false)} onClickConnection={onClickPanelConnections} onToggleFollow={onToggleFollow} onClickEndorse={() => setShowEndorsements(true)} />
       <CommunityRateModal show={showRate} onHide={() => setShowRate(false)} user={selectedConnection} />
+      <EndorsementModal show={showEndorsements} onHide={() => setShowEndorsements(false)} user={selectedConnection} onToggleEndorsement={updateEndorsement} />
     </div>
   );
 }

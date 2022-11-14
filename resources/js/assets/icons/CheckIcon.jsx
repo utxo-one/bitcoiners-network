@@ -2,6 +2,7 @@ export default function CheckIcon(props) {
   return (
     <svg height={512} width={512} viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" {...props}>
     <path
+      data-fill="circle"
       clipRule="evenodd"
       d="M256 0C114.8 0 0 114.8 0 256s114.8 256 256 256 256-114.8 256-256S397.2 0 256 0z"
       fill="#F56B06"
