@@ -79,8 +79,10 @@ export default function EndorsementModal({ show, user, onHide, onToggleEndorseme
                   <div key={id} className='endorsement-row'>
                     <div key={id} className={classNames('badge', `badge-${type.color}`)}>
                       { type.phrase.one }
+                      { _endorsements && _endorsements[id] > 0 && <span className="separator">&middot;</span> }
                       { _endorsements && _endorsements[id] > 0 && <span className="votes-count">{ CompactNumberFormat(_endorsements[id], { digits: 3 }) }</span> }
                     </div>
+                    
                     { !viewingOwnProfile && (
                       _endorsements_auth?.[id] > 0
                       ? <CheckIcon className="checked" role='button' onClick={() => removeEndorsement(id)} />
