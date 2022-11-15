@@ -18,8 +18,6 @@ class UserRepository
 
     public function getFollowData(User $user): array
     {
-        $this->cacheTime = 1000;
-
         if ($user->twitter_count_followers > 1000) {
             $this->cacheTime = 6000;
         }
@@ -46,7 +44,7 @@ class UserRepository
 
     public function getEndorsementData(User $user): array
     {
-        return Cache::remember("endorsement_data:{$user->twitter_id}", $this->cacheTime, function () use ($user) {
+        return Cache::remember("endorsement_data:{$user->twitter_id}", 30, function () use ($user) {
 
             // For each endorsement type, get the count of endorsements
             $endorsementData = [];
