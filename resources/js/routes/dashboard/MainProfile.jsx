@@ -95,7 +95,7 @@ export default function MainProfile({ asDashboard }) {
           endorsements && setLoadedUser(draft => {
             draft._endorsements = endorsements;
             draft._endorsements_auth = endorsements_auth;
-          });    
+          });
         }
         catch {
           setUserNotFound(true);
@@ -205,6 +205,15 @@ export default function MainProfile({ asDashboard }) {
       draft._endorsements_auth[type] = prevEndorsed ? 0 : 1;
       draft._endorsements[type] += prevEndorsed ? -1 : 1;
     })
+  }
+
+  const onClickAddEndorsements = () => {
+    if (publicUser) {
+      setShowSignup(true);
+    }
+    else {
+      setShowEndorsements(true);
+    }
   }
 
   const campaignRunning = campaignData?.status === 'running';
@@ -334,7 +343,7 @@ export default function MainProfile({ asDashboard }) {
                 <ConnectionTypeBadge type='following' connection={userData} />
               </div>
               
-              <div className='endorsements'><EndorsementBadges user={userData} onClick={() => setShowEndorsements(true)} viewingOwnProfile={viewingOwnProfile} /></div>
+              <div className='endorsements'><EndorsementBadges user={userData} onClick={onClickAddEndorsements} viewingOwnProfile={viewingOwnProfile} /></div>
               <div className="description">{ userData?.twitter_description }</div>
             </>
             )}

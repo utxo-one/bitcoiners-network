@@ -31,7 +31,6 @@ export default function Connections({ initialType }) {
   const [type, setType] = useState(initialType);
   const [headerType, setHeaderType] = useState(type);
 
-
   const [initialLoad, setInitialLoad] = useState(false);
   const [loadMore, setLoadMore] = useState(false);
   const [loadedAllItems, setLoadedAllItems] = useState(false);
