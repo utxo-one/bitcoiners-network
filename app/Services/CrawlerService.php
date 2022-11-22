@@ -100,7 +100,7 @@ class CrawlerService
                     $bitcoiner->is_suspended = true;
                     $bitcoiner->save();
 
-                    Log::notice('User ' . $bitcoiner->twitter_username . ' is suspended, setting isSuspended to true');
+                    Log::notice('User ' . $bitcoiner->twitter_username . ' is suspended, setting isSuspended to true. Error: ' . $e->getMessage());
                 }
             }
         }
