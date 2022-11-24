@@ -7,7 +7,7 @@ use App\Enums\UserType;
 use App\Models\User;
 use Illuminate\Support\Facades\Cache;
 
-class UserRepository 
+class UserRepository
 {
     private int $cacheTime;
 
@@ -60,27 +60,26 @@ class UserRepository
 
     public function getUsersByEndorsementType(EndorsementType $endorsementType): array
     {
-        // Get the users who have received the endorsement type.
-        $users = User::whereHas('endorsementsReceived', function ($query) use ($endorsementType) {
-            $query->where('endorsement_type', $endorsementType);
-        })->get();
+        return Cache::remember("users_by_endorsement_type:{$endorsementType->value}", $this->cacheTime, function () use ($endorsementType) {
+            // Get the users who have received the endorsement type.
+            $users = User::whereHas('endorsementsReceived', function ($query) use ($endorsementType) {
+                $query->where('endorsement_type', $endorsementType);
+            })->get();
 
-        // For each user, get the count of endorsements.
-        $usersWithEndorsementCount = [];
+            // For each user, get the count of endorsements.
+            $usersWithEndorsementCount = [];
 
-        foreach ($users as $user) {
-            $usersWithEndorsementCount[] = [
-                'user' => $user,
-                'endorsement_count' => $user->endorsementsReceived()->where('endorsement_type', $endorsementType)->count(),
-            ];
-        }
+            foreach ($users as $user) {
+                $usersWithEndorsementCount[] = [
+                    'user' => $user,
+                    'endorsement_count' => $user->endorsementsReceived()->where('endorsement_type', $endorsementType)->count(),
+                ];
+            }
 
-        // Sort the users by endorsement count.
-        usort($usersWithEndorsementCount, function ($a, $b) {
-            return $b['endorsement_count'] <=> $a['endorsement_count'];
-        });
-
-        return Cache::remember("users_by_endorsement_type:{$endorsementType->value}", $this->cacheTime, function () use ($usersWithEndorsementCount) {
+            // Sort the users by endorsement count.
+            usort($usersWithEndorsementCount, function ($a, $b) {
+                return $b['endorsement_count'] <=> $a['endorsement_count'];
+            });
             return $usersWithEndorsementCount;
         });
     }

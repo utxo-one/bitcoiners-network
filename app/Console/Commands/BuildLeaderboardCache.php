@@ -2,6 +2,8 @@
 
 namespace App\Console\Commands;
 
+use App\Enums\FollowType;
+use App\Enums\UserType;
 use App\Repositories\LeaderboardRepository;
 use Illuminate\Console\Command;
 
@@ -30,43 +32,76 @@ class BuildLeaderboardCache extends Command
     {
         $this->info('building bitcoinersByBitcoinerFollowers cache...');
 
-        $start = microtime(true);
         $leaderboardRepository = new LeaderboardRepository();
-        $leaderboardRepository->getBitcoinersByBitcoinerFollowers();
 
-        $end = microtime(true);
-        $this->alert('bitcoinersByBitcoinerFollowers cache built in ' . ($end - $start) . ' seconds');
+        $this->info('building bitcoiners by bitcoiner followers cache...');
+        $leaderboardRepository->getLeaderboard(
+            minFollowers: 100,
+            maxFollowers: 10000000,
+            userType: UserType::BITCOINER,
+            followType: FollowType::FOLLOWER,
+            followUserType: UserType::BITCOINER,
+        );
 
-        $this->info('building bitcoinersByBitcoinersFollowing cache...');
-        $start = microtime(true);
-        $leaderboardRepository->getBitcoinersByBitcoinersFollowing();
-        $end = microtime(true);
-        $this->alert('bitcoinersByBitcoinersFollowing cache built in ' . ($end - $start) . ' seconds');
+        $this->alert('bitcoiners by bitcoiner followers cache built');
 
-        $this->info('building bitcoinersByShitcoinerFollowers cache...');
-        $start = microtime(true);
-        $leaderboardRepository->getBitcoinersByShitcoinerFollowers();
-        $end = microtime(true);
-        $this->alert('bitcoinersByShitcoinerFollowers cache built in ' . ($end - $start) . ' seconds');
+        $this->info('building bitcoiners by bitcoiner following cache...');
+        $leaderboardRepository->getLeaderboard(
+            minFollowers: 100,
+            maxFollowers: 10000000,
+            userType: UserType::BITCOINER,
+            followType: FollowType::FOLLOWING,
+            followUserType: UserType::BITCOINER,
+        );
 
-        $this->info('building bitcoinersByShitcoinersFollowing cache...');
-        $start = microtime(true);
-        $leaderboardRepository->getBitcoinersByShitcoinersFollowing();
-        $end = microtime(true);
-        $this->alert('bitcoinersByShitcoinersFollowing cache built in ' . ($end - $start) . ' seconds');
+        $this->alert('bitcoiners by bitcoiner following cache built');
 
-        $this->info('building bitcoinersByNocoinerFollowers cache...');
-        $start = microtime(true);
-        $leaderboardRepository->getBitcoinersByNocoinerFollowers();
-        $end = microtime(true);
-        $this->alert('bitcoinersByNocoinerFollowers cache built in ' . ($end - $start) . ' seconds');
+        $this->info('building bitcoiners by shitcoiner followers cache...');
+        $leaderboardRepository->getLeaderboard(
+            minFollowers: 100,
+            maxFollowers: 10000000,
+            userType: UserType::BITCOINER,
+            followType: FollowType::FOLLOWER,
+            followUserType: UserType::SHITCOINER,
+        );
 
-        $this->info('building bitcoinersByNocoinersFollowing cache...');
-        $start = microtime(true);
-        $leaderboardRepository->getBitcoinersByNocoinersFollowing();
-        $end = microtime(true);
-        $this->alert('bitcoinersByNocoinersFollowing cache built in ' . ($end - $start) . ' seconds');
+        $this->alert('bitcoiners by shitcoiner following cache built');
 
+        $this->info('building bitcoiners by shitcoiner following cache...');
+        $leaderboardRepository->getLeaderboard(
+            minFollowers: 100,
+            maxFollowers: 10000000,
+            userType: UserType::BITCOINER,
+            followType: FollowType::FOLLOWING,
+            followUserType: UserType::SHITCOINER,
+        );
+
+        $this->alert('bitcoiners by shitcoiner following cache built');
+
+        $this->info('building bitcoiner by nocoiner followers cache...');
+        $leaderboardRepository->getLeaderboard(
+            minFollowers: 100,
+            maxFollowers: 10000000,
+            userType: UserType::BITCOINER,
+            followType: FollowType::FOLLOWER,
+            followUserType: UserType::NOCOINER,
+        );
+
+        $this->alert('bitcoiner by nocoiner followers cache built');
+
+        $this->info('building bitcoiner by nocoiner following cache...');
+        $leaderboardRepository->getLeaderboard(
+            minFollowers: 100,
+            maxFollowers: 10000000,
+            userType: UserType::BITCOINER,
+            followType: FollowType::FOLLOWING,
+            followUserType: UserType::NOCOINER,
+        );
+
+        $this->alert('bitcoiner by nocoiner following cache built');
+
+
+        return 0;
         return 0;
     }
 }
