@@ -1,0 +1,167 @@
+.__leaderboards {
+  .content {
+    padding: 0 8px;
+    margin: 0 auto;
+    max-width: 480px;
+  }
+
+  .sticky-navigation {
+    background-color: white;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+
+    .categories {
+      display: flex;
+      gap: 8px;
+      padding: 12px 8px;
+      margin: 0 auto;
+      max-width: 480px;  
+  
+      button {
+        flex: 1;
+
+        &:last-of-type {
+          flex: 1.2;
+        }
+      }
+    }
+
+    .tabs {
+      display: flex;
+      justify-content: space-between;
+      max-width: 480px;
+      width: 96%;
+      margin: 0 auto;
+
+      .item {
+        text-transform: uppercase;
+        padding: 8px 10px;
+        color: var(--gray-40);
+        font-weight: bold;
+        font-size: 13px;
+        border-bottom: 3px solid transparent;
+
+        &.selected {
+          border-color: var(--blue-light);
+          color: var(--blue-twitter);
+
+          &.search {
+            svg {
+              fill: var(--blue-light);
+            }
+          }
+        }
+      }
+
+      .search {
+        padding-top: 6px;
+        padding-bottom: 4px;
+        
+        svg {
+          display: inline-block;
+          vertical-align: bottom;
+          fill: var(--gray-70);
+          width: 18px;
+          margin-left: 4px;
+        }
+      }
+    }
+
+    .subfilter {
+      border-top: 1px solid var(--gray-80);
+      border-bottom: 1px solid var(--gray-80);
+      text-align: center;
+      background-color: var(--gray-90);
+      height: 56px;
+      color: var(--gray-30);
+      font-size: 16px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .__search-bar {
+        width: 90%;
+        max-width: 480px;
+      }
+  
+      strong {
+        color: var(--orange);
+      }
+
+      .endorsement {
+        display: flex;
+        padding: 0 8px;
+        justify-content: space-between;
+        align-items: center;
+        width: 95%;
+        max-width: 480px;
+        font-weight: 500;
+
+        .filter-dropdown {
+          all: unset;
+          display: flex;
+          border-radius: 32px;
+          text-transform: uppercase;
+          min-width: 100px;
+          border: 1px solid var(--gray-70);
+          font-size: 14px;
+          padding: 6px 12px;
+          justify-content: space-between;
+          color: var(--gray-40);
+          font-weight: 500;
+          gap: 12px;
+          align-items: baseline;
+          background-color: white;
+
+          > svg {
+            width: 8px;
+            height: auto;
+            fill: var(--gray-50);
+          }
+
+          &.orange {
+            // border-color: var(--orange-btc);
+            border-color: rgba(#F56B06, 66%);
+            color: var(--orange);
+
+            > svg {
+              fill: var(--orange);
+            }
+          }
+    
+          &.green {
+            // border-color: var(--green);
+            border-color: rgba(#20BF55, 66%);
+            color: var(--green);
+
+            > svg {
+              fill: var(--green);
+            }
+          }
+    
+          &.blue {
+            // border-color: var(--blue-twitter);
+            border-color: rgba(#1c7ed9, 66%);
+            color: var(--blue-twitter);
+            
+            > svg {
+              fill: var(--blue-twitter);
+            }
+          }
+    
+          &.poop {
+            // border-color: var(--shitcoiner-color);
+            border-color: rgba(#9F4D00, 66%);
+            color: var(--shitcoiner-color);
+
+            > svg {
+              fill: var(--shitcoiner-color);
+            }
+          }
+        }
+      }
+    }
+  }
+}

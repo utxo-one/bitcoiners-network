@@ -1,12 +1,15 @@
 ### LAST PR
-- Add Endorsements to other user panels
-- Update parent copy of connections/users
-- skeleton loader for endorsements
-- Do not let users vote on their own profile
-- change _auth_endorse and _endorse local copies
-- load endorsements on main profile
+- 
 
 ### TODO
+- SEARCH -> show followers (try)
+- SEARCH -> show "no results found"
+- SEARCH -> on blur should hide the results
+- SEARCH -> add pressing overlay
+
+- Add powered by coingecko
+- BUG -> Campaign needs endorsement/community rate modals + update patterns
+- Load more button or infinite scrolling?
 
 ### TODO V2
 - Pagination -> When entries loaded still show the infinite loader, it will not be triggered to load more entries

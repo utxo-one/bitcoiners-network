@@ -117,7 +117,7 @@ export default function Connections({ initialType }) {
       
       draft[index]._endorsements_auth[type] = prevEndorsed ? 0 : 1;
       draft[index]._endorsements[type] += prevEndorsed ? -1 : 1;
-    })
+    });
   }
 
   const onClickConnection = async (e, connection) => {
