@@ -120,4 +120,61 @@
       background-color: var(--gray-30);
     }
   }
+
+  &-square {
+    font-size: 14px;
+    color: var(--gray-30);
+    background-color: var(--gray-85);
+    border-radius: 8px;
+    padding: 10px 12px;
+    transition: background-color 0.3s;
+
+    @media screen and (max-width: 385px) {
+      font-size: 12px;
+      padding: 8px;
+
+      .icon > svg {
+        width: 12px;
+      }
+    }
+    
+    .__button-content {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      align-items: center;
+
+      @media screen and (max-width: 385px) {
+        gap: 4px;
+      }
+
+      .icon > svg {
+        fill: var(--gray-70);
+        width: 16px;
+        height: auto;
+      }
+    }
+
+    &:active, &:focus {
+      box-shadow: none;
+    }  
+
+    &:hover:not(.__button-selected) {
+      // background-color: var(--gray-90);
+      color: var(--blue-light);
+
+      .icon > svg {
+        fill: var(--blue-light);
+      }
+    }
+
+    &.__button-selected {
+      background-color: var(--blue-lightest);
+      color: var(--blue-twitter);
+
+      .icon > svg {
+        fill: var(--blue-light);
+      }
+    }
+  }
 }

@@ -30,6 +30,7 @@
         "react-transition-group": "^4.4.5",
         "runes": "^0.4.3",
         "sass": "^1.55.0",
+        "use-debounce": "^8.0.4",
         "use-immer": "^0.7.0"
     }
 }

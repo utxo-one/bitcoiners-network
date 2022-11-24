@@ -1,0 +1,62 @@
+.__bitcoiners-ranking {
+  width: 100%;
+  margin: 12px 0;
+  table-layout: fixed;
+  border-spacing: 0 8px;
+
+  th {
+    text-align: left;
+    color: var(--gray-60);
+    font-size: 13px;
+    font-weight: 600;
+    
+    &.rank {
+      width: 8%;
+    }
+
+    &.profile-picture {
+      width: 60px;
+    }
+
+    &.followers {
+      width: 22%;
+      text-align: right;
+    }
+  }  
+  
+  td {
+    &.rank {
+      // text-align: center;
+      font-size: 17px;
+      font-weight: 500;
+      color: var(--gray-30);
+    }
+
+    &.user-info {
+      overflow: hidden;
+      
+      > div {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+      
+      .username {
+        font-weight: 600;
+        line-height: 20px;
+      }
+      
+      .handle {
+        color: var(--gray-50);
+        font-size: 14px;
+      }
+    }
+
+    &.followers {
+      color: var(--gray-30);
+      font-weight: 600;
+      font-size: 17px;
+      text-align: right;
+    }
+  }
+}

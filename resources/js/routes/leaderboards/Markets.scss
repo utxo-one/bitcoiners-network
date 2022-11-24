@@ -1,0 +1,68 @@
+.__markets {
+  width: 100%;
+  margin: 12px 0;
+  table-layout: fixed;
+  border-spacing: 0 8px;
+
+  th {
+    color: var(--gray-60);
+    font-size: 13px;
+    font-weight: 600;
+    padding-bottom: 6px;
+    
+    &.rank {
+      width: 10%;
+      text-align: left;
+    }
+
+    &.coin {
+      width: 60%;
+      text-align: left;
+    }
+
+    &.cap, &.price {
+      text-align: right;
+    }
+  }  
+  
+  td {
+    &.rank {
+      font-size: 17px;
+      font-weight: 500;
+      color: var(--gray-30);
+    }
+
+    &.coin {
+      font-weight: 500;
+      color: var(--gray-30);
+
+      img {
+        display: inline-block;
+        margin-right: 4px;
+        height: auto;
+        vertical-align: middle;
+        width: 24px;
+      }
+
+      .poop {
+        display: inline-block;
+        font-size: 24px;
+        margin-right: 4px;
+      }
+
+      .symbol {
+        display: inline-block;
+        margin-left: 8px;
+        text-transform: uppercase;
+        color: var(--gray-70);
+        font-size: 14px;
+      }
+    }
+
+    &.cap, &.price {
+      text-align: right;
+      color: var(--gray-20);
+      font-weight: 500;
+    }
+  }
+}

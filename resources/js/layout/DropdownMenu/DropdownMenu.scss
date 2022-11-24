@@ -33,6 +33,11 @@
     border-bottom: 1px solid var(--gray-80);
     margin: 4px 0;
   }
+
+  &-vertical-gap {
+    margin-top: 6px;
+    margin-bottom: 6px;
+  }
 }
 
 @keyframes anim__dropdown-menu-in {

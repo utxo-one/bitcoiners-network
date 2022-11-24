@@ -1,10 +1,12 @@
-import { BrowserRouter, Navigate, Outlet, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import ScrollToTop from "./components/ScrollToTup";
+
 import CampaignOverview from "./routes/campaign/CampaignOverview";
 import Connections from "./routes/connections/Connections";
 import MainProfile from "./routes/dashboard/MainProfile";
 import TransactionsOverview from "./routes/transactions/TransactionsOverview";
 import AuthRoute from "./routes/AuthRoute";
-import ScrollToTop from "./components/ScrollToTup";
+import Leaderboards from "./routes/leaderboards/Leaderboards";
 
 // All React Routes are using the basename '/u' as included in the catch-all
 // laravel route in frontend.php, when using components such as <Link>, there is
@@ -16,6 +18,7 @@ export default function AppRoutes() {
       <BrowserRouter basename="/u">
         <ScrollToTop />
         <Routes>
+          <Route path='/leaderboards' element={<Leaderboards />} />
           <Route path='/profile/:username' element={<MainProfile key='profile' />} />
 
           <Route path='/dashboard' element={<AuthRoute element={<MainProfile key='dashboard' asDashboard />} />} />

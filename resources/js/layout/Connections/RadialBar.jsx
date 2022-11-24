@@ -8,7 +8,7 @@ export default function RadialBar({ percent }) {
   const normalizedRadius = radius - stroke * 2;
   const circumference = normalizedRadius * 2 * Math.PI;
 
-  const strokeDashoffset = circumference - percent / 100 * circumference;
+  const strokeDashoffset = (circumference - percent / 100 * circumference) || 0;
 
   //  viewBox={`0 0 ${radius * 2} ${radius * 2}`
   return (

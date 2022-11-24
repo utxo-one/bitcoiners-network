@@ -104,7 +104,7 @@ export default function EndorsementModal({ show, user, onHide, onToggleEndorseme
                   </div>
 
                   <DropdownMenu.Portal>
-                    <DropdownMenu.Content avoidCollisions={false} className="__dropdown-menu __connections-filter" >
+                    <DropdownMenu.Content avoidCollisions={false} className="__dropdown-menu">
                       { renderMenuItems() }
                     </DropdownMenu.Content>
                   </DropdownMenu.Portal>
