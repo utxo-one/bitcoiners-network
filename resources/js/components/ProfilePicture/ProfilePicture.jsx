@@ -1,6 +1,6 @@
+import { useEffect, useState, useMemo } from "react"
 import axios from "axios";
 import classNames from "classnames";
-import { useEffect, useState } from "react"
 import SadFaceIcon from "../../assets/icons/SadFaceIcon";
 import UserProfileImg from "../../assets/images/UserProfile.png";
 
@@ -8,10 +8,11 @@ import './ProfilePicture.scss';
 
 export default function ProfilePicture({ user, className, userNotFound, ...props }) {
 
-  const imageSrc = user?.twitter_profile_image_url_high_res;
-
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
+  const [newImageSrc, setNewImgSrc] = useState(null);
+
+  const imageSrc = useMemo(() => newImageSrc || user?.twitter_profile_image_url_high_res, [newImageSrc, user])
 
   useEffect(() => {
     const loadImage = async () => {
@@ -27,7 +28,8 @@ export default function ProfilePicture({ user, className, userNotFound, ...props
       }
       catch {
         setImageError(true);
-        axios.post(`/frontend/refresh/user/${user.twitter_username}`);
+        const { data } = await axios.post(`/frontend/refresh/user/${user.twitter_username}`);
+        setNewImgSrc(data?.twitter_profile_image_url_high_res);
       }
     }
 
