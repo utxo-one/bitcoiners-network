@@ -63,7 +63,7 @@ export default function SearchBar({ autoFocus, onClickUser, ...props }) {
               <div className="__search-bar-empty">No users found.</div>
             )}
             { results.map(result => (
-              <div key={result.twitter_username} className='__search-bar-item' onClick={() => loadUser(result.twitter_username)}>
+              <div role='button' key={result.twitter_username} className='__search-bar-item' onClick={() => loadUser(result.twitter_username)}>
                 <div className='__search-bar-username'>{ result.name }</div>
                 <div className="__search-bar-handle">@{ result.twitter_username }</div>
               </div>

@@ -25,10 +25,10 @@ import EndorsementModal from "../connections/EndorsementModal";
 import CommunityRateModal from "../connections/CommunityRateModal";
 
 const BITCOINER_TABS = {
-  titans  : { content: 'Titans',    min: 100000, max: 5000000 },
+  titans  : { content: 'Titans',    min: 100000, max: 10000000 },
   popular : { content: 'Popular',   min: 10000,  max: 100000 },
-  plebs   : { content: 'Plebs',     min: 1000,   max: 10000 },
-  search  : { content: <>Search <SearchIcon /></>, min: 1, className: 'search' },
+  plebs   : { content: 'Plebs',     min: 100,    max: 10000 },
+  skills  : { content: 'Skills' },
 }
 
 const TWEETS_TABS = {
@@ -47,7 +47,7 @@ export default function Leaderboards(props) {
   const [tweets, setTweets] = useImmer(null);
   const [markets, setMarkets] = useImmer(null);
   const [category, setCategory] = useState('bitcoiners');
-  const [endorsementFilter, setEndorsementFilter] = useState(null);
+  const [endorsementFilter, setEndorsementFilter] = useState('developer');
   const [tweetsTab, setTweetsTab] = useState('today');
   const [bitcoinerTab, setBitcoinerTab] = useState('titans');
   const [showInfo, setShowInfo] = useState(false);
@@ -80,6 +80,15 @@ export default function Leaderboards(props) {
     // loadTweets();
     loadMarkets();
   }, []);
+
+  useEffect(() => {
+    const loadUsers = async () => {
+      const { data } = await axios.get(`/frontend/endorsements/type/${endorsementFilter}`);
+      setBitcoiners(data);
+    }
+
+    category === 'bitcoiners' && bitcoinerTab === 'skills' && loadUsers();
+  }, [category, bitcoinerTab, endorsementFilter]);
 
   const onClickUser = async user => {
     setSelectedUser(user);
@@ -140,7 +149,7 @@ export default function Leaderboards(props) {
 
   const onUpdateTabBitcoiners = value => {
     setBitcoinerTab(value);
-    value !== 'search' && loadBitcoiners(value);
+    value !== 'skills' && loadBitcoiners(value);
   }
 
   const onUpdateTabTweets = value => {
@@ -170,9 +179,6 @@ export default function Leaderboards(props) {
     const items = Object.entries(ENDORSEMENT_TYPES);
     const renderItems = [];
 
-    renderItems.push(<DropdownMenu.Item onClick={() => setEndorsementFilter(null)}>Show All</DropdownMenu.Item>);
-    renderItems.push(<DropdownMenu.Separator />);
-
     for (let i = 0; i < items.length; ++i) {
       const [id, type] = items[i];
       const [_, nextType] = items[i+1] || [];
@@ -188,15 +194,9 @@ export default function Leaderboards(props) {
   }
 
   const renderBitcoinersSubfilter = () => {
-    if (bitcoinerTab === 'search') {
-      return (
-        <SearchBar autoFocus onClickUser={onClickUser} />
-      );
-    }
-
     return (
       <div className="endorsement">
-        <div>Filter by Skill</div>
+        <div>Skill Endorsement</div>
         <DropdownMenu.Root>
           <DropdownMenu.Trigger className={classNames("filter-dropdown", ENDORSEMENT_TYPES[endorsementFilter]?.color)}>
             <div>{ ENDORSEMENT_TYPES[endorsementFilter]?.phrase.one || 'Show All' }</div>
@@ -218,6 +218,7 @@ export default function Leaderboards(props) {
       {/* <BitcoinersNetworkLogo /> */}
 
       <div className="sticky-navigation">
+        <SearchBar onClickUser={onClickUser}   />
         <div className="categories">
           <SquareButton icon={<ChatIcon />} selected={category === 'tweets'} onClick={selectTweets}>Tweets</SquareButton>
           <SquareButton icon={<UserIcon />} selected={category === 'bitcoiners'} onClick={selectBitcoiners}>Bitcoiners</SquareButton>
@@ -225,8 +226,8 @@ export default function Leaderboards(props) {
         </div>
 
         { renderTabs() }
-        <div className="subfilter">
-          { category === 'bitcoiners' && renderBitcoinersSubfilter() }
+        <div className={classNames("subfilter", { empty: category === 'bitcoiners' && bitcoinerTab !== 'skills' })}>
+          { category === 'bitcoiners' && bitcoinerTab === 'skills' && renderBitcoinersSubfilter() }
           { category === 'market-cap' && <span>Displaying <strong>Top 25 Coins</strong> By Market Cap</span> }
         </div>
       </div>
