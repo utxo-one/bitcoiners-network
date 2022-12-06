@@ -45,10 +45,10 @@ export default function SearchBar({ autoFocus, onClickUser, ...props }) {
   }
 
   const loadUser = async username => {
-    const { data } = await axios.post(`http://localhost:2121/frontend/search?q=${username}`);
+    const { data } = await axios.get(`http://localhost:2121/frontend/user/${username}`);
 
     setResultsVisible(false);
-    onClickUser(data.users);
+    onClickUser(data);
   }
 
   return (
