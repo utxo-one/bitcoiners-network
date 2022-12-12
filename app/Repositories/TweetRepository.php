@@ -9,7 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 
-class TweetRepository 
+class TweetRepository
 {
     private int $limit = 100;
     private int $cacheTime = 60 * 60 * 24;
@@ -73,35 +73,37 @@ class TweetRepository
             throw new \Exception('Invalid user type');
         }
 
-        return Cache::remember("tweets:{$userType->value}:{$orderBy}:{$order}:{$limit}:{$minLikes}:{$minReplies}:{$minRetweets}:{$timeframe}", 
-        $this->cacheTime,
-        function () use (
-            $minLikes,
-            $minReplies,
-            $minRetweets,
-            $timeframe,
-            $userType,
-            $orderBy,
-            $order,
-            $limit,
-        ) {
+        return Cache::remember(
+            "tweets:{$userType->value}:{$orderBy}:{$order}:{$limit}:{$minLikes}:{$minReplies}:{$minRetweets}:{$timeframe}",
+            $this->cacheTime,
+            function () use (
+                $minLikes,
+                $minReplies,
+                $minRetweets,
+                $timeframe,
+                $userType,
+                $orderBy,
+                $order,
+                $limit,
+            ) {
 
-            $tweets = Tweet::query()
-                ->whereHas('user', fn ($query) => $query->where('type', '=', $userType))
-                ->with('user')
-                ->where('likes', '>=', $minLikes)
-                ->where('replies', '>=', $minReplies)
-                ->where('retweets', '>=', $minRetweets)
-                ->where('in_reply_to_user_id', '=', null)
-                ->where('referenced_tweets', '=', null)
-                ->orderBy($orderBy, $order)
-                ->limit($limit);
+                $tweets = Tweet::query()
+                    ->whereHas('user', fn ($query) => $query->where('type', '=', $userType))
+                    ->with('user')
+                    ->where('likes', '>=', $minLikes)
+                    ->where('replies', '>=', $minReplies)
+                    ->where('retweets', '>=', $minRetweets)
+                    ->where('in_reply_to_user_id', '=', null)
+                    ->where('referenced_tweets', '=', null)
+                    ->orderBy($orderBy, $order)
+                    ->limit($limit);
 
-            if ($timeframe !== 0) {
-                $tweets->where('created_at', '>=', Carbon::now()->subDays($timeframe));
+                if ($timeframe !== 0) {
+                    $tweets->where('created_at', '>=', Carbon::now()->subDays($timeframe));
+                }
+
+                return $tweets->get();
             }
-
-            return $tweets->get();
-        });
+        );
     }
 }
