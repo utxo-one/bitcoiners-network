@@ -33,6 +33,7 @@ class FollowService
             ->where('twitter_count_followers', '>', 500)
             ->where('twitter_count_followers', '<', 10000)
             ->where('twitter_count_following', '>', 500)
+            ->where('type', $userType)
             ->orderBy('last_tweeted_at', 'desc')
             ->take($amount)
             ->get()
@@ -114,7 +115,6 @@ class FollowService
                     }
 
                     $this->processFollowRequest($user->followRequests()->where('status', FollowRequestStatus::PENDING)->first());
-
                 } catch (\Exception $e) {
                     Log::error('Failed to process follow request', [
                         'user_id' => $user->twitter_id,
