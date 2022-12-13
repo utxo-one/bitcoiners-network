@@ -45,7 +45,7 @@ class UserService
 
         // if the classification source is vote, do not reclassify and return the current type
         if ($user) {
-            
+
             if ($user->classified_by === ClassificationSource::VOTE->value) {
                 switch ($user->type) {
                     case UserType::BITCOINER->value:
@@ -681,5 +681,21 @@ class UserService
             'mute' => $mute,
             'transaction' => $transaction,
         ];
+    }
+
+    public function getBlocks(User $user): SupportCollection
+    {
+        $userClient = new UserClient(
+            apiKey: config('services.twitter.client_id'),
+            apiSecret: config('services.twitter.client_secret'),
+            accessToken: auth()->user()->oauth_token,
+            accessSecret: auth()->user()->oauth_token_secret,
+        );
+
+        $blocks = $userClient->getBlocks(
+            id: auth()->user()->twitter_id,
+        );
+
+        return collect($blocks);
     }
 }
