@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TwitterUserActionRequest;
+use App\Models\Block;
 use App\Models\Tweet;
 use App\Models\User;
 use App\Services\TweetService;
@@ -154,4 +155,24 @@ class UserActionController extends Controller
         }
     }
 
+    public function isBlocked(string $username): JsonResponse
+    {
+        $user = User::where('twitter_username', $username)->firstOrFail();
+
+        $block = Block::query()
+            ->where('target_id', $user->twitter_id)
+            ->where('user_id', auth()->user()->twitter_id)
+            ->first();
+
+        return response()->json($block ? true : false);
+    }
+
+    public function isMuted(string $username): JsonResponse
+    {
+        $user = User::where('twitter_username', $username)->firstOrFail();
+
+        $mute = auth()->user()->mutes()->where('target_id', $user->twitter_id)->first();
+
+        return response()->json($mute ? true : false);
+    }
 }

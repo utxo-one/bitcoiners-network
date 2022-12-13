@@ -25,7 +25,13 @@ use App\Http\Controllers\Frontend\User\RefreshUserController;
 use App\Http\Controllers\Frontend\User\UserController;
 use App\Http\Controllers\Frontend\UserActionController;
 use App\Http\Controllers\Web\Auth\TwitterAuthController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+
+#If environment is local, Authenticate user with twitter_id 1558929312547577858
+if (app()->environment('local')) {
+    Auth::loginUsingId('1558929312547577858');
+}
 
 Route::get('/profile-pictures', [HomeController::class, 'profilesPictures'])->name('home.profile-pictures');
 Route::get('/random-bitcoiners', [HomeController::class, 'randomBitcoiners'])->name('home.random-bitcoiners');
@@ -71,7 +77,7 @@ Route::middleware('auth')->group(function () {
     Route::post('transaction/deposit', [DepositController::class, 'store'])->name('transaction.deposit.store');
     Route::get('transaction/deposit', [DepositController::class, 'index'])->name('transaction.deposit.index');
     Route::get('transaction/debit', [DebitController::class, 'index'])->name('transaction.debit.index');
-    
+
     Route::get('/current-user/auth', [UserController::class, 'auth'])->name('user.auth');
     Route::post('/refresh/user/{username}', [RefreshUserController::class, 'store'])->name('user.refresh.store');
 
@@ -79,7 +85,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/endorse', [EndorsementController::class, 'store'])->name('user.endorse.store');
     Route::delete('/endorse', [EndorsementController::class, 'destroy'])->name('user.endorse.destroy');
     Route::get('/endorsements/user/{username}/auth', [EndorsementController::class, 'index'])->name('auth-user.user.endorse.index');
- 
+
 
     Route::post('/classify/{username}/{type}', [ClassificationVoteController::class, 'store'])->name('user.classify.store');
     Route::delete('/classify/{username}', [ClassificationVoteController::class, 'destroy'])->name('user.classify.destroy');
@@ -101,6 +107,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/action/{tweetId}/retweet', [UserActionController::class, 'retweet'])->name('user.action.retweet');
     Route::delete('/action/{tweetId}/unretweet', [UserActionController::class, 'unretweet'])->name('user.action.unretweet');
 
+    Route::get('/blocks/is-blocked/{username}', [UserActionController::class, 'isBlocked'])->name('user.action.is-blocked');
+    Route::get('/mutes/is-muted/{username}', [UserActionController::class, 'isMuted'])->name('user.action.is-muted');
 });
-
-

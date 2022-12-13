@@ -94,7 +94,7 @@ class TweetRepository
                     ->where('replies', '>=', $minReplies)
                     ->where('retweets', '>=', $minRetweets)
                     ->where('in_reply_to_user_id', '=', null)
-                    ->where('referenced_tweets', '=', null)
+                    ->where('referenced_tweets', 'LIKE', 'null')
                     ->orderBy($orderBy, $order)
                     ->limit($limit);
 
