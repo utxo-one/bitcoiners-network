@@ -618,7 +618,7 @@
 								"method": "POST",
 								"header": [],
 								"url": {
-									"raw": "http://localhost/frontend/action/jack/mute",
+									"raw": "http://localhost/frontend/action/:username/mute",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -626,8 +626,14 @@
 									"path": [
 										"frontend",
 										"action",
-										"jack",
+										":username",
 										"mute"
+									],
+									"variable": [
+										{
+											"key": "username",
+											"value": null
+										}
 									]
 								}
 							},
@@ -670,6 +676,60 @@
 										"action",
 										"jack",
 										"unmute"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Is Blocked",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost/frontend/blocks/is-blocked/:username",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"path": [
+										"frontend",
+										"blocks",
+										"is-blocked",
+										":username"
+									],
+									"variable": [
+										{
+											"key": "username",
+											"value": "btcsessions"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Is Muted",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost/frontend/mutes/is-muted/:username",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"path": [
+										"frontend",
+										"mutes",
+										"is-muted",
+										":username"
+									],
+									"variable": [
+										{
+											"key": "username",
+											"value": "btcsessions"
+										}
 									]
 								}
 							},
