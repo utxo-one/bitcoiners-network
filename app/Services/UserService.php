@@ -162,8 +162,11 @@ class UserService
 
         if ($user->exists) {
 
-            // if the user has alraedy been updated in the last 30 days, just return it
-            if ($user->last_refreshed_at && $user->last_refreshed_at->isAfter(Carbon::now()->subDays(30))) {
+            // create a carbon date for 30 days ago
+            $thirtyDaysAgo = Carbon::now()->subDays(30);
+
+            // if the user has been refreshed in the last 30 days, do not refresh again
+            if ($user->last_refreshed_at > $thirtyDaysAgo) {
                 return $user;
             }
 
