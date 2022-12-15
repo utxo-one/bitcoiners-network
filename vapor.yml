@@ -2,8 +2,11 @@ id: 39884
 name: bitcoiners-network
 environments:
   production:
-    memory: 2048
+    memory: 1024
+    domain: bitcoiners.network
+    timeout: 600
     cli-memory: 512
+    cli-timeout: 600
     database: bitcoiners-network-mysql
     cache: bitcoiners-network-redis
     runtime: "php-8.1:al2"
@@ -11,5 +14,3 @@ environments:
       - "composer install --no-dev"
       - "php artisan event:cache"
       - "npm ci && npm run build && rm -rf node_modules"
-    deploy:
-      - "php artisan migrate --force"
