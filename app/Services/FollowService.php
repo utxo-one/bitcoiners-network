@@ -54,6 +54,12 @@ class FollowService
             return null;
         }
 
+        // if the user already follows this user, delete the follow request and return null
+        if ($followRequest->user->follows->where('followee_id', $followRequest->follow_id)->count() > 0) {
+            $followRequest->delete();
+            return null;
+        }
+
         $client = new UserClient(
             apiKey: config('services.twitter.client_id'),
             apiSecret: config('services.twitter.client_secret'),
