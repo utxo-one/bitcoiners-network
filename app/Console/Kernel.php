@@ -16,8 +16,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         if (env('APP_SCHEDULER') === true) {
-            $schedule->command('save:bitcoiner-tweets')->everyMinute();
-            $schedule->command('process:follow-requests')->everyMinute();
+            $schedule->command('save:bitcoiner-tweets')->everyTwoMinutes();
+            $schedule->command('process:follow-requests')->everyFiveMinutes();
             $schedule->command('process:follow-chunks')->everyMinute();
         }
     }

@@ -59,12 +59,11 @@ class ProcessFollowChunks extends Command
                 $twitterUser = $twitterUserClient->getUserByUsername($user->twitter_username);
                 $userService = new UserService();
                 $user = $userService->processTwitterUser($twitterUser);
-    
+
                 $user->last_crawled_at = now();
                 $user->save();
 
                 Log::info('Crawled user ' . $user->twitter_username);
-
             } catch (\Exception $e) {
                 // If the error message contains "User has been suspended: [username]", then find that user by username and mark them as is_suspended = true
                 if (strpos($e->getMessage(), 'User has been suspended') !== false) {
@@ -81,11 +80,11 @@ class ProcessFollowChunks extends Command
 
                     // Try to process the same followChunk again
                     $this->info("Trying to process the same follow chunk again");
-                    
+
                     // Run this artisan command again
                     $this->call('process:follow-chunks');
                 }
-                
+
                 // If error message contains "Could not find user with id: [103711757]", then find that user by username and mark them as is_suspended = true
                 if (strpos($e->getMessage(), 'Could not find user with username') !== false) {
                     $username = explode(':', $e->getMessage())[1];
@@ -101,16 +100,14 @@ class ProcessFollowChunks extends Command
 
                     // Try to process the same followChunk again
                     $this->info("Trying to process the same follow chunk again");
-                    
+
                     // Run this artisan command again
                     $this->call('process:follow-chunks');
-                }
-                else {
+                } else {
                     // Log the error
                     Log::error($e->getMessage());
                 }
             }
-
         }
 
         if ($followChunk) {
@@ -140,19 +137,14 @@ class ProcessFollowChunks extends Command
 
                     // Try to process the same followChunk again
                     $this->info("Trying to process the same follow chunk again");
-                   
+
                     // Run this artisan command again
                     $this->call('process:follow-chunks');
                 }
 
                 $this->error($e->getMessage());
             }
-            
-            $follows = $userService->processFollowChunk($followChunk);
-            $this->info("Processed {$follows->count()} follows");
-            $this->info('Done');
-
-        } 
+        }
 
         return 0;
     }

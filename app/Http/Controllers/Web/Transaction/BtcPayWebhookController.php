@@ -47,14 +47,19 @@ class BtcPayWebhookController extends Controller
         }
 
         $headers = getallheaders();
-        $sig = $headers['BTCPay-Sig'];
+        foreach ($headers as $key => $value) {
+            if (strtolower($key) === 'btcpay-sig') {
+                $sig = $value;
+            }
+        }
 
         $webhookClient = new Webhook($this->host, $this->apiKey);
 
         if (!$webhookClient->isIncomingWebhookRequestValid($raw_post_data, $sig, $this->secret)) {
             Log::error('Invalid signature');
             throw new \RuntimeException(
-                'Invalid BTCPayServer payment notification message received - signature did not match.');
+                'Invalid BTCPayServer payment notification message received - signature did not match.'
+            );
         }
 
         if (true === empty($payload->invoiceId)) {
@@ -101,5 +106,4 @@ class BtcPayWebhookController extends Controller
 
         echo 'OK';
     }
-
 }
