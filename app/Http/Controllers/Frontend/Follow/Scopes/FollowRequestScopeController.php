@@ -31,7 +31,11 @@ class FollowRequestScopeController extends Controller
     public function pending()
     {
         return response()->json(
-            auth()->user()->followRequests()->with('follow')->where('status', FollowRequestStatus::PENDING)->paginate(),
+            auth()->user()->followRequests()
+                ->where('status', FollowRequestStatus::PENDING)
+                ->with(['follow' => function ($query) {
+                    $query->where('type', UserType::BITCOINER);
+                }])->paginate(),
             Response::HTTP_OK
         );
     }
