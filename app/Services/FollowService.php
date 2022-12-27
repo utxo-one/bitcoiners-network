@@ -34,6 +34,7 @@ class FollowService
             ->where('twitter_count_followers', '<', 10000)
             ->where('twitter_count_following', '>', 500)
             ->where('type', $userType)
+            ->whereNot('classified_by', 'crawler')
             ->orderBy('last_tweeted_at', 'desc')
             ->take($amount)
             ->get()
