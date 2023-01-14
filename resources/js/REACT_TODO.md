@@ -1,5 +1,7 @@
 ### LAST PR
-- 
+- TWEET -> multiple images
+- TWEET -> auto play gif/video
+- TWEET -> image vs photo? 
 
 ### TODO
 - SEARCH -> show followers (try)

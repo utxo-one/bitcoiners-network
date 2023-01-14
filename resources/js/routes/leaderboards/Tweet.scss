@@ -1,0 +1,132 @@
+.__tweet {
+  &:not(:first-child) {
+    margin: 20px 0;
+    border-top: 1px solid var(--gray-80);
+  }
+
+  .__tweet-user {
+    margin: 16px 0;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+
+    .__profile-picture {
+      box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.15);
+      border: 1px solid white;
+    }
+
+    .__tweet-user-info {
+      flex: 1;
+    }
+
+    .__tweet-user-name {
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .__tweet-user-handle {
+      color: var(--blue-twitter);
+      font-weight: 500;
+      font-size: 15px;
+      line-height: 20px;
+    }
+
+    .__tweet-user-options {
+      writing-mode: tb-rl;
+      color: var(--gray-50);
+      font-weight: 500;
+      font-size: 24px;
+    }
+  }
+
+  .__tweet-text {
+    color: var(--gray-20);
+    font-size: 14px;
+    line-height: 22px;
+    margin: 12px 0;
+    white-space: pre-line;
+  }
+
+  .__tweet-video {
+    max-height: 496px;
+    border-radius: 8px;
+    box-shadow: 0px 2px 4px 0 rgba(black, 0.1);
+    background-color: black;
+    overflow: hidden;
+    margin: 12px 0;
+
+    video {
+      width: 100%;
+      max-height: 496px;
+      margin: 0 auto;
+      display: block;
+    }
+  }
+
+  .__tweet-image {
+    max-height: 496px;
+    box-shadow: 0px 2px 4px 0 rgba(black, 0.1);
+    background-color: black;
+    overflow: hidden;
+    border-radius: 8px;
+
+    img {
+      max-width: 100%;
+      max-height: 496px;
+      margin: 0 auto;
+      display: block;
+    }
+  }
+
+  a.__tweet-website-card {
+    border: 1px solid var(--gray-80);
+    border-radius: 8px;
+    display: block;
+    overflow: hidden;
+
+    img {
+      display: block;
+      width: 100%;
+      max-height: 320px;
+      border-bottom: 1px solid var(--gray-80);
+    }
+
+    .domain {
+      margin-top: 8px;
+      margin-inline: 16px;
+      font-size: 15px;
+      color: var(--gray-40);
+      line-height: 22px;
+    }
+
+    .title {
+      margin: 4px 16px 16px;
+      color: black;
+      font-weight: bold;
+      font-size: 17px;
+      line-height: 24px;
+    }
+  }
+
+  .__tweet-stats {
+    background-color: var(--gray-85);
+    padding: 16px;
+    border-radius: 32px;
+    margin: 16px 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 14px;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--gray-50);
+
+    strong {
+      color: var(--gray-20);
+      display: inline-block;
+      margin-inline-end: 2px;
+    }
+  }
+}
+
