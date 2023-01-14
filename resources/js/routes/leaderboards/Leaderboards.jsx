@@ -23,6 +23,8 @@ import UserInfoPanel from "../../components/UserInfoPanel/UserInfoPanel";
 import useEndorsements from "../../hooks/useEndorsements";
 import EndorsementModal from "../connections/EndorsementModal";
 import CommunityRateModal from "../connections/CommunityRateModal";
+import { TWEET_ANIMATED_GIF, TWEET_IMAGE_SQUARE, TWEET_VIDEO, TWEET_WEBSITE_CARD } from "./typesTweets";
+import Tweet from "./Tweet";
 
 const BITCOINER_TABS = {
   titans  : { content: 'Titans',    min: 100000, max: 10000000 },
@@ -46,7 +48,7 @@ export default function Leaderboards(props) {
   const [bitcoiners, setBitcoiners] = useImmer(null);
   const [tweets, setTweets] = useImmer(null);
   const [markets, setMarkets] = useImmer(null);
-  const [category, setCategory] = useState('bitcoiners');
+  const [category, setCategory] = useState('tweets');
   const [endorsementFilter, setEndorsementFilter] = useState('developer');
   const [tweetsTab, setTweetsTab] = useState('today');
   const [bitcoinerTab, setBitcoinerTab] = useState('titans');
@@ -65,10 +67,17 @@ export default function Leaderboards(props) {
 
   useEffect(() => { 
     const loadTweets = async () => {
-      const { data } = await axios.get(`/frontend/leaderboard/tweets/bitcoiner/tweets/days/7000`);
-      // console.log(data);
+      // const { data } = await axios.get(`/frontend/leaderboard/tweets/bitcoiner/tweets/days/7000`);
+      const { data } = await axios.get(`/frontend/leaderboard/tweets/bitcoiner/likes/days/1000`);
+      console.log(data);
+      // setTweets(data);
 
-      setTweets(data);
+      setTweets([
+        TWEET_VIDEO,
+        TWEET_IMAGE_SQUARE,
+        TWEET_ANIMATED_GIF,
+        TWEET_WEBSITE_CARD,
+      ]);
     }
 
     const loadMarkets = async () => {
@@ -77,7 +86,7 @@ export default function Leaderboards(props) {
     }
 
     loadBitcoiners(bitcoinerTab);
-    // loadTweets();
+    loadTweets();
     loadMarkets();
   }, []);
 
@@ -213,6 +222,14 @@ export default function Leaderboards(props) {
     )
   }
 
+  const renderTweets = () => {
+    return (
+      <div className="__tweets">
+        { tweets?.map(tweet => <Tweet tweet={tweet} /> )}
+      </div>
+    );
+  }
+
   return (
     <div className="__leaderboards">
       {/* <BitcoinersNetworkLogo /> */}
@@ -226,13 +243,14 @@ export default function Leaderboards(props) {
         </div>
 
         { renderTabs() }
-        <div className={classNames("subfilter", { empty: category === 'bitcoiners' && bitcoinerTab !== 'skills' })}>
+        <div className={classNames("subfilter", { empty: category === 'tweets' || (category === 'bitcoiners' && bitcoinerTab !== 'skills') })}>
           { category === 'bitcoiners' && bitcoinerTab === 'skills' && renderBitcoinersSubfilter() }
           { category === 'market-cap' && <span>Displaying <strong>Top 25 Coins</strong> By Market Cap</span> }
         </div>
       </div>
 
       <div className="content">
+        { category === 'tweets' && renderTweets() }
         { category === 'bitcoiners' && <BitcoinersRanking users={bitcoiners} onClickUser={onClickUser} /> }
         { category === 'market-cap' && <Markets markets={markets} />}
       </div>
